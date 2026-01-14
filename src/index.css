@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-/* Global Font Configuration */
 * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
