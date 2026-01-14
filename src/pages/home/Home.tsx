@@ -1,7 +1,8 @@
+import '../../App.scss';
 
 const Home = () => {
     return (
-        <div className="text-3xl font-bold text-center">
+        <div className="text-center big-div">
             Otolor
         </div>
     )
