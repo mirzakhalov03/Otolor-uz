@@ -5,7 +5,7 @@ const Home = () => {
     return (
         <div className="text-center big-div bg-[#ffff]">
             <Navbar />
-            Otolor Home page
+            {/* Otolor Home page */}
         </div>
     )
 }
