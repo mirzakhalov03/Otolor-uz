@@ -1,5 +1,6 @@
 import { useRoutes } from "react-router-dom"
 import Home from "../pages/home/Home"
+import About from "../pages/about/About"
 
 export const RouteController = () => {
 
@@ -7,6 +8,10 @@ export const RouteController = () => {
         {
             path: "/",
             element: <Home/>
+        }, 
+        {
+            path: '/about',
+            element: <About/>
         }
     ])
 }

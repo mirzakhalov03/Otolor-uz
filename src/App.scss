@@ -1,9 +1,7 @@
-/* SCSS Styling */
 #root {
   width: 100%;
   min-height: 100vh;
   
-  // Example of SCSS nesting
   .app-container {
     display: flex;
     flex-direction: column;
@@ -12,6 +10,5 @@
   .big-div{
     width: 100%;
     height: 100%;
-    background-color: red;
   }
 }
