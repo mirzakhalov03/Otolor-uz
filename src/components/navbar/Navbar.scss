@@ -1,0 +1,52 @@
+@import '../../styles/variables';
+
+.navbar-wrapper {
+    width: 100%;
+    position: relative;
+
+    .navbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $primary-green;
+        position: absolute;
+        top: 16px;
+        left: 0;
+        right: 0;
+        border-radius: $radius-xl;
+        background-color: rgba($white, 0.05);
+        backdrop-filter: blur(4px);
+
+        .navbar-list {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px;
+            list-style: none;
+
+            .navbar-tabs {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                .nav-link {
+                    color: $text-primary;
+                    text-decoration: none;
+                    transition: all $transition-base;
+                    font-weight: $font-weight-medium;
+                    padding: $spacing-sm $spacing-md;
+                    border-radius: $radius-md;
+
+                    &:hover {
+                        color: $primary-green;
+                    }
+
+                    &.active {
+                        color: $primary-green;
+                    }
+                }
+            }
+        }
+    }
+}

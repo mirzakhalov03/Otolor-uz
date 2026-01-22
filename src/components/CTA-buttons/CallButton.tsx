@@ -1,8 +1,10 @@
 
 const CallButton = () => {
   return (
-    <div className="w-[150px] p-5 bg-white border-2 border-gray-200 rounded-lg">
-        <button className="w-full h-full bg-blue-400 rounded-lg">Call</button>
+    <div className="">
+        <button className="w-full h-full border-2 border-[#02c539] py-2 px-4 rounded-xl">
+          <a href="tel:+998781133883" className="text-[#02c539]">+998(78)113-38-83</a>
+        </button>
     </div>
   )
 }
