@@ -1,0 +1,119 @@
+@import "../../../../styles/variables";
+
+.features {
+  width: 100%;
+  padding: 80px 0;
+  background-color: #f8f9fa;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  &__title {
+    font-size: 36px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 50px;
+    text-align: left;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+}
+
+.feature-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  gap: 20px;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  &__description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .features {
+    padding: 60px 0;
+
+    &__title {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  .feature-card {
+    padding: 20px;
+
+    &__icon {
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+
+      svg {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    &__title {
+      font-size: 16px;
+    }
+
+    &__description {
+      font-size: 13px;
+    }
+  }
+}
