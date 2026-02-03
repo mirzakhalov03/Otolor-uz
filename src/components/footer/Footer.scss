@@ -1,0 +1,249 @@
+@import "../../styles/variables";
+
+.footer {
+  width: 100%;
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  color: white;
+  padding: 60px 0 20px;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    gap: 60px;
+    margin-bottom: 40px;
+  }
+
+  &__section {
+    &--brand {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    &--branches {
+      .footer__branches {
+        max-height: 300px;
+        overflow-y: auto;
+        padding-right: 10px;
+
+        &::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 4px;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.5);
+          }
+        }
+      }
+    }
+  }
+
+  &__section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  &__logo {
+    margin-bottom: 10px;
+
+    &-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      margin: 0;
+      text-transform: lowercase;
+    }
+
+    &-img {
+      height: 40px;
+      width: auto;
+    }
+  }
+
+  &__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__phone {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__address {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+
+  &__social {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  &__social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+  }
+
+  &__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__link-item {
+    margin: 0;
+  }
+
+  &__link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-block;
+
+    &:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+  }
+
+  &__branches {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__branch {
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  &__branch-name {
+    font-size: 13px;
+    color: white;
+    margin: 0 0 5px 0;
+    line-height: 1.5;
+  }
+
+  &__branch-address {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+
+  &__bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+  }
+
+  &__copyright {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+  .footer {
+    &__content {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    &__section--branches {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 0 20px;
+
+    &__content {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    &__section--branches {
+      .footer__branches {
+        max-height: none;
+      }
+    }
+
+    &__phone {
+      font-size: 18px;
+    }
+
+    &__address {
+      font-size: 13px;
+    }
+
+    &__social-link {
+      width: 36px;
+      height: 36px;
+    }
+
+    &__bottom {
+      padding-top: 20px;
+    }
+
+    &__copyright {
+      font-size: 12px;
+    }
+  }
+}
