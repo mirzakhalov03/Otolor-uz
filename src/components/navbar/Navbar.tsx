@@ -51,8 +51,6 @@ const Navbar = () => {
           </div>
 
           <div className="navbar-actions">
-            <CallButton />
-
             {/* Burger Menu Button */}
             <button
               className="navbar-burger"
