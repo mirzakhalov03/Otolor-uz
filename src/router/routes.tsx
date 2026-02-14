@@ -3,6 +3,7 @@ import Home from "../pages/home/Home"
 import About from "../pages/about/About"
 import Layout from "../components/layout/Layout"
 import Appointments from "../pages/appointments/Appointments"
+import Services from "../pages/servicesPage/Services"
 
 export const RouteController = () => {
 
@@ -22,6 +23,10 @@ export const RouteController = () => {
                 {
                     path: 'appointments',
                     element: <Appointments />
+                },
+                {
+                    path: 'services',
+                    element: <Services />
                 }
             ]
         }
