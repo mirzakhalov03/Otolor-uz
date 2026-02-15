@@ -1,0 +1,207 @@
+@import "../../../../styles/variables";
+
+.appointments-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2xl;
+
+  @media (max-width: $breakpoint-md) {
+    gap: $spacing-lg;
+  }
+
+  .form-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: $radius-xl;
+    padding: $spacing-xl;
+    box-shadow: $shadow-md;
+    transition: $transition-base;
+
+    @media (max-width: $breakpoint-md) {
+      padding: $spacing-md;
+      border-radius: $radius-lg;
+    }
+
+    &:hover {
+      box-shadow: $shadow-lg;
+    }
+  }
+
+  .section-title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    color: $primary-green;
+    margin-bottom: $spacing-lg;
+  }
+
+  .subsection-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  // Date & Time Container (Side by Side)
+  .date-time-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-2xl;
+
+    @media (max-width: $breakpoint-lg) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .calendar-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .time-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: $spacing-md;
+    min-height: 200px;
+    align-content: start;
+
+    .time-slot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-sm;
+      padding: $spacing-md $spacing-lg;
+      background: $white;
+      border: 2px solid $border-light;
+      border-radius: $radius-md;
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      color: $text-primary;
+      cursor: pointer;
+      transition: $transition-fast;
+
+      &:hover {
+        border-color: $primary-green;
+        background: rgba($primary-green, 0.05);
+        transform: translateY(-2px);
+        box-shadow: $shadow-sm;
+      }
+
+      &.selected {
+        background: $primary-green;
+        border-color: $primary-green;
+        color: $white;
+        box-shadow: $shadow-md;
+
+        &:hover {
+          background: $primary-green-dark;
+          border-color: $primary-green-dark;
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      
+      p {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  .user-info-form {
+    // display: flex;
+    // flex-direction: column;
+    // gap: $spacing-lg;
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+        color: $text-primary;
+      }
+
+      :global(.ant-input) {
+        border-radius: $radius-md;
+        border: 2px solid $border-light;
+        transition: $transition-fast;
+
+        &:hover:not(:disabled) {
+          border-color: $primary-green;
+        }
+
+        &:focus {
+          border-color: $primary-green;
+          box-shadow: 0 0 0 2px rgba($primary-green, 0.1);
+        }
+
+        &:disabled {
+          background: $gray-100;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .submit-button {
+      margin-top: $spacing-lg;
+      height: 48px;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      background: $primary-green;
+      border: none;
+      border-radius: $radius-md;
+      transition: $transition-base;
+
+      &:hover:not(:disabled) {
+        background: $primary-green-dark !important;
+        transform: translateY(-2px);
+        box-shadow: $shadow-lg;
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        background: $gray-300;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.appointments-form-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: $radius-xl;
+  padding: $spacing-3xl;
+  box-shadow: $shadow-md;
+
+  p {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+  }
+}

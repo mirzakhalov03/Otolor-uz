@@ -29,6 +29,6 @@ export interface IButton {
     isLoading?: boolean;
     className?: string;
     onClick?: () => void;
-    color?: 'black' | 'red' | 'third' | undefined;
+    color?: 'black' | 'red' | 'third' | 'white' | undefined;
     style?: any;
 }
