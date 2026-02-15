@@ -30,5 +30,5 @@ export interface IButton {
     className?: string;
     onClick?: () => void;
     color?: 'black' | 'red' | 'third' | 'white' | undefined;
-    style?: any;
+    style?: React.CSSProperties;
 }

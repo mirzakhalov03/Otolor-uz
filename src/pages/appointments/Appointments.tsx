@@ -1,41 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Alert } from 'antd';
 import { useTranslation } from 'react-i18next';
 import './appointments.scss';
 import AppointmentsForm from './components/appointmentForm/AppointmentsForm';
 import DoctorSelector from './components/selectors/DoctorSelector';
 import { type Doctor } from './types/appointment.types';
-import Spinner from '../../components/spinner/Spinner';
 
 const Appointments = () => {
     const { t } = useTranslation();
     const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        // Simulate initial data loading
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 800);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    const handleDoctorSelect = (doctor: Doctor) => {
+    const handleDoctorSelect = useCallback((doctor: Doctor) => {
         setSelectedDoctor(doctor);
-    };
-
-    if (isLoading) {
-        return (
-            <div className='appointments'>
-                <div className='container'>
-                    <div className='appointments-loading'>
-                        <Spinner size='lg' />
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    }, []);
 
     return (
         <div className='appointments'>

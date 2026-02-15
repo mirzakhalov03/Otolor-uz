@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import './ImageCarousel.scss';
 import { doctorsImages } from '../../assets/images/doctors/doctorsImages';
 
@@ -9,13 +9,15 @@ interface ImageCarouselProps {
 const ImageCarousel = ({ autoPlayInterval = 4000 }: ImageCarouselProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    
+    const totalSlides = useMemo(() => doctorsImages.length, []);
 
     const goToNext = useCallback(() => {
         if (isTransitioning) return;
         setIsTransitioning(true);
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % doctorsImages.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
         setTimeout(() => setIsTransitioning(false), 500);
-    }, [doctorsImages.length, isTransitioning]);
+    }, [totalSlides, isTransitioning]);
 
     const goToSlide = (index: number) => {
         if (isTransitioning || index === currentIndex) return;
