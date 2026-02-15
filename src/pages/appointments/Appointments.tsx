@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Alert } from 'antd';
+import { useTranslation } from 'react-i18next';
 import './appointments.scss';
 import AppointmentsForm from './components/appointmentForm/AppointmentsForm';
 import DoctorSelector from './components/selectors/DoctorSelector';
@@ -7,6 +8,7 @@ import { type Doctor } from './types/appointment.types';
 import Spinner from '../../components/spinner/Spinner';
 
 const Appointments = () => {
+    const { t } = useTranslation();
     const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -38,12 +40,12 @@ const Appointments = () => {
     return (
         <div className='appointments'>
             <div className='container'>
-                <h1 className='appointments-title'>Online Navbat olish</h1>
+                <h1 className='appointments-title'>{t('appointments.pageTitle')}</h1>
                 <div className='appointments-wrapper'>
                     <div className="appointments-wrapper__clinics">
                         <Alert
                             type='info'
-                            message='Online navbatga olish hozircha faqatgina "Centromed" shifoxonasi uchun ishlaydi'
+                            message={t('appointments.alertMessage')}
                             showIcon
                             style={{ fontSize: "16px", fontWeight: "bold" }}
                         />

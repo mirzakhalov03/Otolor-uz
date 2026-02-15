@@ -1,0 +1,125 @@
+/**
+ * Admin Login Page Styles
+ */
+
+@import '../../../styles/variables';
+
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a1f0f 0%, #0d2e16 50%, #01a02e 100%);
+  padding: 20px;
+  position: relative;
+
+  &__language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+  }
+
+  &__container {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  &__card {
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    
+    .ant-card-body {
+      padding: 32px;
+    }
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  &__logo {
+    margin-bottom: 16px;
+  }
+
+  &__logo-text {
+    font-size: 36px;
+    font-weight: 700;
+    color: $primary-green;
+    letter-spacing: -1px;
+  }
+
+  &__title {
+    margin-bottom: 8px !important;
+    color: #1a1a2e !important;
+  }
+
+  &__subtitle {
+    display: block;
+    font-size: 14px;
+  }
+
+  &__button {
+    height: 48px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    background: linear-gradient(135deg, $primary-green 0%, $primary-green-dark 100%);
+    border: none;
+    
+    &:hover {
+      background: linear-gradient(135deg, $primary-green-light 0%, $primary-green 100%);
+    }
+  }
+
+  &__footer {
+    margin-top: 24px;
+    text-align: center;
+    padding-top: 24px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  // Form styling
+  .ant-form-item-label > label {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .ant-input-affix-wrapper {
+    border-radius: 8px;
+    padding: 12px 16px;
+    
+    &:focus,
+    &-focused {
+      box-shadow: 0 0 0 2px rgba(45, 194, 99, 0.2);
+    }
+  }
+
+  .ant-input-prefix {
+    margin-right: 12px;
+    color: #bfbfbf;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+  .admin-login {
+    padding: 16px;
+
+    &__card {
+      .ant-card-body {
+        padding: 24px;
+      }
+    }
+
+    &__logo-text {
+      font-size: 28px;
+    }
+
+    &__title {
+      font-size: 20px !important;
+    }
+  }
+}

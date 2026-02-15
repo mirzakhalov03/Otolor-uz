@@ -1,0 +1,118 @@
+/**
+ * Admin Layout Styles
+ */
+
+@import '../../../styles/variables';
+
+.admin-layout {
+  min-height: 100vh;
+  
+  &__main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  &__content {
+    flex: 1;
+    padding: 24px;
+    background: #f5f5f5;
+    overflow-y: auto;
+    
+    @media (max-width: 768px) {
+      padding: 16px;
+    }
+  }
+}
+
+// Global admin styles
+.admin-page {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    
+    @media (max-width: 576px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  }
+  
+  &__title {
+    margin: 0 !important;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+  
+  &__actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  &__card {
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    
+    .ant-card-head {
+      border-bottom: 1px solid #f0f0f0;
+    }
+  }
+}
+
+// Stat cards
+.stat-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    
+    &--primary {
+      background: rgba(45, 194, 99, 0.1);
+      color: $primary-green;
+    }
+    
+    &--success {
+      background: rgba(82, 196, 26, 0.1);
+      color: #52c41a;
+    }
+    
+    &--warning {
+      background: rgba(250, 173, 20, 0.1);
+      color: #faad14;
+    }
+    
+    &--danger {
+      background: rgba(255, 77, 79, 0.1);
+      color: #ff4d4f;
+    }
+  }
+  
+  &__value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.2;
+  }
+  
+  &__label {
+    font-size: 14px;
+    color: #8c8c8c;
+    margin-top: 4px;
+  }
+}

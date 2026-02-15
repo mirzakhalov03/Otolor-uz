@@ -1,0 +1,62 @@
+/**
+ * Admin Header Styles
+ */
+
+@import '../../../styles/variables';
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &__left {
+    display: flex;
+    align-items: center;
+  }
+
+  &__toggle {
+    font-size: 18px;
+    width: 48px;
+    height: 48px;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__notification {
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    
+    &:hover {
+      color: $primary-green;
+    }
+  }
+
+  &__user {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+
+  &__username {
+    font-weight: 500;
+    
+    @media (max-width: 576px) {
+      display: none;
+    }
+  }
+}

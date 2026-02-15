@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CheckCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { categories, services } from './data/servicesData';
 import { type ServiceCategory } from './types/service.types';
 import Spinner from '../../components/spinner/Spinner';
@@ -8,6 +9,7 @@ import './services.scss';
 const Services = () => {
     const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(categories[0].id);
     const [isLoading, setIsLoading] = useState(true);
+    const { t } = useTranslation();
 
     useEffect(() => {
         // Simulate initial data loading
@@ -37,15 +39,15 @@ const Services = () => {
     return (
         <div className='services'>
             <div className='container'>
-                <h1 className='services-title'>Xizmatlarimiz</h1>
+                <h1 className='services-title'>{t('servicesPage.title')}</h1>
                 <p className='services-subtitle'>
-                    Quloq, burun va tomoq kasalliklarini davolashda professional xizmatlar
+                    {t('servicesPage.subtitle')}
                 </p>
 
                 {/* Category Selection */}
                 <div className='services-wrapper'>
                     <div className='category-section'>
-                        <h2 className='section-title'>Kategoriyani tanlang</h2>
+                        <h2 className='section-title'>{t('servicesPage.categoryTitle')}</h2>
                         <div className='category-grid'>
                             {categories.map((category) => (
                                 <div
@@ -73,20 +75,20 @@ const Services = () => {
                     {selectedCategory && (
                         <div className='services-section'>
                             <h2 className='section-title'>
-                                {categories.find(c => c.id === selectedCategory)?.title} xizmatlari
+                                {categories.find(c => c.id === selectedCategory)?.title} {t('servicesPage.servicesTitle')}
                             </h2>
                             <div className='services-table'>
                                 <div className='table-header'>
-                                    <div className='table-cell header-cell'>№</div>
-                                    <div className='table-cell header-cell'>Xizmat nomi</div>
-                                    <div className='table-cell header-cell'>Narxi</div>
+                                    <div className='table-cell header-cell'>{t('servicesPage.tableNumber')}</div>
+                                    <div className='table-cell header-cell'>{t('servicesPage.tableName')}</div>
+                                    <div className='table-cell header-cell'>{t('servicesPage.tablePrice')}</div>
                                 </div>
                                 <div className='table-body'>
                                     {filteredServices.map((service, index) => (
                                         <div key={service.id} className='table-row'>
                                             <div className='table-cell number-cell'>{index + 1}</div>
                                             <div className='table-cell name-cell'>{service.name}</div>
-                                            <div className='table-cell price-cell'>{service.price} so'm</div>
+                                            <div className='table-cell price-cell'>{service.price} {t('servicesPage.currency')}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -97,10 +99,10 @@ const Services = () => {
                     {/* Empty State */}
                     {!selectedCategory && (
                         <div className='empty-state'>
-                            <div className='empty-state-icon'>🏥</div>
-                            <h3 className='empty-state-title'>Kategoriyani tanlang</h3>
+                            <div className='empty-state-icon'>{t('servicesPage.emptyStateIcon')}</div>
+                            <h3 className='empty-state-title'>{t('servicesPage.emptyStateTitle')}</h3>
                             <p className='empty-state-description'>
-                                Xizmatlarni ko'rish uchun yuqoridagi kategoriyalardan birini tanlang
+                                {t('servicesPage.emptyStateDesc')}
                             </p>
                         </div>
                     )}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import FeatureCard from './FeatureCard';
 import './Features.scss';
 
@@ -21,28 +22,30 @@ const CheckIcon = () => (
 );
 
 const Features = () => {
+    const { t } = useTranslation();
+    
     const features = [
         {
             icon: <StethoscopeIcon />,
-            title: "Современное оборудование",
-            description: "Оборудование ведущих производителей из Европы, США, Японии и только сертифицированные расходные материалы"
+            title: t('features.feature1Title'),
+            description: t('features.feature1Description')
         },
         {
             icon: <MicroscopeIcon />,
-            title: "Современное оборудование",
-            description: "Оборудование ведущих производителей из Европы, США, Японии и только сертифицированные расходные материалы"
+            title: t('features.feature2Title'),
+            description: t('features.feature2Description')
         },
         {
             icon: <CheckIcon />,
-            title: "Современное оборудование",
-            description: "Оборудование ведущих производителей из Европы, США, Японии и только сертифицированные расходные материалы"
+            title: t('features.feature3Title'),
+            description: t('features.feature3Description')
         }
     ];
 
     return (
         <section className="features">
             <div className="features__container container">
-                <h2 className="features__title">Преимущество</h2>
+                <h2 className="features__title">{t('features.title')}</h2>
                 <div className="features__grid">
                     {features.map((feature, index) => (
                         <FeatureCard
