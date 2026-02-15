@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
 import { Menu, X } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import Logo from "../../assets/Logo"
 import CallButton from "../CTA-buttons/CallButton"
 import LangSelector from "../langSelector/LangSelector"
@@ -8,15 +9,15 @@ import './Navbar.scss'
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { t } = useTranslation()
 
   const Tabs = [
-    { name: "Home", to: "/" },
-    { name: "Services", to: "/services" },
-    { name: "Academy", to: "/academy" },
-    { name: "About", to: "/about" },
-    { name: "Blog", to: "/blog" },
-    { name: "Microtia", to: "/microtia" },
-    { name: "Moscadaver", to: "/moscadaver" },
+    { name: t('nav.home'), to: "/" },
+    { name: t('nav.services'), to: "/services" },
+    { name: t('nav.academy'), to: "/academy" },
+    { name: t('nav.about'), to: "/about" },
+    { name: t('nav.microtia'), to: "/microtia" },
+    { name: t('nav.moscadaver'), to: "/moscadaver" },
   ]
 
   const toggleMobileMenu = () => {
@@ -48,6 +49,7 @@ const Navbar = () => {
               </NavLink>
             ))}
             <LangSelector />
+            <CallButton />
           </div>
 
           <div className="navbar-actions">

@@ -1,31 +1,27 @@
-import i18n from '../../languages/i18next';
-import { useState, useEffect, type ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { type ChangeEvent } from 'react';
 import './LangSelector.scss';
 
-const LanguageSelector = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState(() => i18n.language || "uz");
+/**
+ * Public Language Selector
+ * Simple select dropdown for public-facing pages
+ */
+const LangSelector = () => {
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language || 'uz';
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newLanguage = event.target.value;
-    setSelectedLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
-    localStorage.setItem('preferredLanguage', newLanguage); 
   };
-
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('preferredLanguage');
-    if (savedLanguage) {
-      setSelectedLanguage(savedLanguage);
-      i18n.changeLanguage(savedLanguage); 
-    }
-  }, []);
 
   return (
     <select 
       id="language-selector" 
-      value={selectedLanguage} 
+      value={currentLanguage} 
       onChange={handleLanguageChange} 
-      className={`outline-none language-selector ${selectedLanguage}`}
+      className={`outline-none language-selector ${currentLanguage}`}
+      aria-label="Select language"
     >
       <option value="uz" data-flag="uz">UZ</option>
       <option value="ru" data-flag="ru">RU</option>
@@ -34,4 +30,4 @@ const LanguageSelector = () => {
   );
 };
 
-export default LanguageSelector;
+export default LangSelector;

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Button from '../../../../components/buttons/Button';
 import ImageCarousel from '../../../../components/carousel/ImageCarousel';
 import './Hero.scss';
@@ -6,7 +7,8 @@ import './Hero.scss';
 
 
 const Hero = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className='hero'>
@@ -15,12 +17,12 @@ const Hero = () => {
           <div className="hero-wrapper__left">
             <div className='mt-[60px]'>
               <h1 className='hero-headline'>
-                <span>OTOLOR</span>
+                <span>{t('hero.title')}</span>
                 <br />
-                Advanced ENT care for adults and children
+                {t('hero.subtitle')}
               </h1>
-              <p>Tuzalish shu yerdan boshlanadi. <br /> Samarali davo olish - to'g'ri tashxis qo'yishga bog'liq. <br /> Mutaxassislarimiz eng murakkab tibbiy muammolarni <br /> aniqlaydilar va davolashadilar.</p>
-              <Button onClick={() => navigate('/appointments')}  className='hero-button'>Book an appointment</Button>
+              <p>{t('hero.description')} <br /> {t('hero.descriptionLine2')} <br /> {t('hero.descriptionLine3')}</p>
+              <Button onClick={() => navigate('/appointments')}  className='hero-button'>{t('hero.bookAppointment')}</Button>
             </div>
           </div>
           <div className="hero-wrapper__right">

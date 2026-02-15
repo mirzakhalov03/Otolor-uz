@@ -1,29 +1,31 @@
 import { Instagram, Facebook, Youtube, Send } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './Footer.scss';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const { t } = useTranslation();
 
     const footerLinks = {
         information: [
-            { label: 'Главная', href: '/' },
-            { label: 'Наши услуги', href: '/services' },
-            { label: 'Пациентам', href: '/patients' },
-            { label: 'Акциями', href: '/promotions' },
-            { label: 'О нас', href: '/about' },
-            { label: 'Блог', href: '/blog' }
+            { label: t('nav.home'), href: '/' },
+            { label: t('footer.ourServices'), href: '/services' },
+            { label: t('footer.patients'), href: '/patients' },
+            { label: t('footer.promotions'), href: '/promotions' },
+            { label: t('nav.about'), href: '/about' },
+            { label: t('nav.blog'), href: '/blog' }
         ],
         branches: [
             {
-                name: 'Otolor hospital (ЕМГ) Очилов Мирза-уля Туйлабаш',
-                address: 'ЦОotolor hospital (ЦБ)- массив Кашгар, 24А'
+                name: t('footer.branch1Name'),
+                address: t('footer.branch1Address')
             },
             {
-                name: 'Otolor hospital (Медез klinika) - проси. Амира Темура',
-                address: '1196'
+                name: t('footer.branch2Name'),
+                address: t('footer.branch2Address')
             },
             {
-                name: 'Otolor hospital (M clinic) — ул. Талтана. 1',
+                name: t('footer.branch3Name'),
                 address: ''
             }
         ]
@@ -43,8 +45,8 @@ const Footer = () => {
                                 + 998 (78) 113-38-83
                             </a>
                             <p className="footer__address">
-                                г. Ташкент, ул. Мустақил, 24А<br />
-                                Пн-Пт: с 08:00 до 18:00
+                                {t('footer.mainAddress')}<br />
+                                {t('footer.workingHours')}
                             </p>
                         </div>
                         <div className="footer__social">
@@ -65,7 +67,7 @@ const Footer = () => {
 
                     {/* Information Links */}
                     <div className="footer__section">
-                        <h3 className="footer__section-title">Информация</h3>
+                        <h3 className="footer__section-title">{t('footer.information')}</h3>
                         <ul className="footer__links">
                             {footerLinks.information.map((link, index) => (
                                 <li key={index} className="footer__link-item">
@@ -79,7 +81,7 @@ const Footer = () => {
 
                     {/* Branches */}
                     <div className="footer__section footer__section--branches">
-                        <h3 className="footer__section-title">Филиалы:</h3>
+                        <h3 className="footer__section-title">{t('footer.branches')}</h3>
                         <ul className="footer__branches">
                             {footerLinks.branches.map((branch, index) => (
                                 <li key={index} className="footer__branch">
@@ -96,7 +98,7 @@ const Footer = () => {
                 {/* Copyright */}
                 <div className="footer__bottom">
                     <p className="footer__copyright">
-                        © Все права защищены. {currentYear} год
+                        {t('footer.copyright', { year: currentYear })}
                     </p>
                 </div>
             </div>

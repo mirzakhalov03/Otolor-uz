@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import ServiceCard from './ServiceCard';
 import './Services.scss';
 
@@ -21,23 +22,25 @@ const ThroatIcon = () => (
 );
 
 const Services = () => {
+    const { t } = useTranslation();
+    
     const services = [
         {
             icon: <EarIcon />,
-            title: "Врач-оториноларинголог для детей и взрослых",
-            description: "Подробнее",
+            title: t('homeServices.service1Title'),
+            description: t('homeServices.learnMore'),
             variant: 'default' as const
         },
         {
             icon: <NoseIcon />,
-            title: "Ринохирург",
-            description: "Подробнее",
+            title: t('homeServices.service2Title'),
+            description: t('homeServices.learnMore'),
             variant: 'primary' as const
         },
         {
             icon: <ThroatIcon />,
-            title: "Логопед",
-            description: "Подробнее",
+            title: t('homeServices.service3Title'),
+            description: t('homeServices.learnMore'),
             variant: 'default' as const
         }
     ];
@@ -45,7 +48,7 @@ const Services = () => {
     return (
         <section className="services">
             <div className="services__container container">
-                <h2 className="services__title">Наши сервисы</h2>
+                <h2 className="services__title">{t('homeServices.title')}</h2>
                 <div className="services__grid">
                     {services.map((service, index) => (
                         <ServiceCard
@@ -58,7 +61,7 @@ const Services = () => {
                     ))}
                 </div>
                 <div className="services__more">
-                    <button className="services__more-btn">Увидеть Все</button>
+                    <button className="services__more-btn">{t('homeServices.seeAll')}</button>
                 </div>
             </div>
         </section>

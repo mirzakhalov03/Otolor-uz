@@ -1,33 +1,32 @@
+import { useTranslation } from 'react-i18next';
 import './AboutUs.scss';
 
 const AboutUs = () => {
+    const { t } = useTranslation();
+    
     return (
         <section className="about-us">
             <div className="about-us__container container">
                 <div className="about-us__content">
-                    <h2 className="about-us__title">О нас</h2>
+                    <h2 className="about-us__title">{t('homeAbout.title')}</h2>
                     <p className="about-us__description">
-                        Мы — команда высококвалифицированных специалистов, предоставляющих качественные медицинские услуги.
-                        Наша клиника оснащена современным оборудованием и использует передовые методы лечения.
-                        Мы заботимся о здоровье каждого пациента и стремимся обеспечить комфортное и эффективное лечение.
+                        {t('homeAbout.description1')}
                     </p>
                     <p className="about-us__description">
-                        С многолетним опытом работы в области отоларингологии, мы гордимся тем, что помогаем людям
-                        вернуть здоровье и улучшить качество жизни. Наши врачи постоянно повышают квалификацию и
-                        следят за новейшими достижениями в медицине.
+                        {t('homeAbout.description2')}
                     </p>
                     <div className="about-us__stats">
                         <div className="about-us__stat">
-                            <div className="about-us__stat-number">15+</div>
-                            <div className="about-us__stat-label">Лет опыта</div>
+                            <div className="about-us__stat-number">{t('homeAbout.stat1Number')}</div>
+                            <div className="about-us__stat-label">{t('homeAbout.stat1Label')}</div>
                         </div>
                         <div className="about-us__stat">
-                            <div className="about-us__stat-number">10000+</div>
-                            <div className="about-us__stat-label">Довольных пациентов</div>
+                            <div className="about-us__stat-number">{t('homeAbout.stat2Number')}</div>
+                            <div className="about-us__stat-label">{t('homeAbout.stat2Label')}</div>
                         </div>
                         <div className="about-us__stat">
-                            <div className="about-us__stat-number">50+</div>
-                            <div className="about-us__stat-label">Специалистов</div>
+                            <div className="about-us__stat-number">{t('homeAbout.stat3Number')}</div>
+                            <div className="about-us__stat-label">{t('homeAbout.stat3Label')}</div>
                         </div>
                     </div>
                 </div>
