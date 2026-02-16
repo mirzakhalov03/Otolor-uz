@@ -35,7 +35,7 @@ const AdminLogin: React.FC = () => {
         <LanguageSelector type="default" showLabel />
       </div>
       <div className="admin-login__container">
-        <Card className="admin-login__card" bordered={false}>
+        <Card className="admin-login__card">
           <div className="admin-login__header">
             <div className="admin-login__logo">
               <span className="admin-login__logo-text">Otolor</span>

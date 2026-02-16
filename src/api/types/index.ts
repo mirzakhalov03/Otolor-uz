@@ -100,19 +100,32 @@ export interface RefreshTokenResponse {
 
 export interface Doctor {
   _id: string;
-  user: User | string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  phone: string;
   specialization: string;
+  qualifications: string[];
   experience: number;
-  education: string[];
-  bio?: string;
-  languages: string[];
+  bio: string;
   consultationFee: number;
-  rating: number;
-  totalReviews: number;
-  isAvailable: boolean;
+  workingHours: {
+    start: string;
+    end: string;
+  };
+  availableDays: string[];
+  rating?: number;
+  totalReviews?: number;
+  profileImage?: {
+    url: string;
+    key?: string;
+  };
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  __v: number;
 }
 
 // ================== Service Types ==================

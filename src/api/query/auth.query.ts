@@ -150,12 +150,12 @@ export const useLogout = () => {
       // Clear all auth-related cache
       queryClient.removeQueries({ queryKey: authKeys.all });
       queryClient.clear();
-      navigate('/admins-otolor/login');
+      navigate('/');
     },
     onError: () => {
       // Even on error, clear local state
       queryClient.removeQueries({ queryKey: authKeys.all });
-      navigate('/admins-otolor/login');
+      navigate('/');
     },
   });
 };

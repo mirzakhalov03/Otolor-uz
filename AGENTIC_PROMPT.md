@@ -260,6 +260,62 @@ pages/
 
 Then add route in `router/routes.tsx`.
 
+### Adding a New Admin Page
+
+Follow the scalable pattern for consistency:
+
+```
+pages/admin/resource/
+├── components/
+│   ├── ResourceList.tsx      # Main list with DataTable
+│   ├── CreateResource.tsx    # Create form
+│   └── EditResource.tsx      # Edit form
+├── config/
+│   └── resource.config.tsx   # Table columns & constants
+└── index.ts                  # Exports
+```
+
+**Steps:**
+
+1. **Create config file:**
+```tsx
+// config/resource.config.tsx
+export const getResourceColumns = (actions) => [
+  // Define table columns with render functions
+];
+
+export const RESOURCE_PAGE_CONFIG = {
+  title: 'Resource Management',
+  description: 'Manage resources',
+  searchPlaceholder: 'Search...',
+  createButtonText: 'Add Resource',
+  defaultPageSize: 10,
+};
+```
+
+2. **Create List component:**
+```tsx
+// components/ResourceList.tsx
+import { PageHeader, DataTable } from '../../../../components/admin/shared';
+import { getResourceColumns, RESOURCE_PAGE_CONFIG } from '../config/resource.config';
+
+const ResourceList = () => {
+  const { data, isLoading } = useResources({ page, limit, search });
+  const columns = getResourceColumns({ onView, onEdit, onDelete });
+  
+  return (
+    <>
+      <PageHeader {...RESOURCE_PAGE_CONFIG} onSearch={...} />
+      <DataTable columns={columns} dataSource={data?.data} ... />
+    </>
+  );
+};
+```
+
+3. **Create forms** (Create & Edit)
+4. **Export from index.ts**
+5. **Add route** in `router/routes.tsx`
+
 ## Testing Checklist
 
 Before submitting:

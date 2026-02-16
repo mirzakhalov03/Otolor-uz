@@ -72,8 +72,8 @@ const AdminDashboard: React.FC = () => {
       <Row gutter={[24, 24]} className="admin-dashboard__stats">
         {stats.map((stat, index) => (
           <Col xs={24} sm={12} lg={6} key={index}>
-            <Card className="stat-card" bordered={false}>
-              <Space direction="vertical" size={8} style={{ width: '100%' }}>
+            <Card className="stat-card">
+              <Space orientation="vertical" size={8} style={{ width: '100%' }}>
                 <div
                   className="stat-card__icon"
                   style={{ backgroundColor: `${stat.color}15`, color: stat.color }}
@@ -83,7 +83,6 @@ const AdminDashboard: React.FC = () => {
                 <Statistic
                   title={stat.title}
                   value={stat.value}
-                  valueStyle={{ fontSize: 28, fontWeight: 700 }}
                 />
                 <Space size={4}>
                   <ArrowUpOutlined style={{ color: '#52c41a' }} />
@@ -102,7 +101,6 @@ const AdminDashboard: React.FC = () => {
           <Card
             title={t('admin.recentAppointments')}
             className="admin-page__card"
-            bordered={false}
           >
             <div className="admin-dashboard__placeholder">
               <Text type="secondary">
@@ -115,9 +113,8 @@ const AdminDashboard: React.FC = () => {
           <Card
             title={t('admin.quickActions')}
             className="admin-page__card"
-            bordered={false}
           >
-            <Space direction="vertical" size={12} style={{ width: '100%' }}>
+            <Space orientation="vertical" size={12} style={{ width: '100%' }}>
               <Card size="small" hoverable>
                 <Space>
                   <TeamOutlined style={{ color: '#2DC263' }} />

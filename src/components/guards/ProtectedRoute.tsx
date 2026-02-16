@@ -42,17 +42,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Show loading spinner while checking auth
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          background: '#f0f2f5',
-        }}
-      >
-        <Spin size="large" tip="Loading..." />
-      </div>
+      <Spin size="large" fullscreen tip="Loading..." />
     );
   }
 
