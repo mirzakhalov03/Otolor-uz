@@ -13,7 +13,6 @@ import {
   UserOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
-  PlusOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import DataTable from '../../../components/admin/DataTable';

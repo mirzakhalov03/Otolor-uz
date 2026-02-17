@@ -366,7 +366,7 @@ const DoctorForm: React.FC<DoctorFormProps> = ({
                 formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={value => {
                   const parsed = value?.replace(/\$\s?|(,*)/g, '');
-                  return parsed ? parseFloat(parsed) : 0;
+                  return (parsed ? parseFloat(parsed) : 0) as 0;
                 }}
               />
             </Form.Item>

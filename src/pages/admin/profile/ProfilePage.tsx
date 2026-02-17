@@ -75,7 +75,7 @@ const ProfilePage: React.FC = () => {
   const updateDoctorMutation = useUpdateDoctor();
 
   // Get doctor info from API response
-  const doctor = doctorData?.data as Doctor | undefined;
+  const doctor = doctorData as Doctor | undefined;
 
   // Initialize form with current data
   const handleEdit = () => {
@@ -289,7 +289,7 @@ const ProfilePage: React.FC = () => {
                         formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={value => {
                           const parsed = value?.replace(/\$\s?|(,*)/g, '');
-                          return parsed ? parseFloat(parsed) : 0;
+                          return (parsed ? parseFloat(parsed) : 0) as 0;
                         }}
                       />
                     </Form.Item>

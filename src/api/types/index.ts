@@ -70,6 +70,7 @@ export interface User {
   _id: string;
   firstName: string;
   lastName: string;
+  fullName?: string;
   username?: string;
   email: string;
   phone?: string;
@@ -134,6 +135,7 @@ export interface Doctor {
   __v: number;
   // Linked user account (for authentication)
   user?: DoctorUser | null;
+  languages?: string[];
 }
 
 // ================== Service Types ==================

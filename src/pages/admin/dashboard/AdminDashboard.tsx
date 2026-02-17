@@ -52,7 +52,7 @@ const AdminDashboard: React.FC = () => {
     data: upcomingAppointments,
     isLoading: isLoadingAppointments,
   } = useDoctorBookings(
-    { status: 'booked', limit: 10 },
+    { status: 'confirmed', limit: 10 },
     isDoctor
   );
 
