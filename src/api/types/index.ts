@@ -98,6 +98,12 @@ export interface RefreshTokenResponse {
 
 // ================== Doctor Types ==================
 
+export interface DoctorUser {
+  _id: string;
+  username: string;
+  isActive?: boolean;
+}
+
 export interface Doctor {
   _id: string;
   id: string;
@@ -126,6 +132,8 @@ export interface Doctor {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  // Linked user account (for authentication)
+  user?: DoctorUser | null;
 }
 
 // ================== Service Types ==================

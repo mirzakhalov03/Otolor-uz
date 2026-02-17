@@ -9,7 +9,7 @@ import Unauthorized from "../pages/unauthorized/Unauthorized"
 
 // Admin imports
 import { AdminLayout } from "../components/admin"
-import { AdminLogin, AdminDashboard } from "../pages/admin"
+import { AdminLogin, AdminDashboard, ProfilePage } from "../pages/admin"
 import { AdminRoute, GuestRoute } from "../components/guards"
 import DoctorsPage from "../pages/admin/doctors"
 import ServicesPage from "../pages/admin/services"
@@ -73,6 +73,10 @@ export const RouteController = () => {
                 {
                     index: true,
                     element: <AdminDashboard />
+                },
+                {
+                    path: 'profile',
+                    element: <ProfilePage />
                 },
                 {
                     path: 'doctors',

@@ -73,6 +73,7 @@ export const useLogin = () => {
 
 /**
  * Hook for admin-specific login (stays on admin dashboard)
+ * Allows admin, superadmin, and doctor roles
  */
 export const useAdminLogin = () => {
   const queryClient = useQueryClient();
@@ -85,14 +86,15 @@ export const useAdminLogin = () => {
         throw response;
       }
       
-      // Validate admin role
+      // Validate allowed roles for admin panel access
       const role = response.data?.user?.role?.name;
-      if (role !== 'admin' && role !== 'superadmin') {
+      const allowedRoles = ['admin', 'superadmin', 'doctor'];
+      if (!role || !allowedRoles.includes(role)) {
         authService.clearAuth();
         throw { 
           success: false, 
           status: 403, 
-          message: 'Access denied. Admin privileges required.' 
+          message: 'Access denied. Admin panel access required.' 
         } as ApiResponse;
       }
       

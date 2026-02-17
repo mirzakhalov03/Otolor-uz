@@ -8,29 +8,51 @@ import baseService from '../baseService';
 import type { Doctor, SearchParams } from '../types';
 
 export interface CreateDoctorRequest {
-  userId?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  phone?: string;
+  // User account fields (required)
+  username: string;
+  password: string;
+  // Doctor profile fields
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
   specialization: string;
-  experience: number;
-  education: string[];
+  qualifications?: string[];
+  experience?: number;
   bio?: string;
-  languages?: string[];
-  consultationFee: number;
+  consultationFee?: number;
+  availableDays?: string[];
+  workingHours?: {
+    start: string;
+    end: string;
+  };
 }
 
 export interface UpdateDoctorRequest {
+  // Optional user account fields
+  username?: string;
+  password?: string;
+  // Optional doctor profile fields
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
   specialization?: string;
+  qualifications?: string[];
   experience?: number;
-  education?: string[];
   bio?: string;
-  languages?: string[];
   consultationFee?: number;
-  isAvailable?: boolean;
+  availableDays?: string[];
+  workingHours?: {
+    start: string;
+    end: string;
+  };
   isActive?: boolean;
+}
+
+export interface UsernameAvailabilityResponse {
+  username: string;
+  isAvailable: boolean;
 }
 
 /**
@@ -54,7 +76,15 @@ export const doctorService = {
   },
 
   /**
-   * Create new doctor (admin only)
+   * Get doctor by ID with linked user info
+   * GET /doctors/:id/with-user
+   */
+  async getByIdWithUser(id: string) {
+    return baseService.get<Doctor>(`/doctors/${id}/with-user`);
+  },
+
+  /**
+   * Create new doctor with user account (admin only)
    * POST /doctors
    */
   async create(data: CreateDoctorRequest) {
@@ -63,10 +93,10 @@ export const doctorService = {
 
   /**
    * Update doctor
-   * PATCH /doctors/:id
+   * PUT /doctors/:id
    */
   async update(id: string, data: UpdateDoctorRequest) {
-    return baseService.patch<Doctor, UpdateDoctorRequest>(`/doctors/${id}`, data);
+    return baseService.put<Doctor, UpdateDoctorRequest>(`/doctors/${id}`, data);
   },
 
   /**
@@ -75,6 +105,14 @@ export const doctorService = {
    */
   async delete(id: string) {
     return baseService.delete(`/doctors/${id}`);
+  },
+
+  /**
+   * Check username availability
+   * GET /doctors/check-username?username=xxx
+   */
+  async checkUsername(username: string) {
+    return baseService.get<UsernameAvailabilityResponse>('/doctors/check-username', { username });
   },
 
   /**

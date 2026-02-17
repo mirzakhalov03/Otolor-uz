@@ -74,9 +74,24 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 /**
  * Admin-only protected route
- * Convenience wrapper for admin/superadmin routes
+ * Convenience wrapper for admin/superadmin/doctor routes
+ * Doctors have limited access controlled at sidebar level
  */
 export const AdminRoute: React.FC<Omit<ProtectedRouteProps, 'requiredRoles'>> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <ProtectedRoute requiredRoles={['admin', 'superadmin', 'doctor']} {...props}>
+      {children}
+    </ProtectedRoute>
+  );
+};
+
+/**
+ * Admin/Superadmin only routes (excludes doctors)
+ */
+export const AdminOnlyRoute: React.FC<Omit<ProtectedRouteProps, 'requiredRoles'>> = ({
   children,
   ...props
 }) => {

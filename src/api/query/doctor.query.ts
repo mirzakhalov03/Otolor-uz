@@ -15,7 +15,9 @@ export const doctorKeys = {
   list: (params?: SearchParams) => [...doctorKeys.lists(), params] as const,
   details: () => [...doctorKeys.all, 'detail'] as const,
   detail: (id: string) => [...doctorKeys.details(), id] as const,
+  detailWithUser: (id: string) => [...doctorKeys.all, 'detail-with-user', id] as const,
   availability: (id: string, date?: string) => [...doctorKeys.all, 'availability', id, date] as const,
+  usernameCheck: (username: string) => [...doctorKeys.all, 'username-check', username] as const,
 };
 
 /**
@@ -49,6 +51,41 @@ export const useDoctor = (id: string, enabled = true) => {
       return response.data;
     },
     enabled: !!id && enabled,
+  });
+};
+
+/**
+ * Hook to get a doctor with linked user info
+ */
+export const useDoctorWithUser = (id: string, enabled = true) => {
+  return useQuery({
+    queryKey: doctorKeys.detailWithUser(id),
+    queryFn: async () => {
+      const response = await doctorService.getByIdWithUser(id);
+      if (!response.success) {
+        throw response;
+      }
+      return response.data;
+    },
+    enabled: !!id && enabled,
+  });
+};
+
+/**
+ * Hook to check username availability
+ */
+export const useCheckUsername = (username: string, enabled = true) => {
+  return useQuery({
+    queryKey: doctorKeys.usernameCheck(username),
+    queryFn: async () => {
+      const response = await doctorService.checkUsername(username);
+      if (!response.success) {
+        throw response;
+      }
+      return response.data;
+    },
+    enabled: !!username && username.length >= 3 && enabled,
+    staleTime: 10 * 1000, // 10 seconds
   });
 };
 
@@ -111,6 +148,7 @@ export const useUpdateDoctor = () => {
       // Update the specific doctor in cache
       if (updatedDoctor) {
         queryClient.setQueryData(doctorKeys.detail(updatedDoctor._id), updatedDoctor);
+        queryClient.invalidateQueries({ queryKey: doctorKeys.detailWithUser(updatedDoctor._id) });
       }
       // Invalidate list to refresh
       queryClient.invalidateQueries({ queryKey: doctorKeys.lists() });
@@ -138,6 +176,7 @@ export const useDeleteDoctor = () => {
     onSuccess: (deletedId) => {
       // Remove from cache
       queryClient.removeQueries({ queryKey: doctorKeys.detail(deletedId) });
+      queryClient.removeQueries({ queryKey: doctorKeys.detailWithUser(deletedId) });
       // Invalidate list
       queryClient.invalidateQueries({ queryKey: doctorKeys.lists() });
     },

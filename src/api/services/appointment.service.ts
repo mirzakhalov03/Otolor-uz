@@ -105,6 +105,22 @@ export const appointmentService = {
   async getMyAppointments(params?: AppointmentFilters) {
     return baseService.get<Appointment[]>('/appointments/my', params);
   },
+
+  /**
+   * Get doctor's booked appointments (for doctors)
+   * GET /appointments/doctor/bookings
+   */
+  async getDoctorBookings(params?: AppointmentFilters) {
+    return baseService.get<Appointment[]>('/appointments/doctor/bookings', params);
+  },
+
+  /**
+   * Get today's queue for doctor (for doctors)
+   * GET /appointments/doctor/queue
+   */
+  async getDoctorTodayQueue() {
+    return baseService.get<Appointment[]>('/appointments/doctor/queue');
+  },
 };
 
 export default appointmentService;

@@ -1,0 +1,52 @@
+/**
+ * Doctor Form Styles
+ */
+
+.doctor-form {
+  padding: 16px 0;
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+  }
+
+  &__section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 8px;
+
+    .ant-typography {
+      margin-bottom: 8px;
+    }
+
+    .ant-divider {
+      margin: 12px 0 16px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 24px;
+  }
+
+  // Form item customizations
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+
+  // Input number full width
+  .ant-input-number {
+    width: 100%;
+  }
+
+  // Select full width
+  .ant-select {
+    width: 100%;
+  }
+}

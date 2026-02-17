@@ -1,9 +1,9 @@
 /**
  * Admin Sidebar Navigation
- * Reusable sidebar with active state and scalable sections
+ * Reusable sidebar with active state and role-based menu items
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Layout, Menu, Typography } from 'antd';
 import type { MenuProps } from 'antd';
@@ -15,9 +15,11 @@ import {
   FileTextOutlined,
   SettingOutlined,
   TeamOutlined,
+  ProfileOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../context/AuthContext';
+import { hasMenuAccess } from '../../../config/rbac.config';
 import './AdminSidebar.scss';
 
 const { Sider } = Layout;
@@ -30,10 +32,23 @@ interface AdminSidebarProps {
 
 type MenuItem = Required<MenuProps>['items'][number];
 
+/**
+ * Menu item definitions with their icons and labels
+ */
+interface MenuItemDefinition {
+  key: string;
+  icon: React.ReactNode;
+  labelKey: string;
+  path: string;
+  dividerBefore?: boolean;
+}
+
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) => {
   const location = useLocation();
   const { t } = useTranslation();
-  const { user, isSuperAdmin } = useAuth();
+  const { user } = useAuth();
+  
+  const userRole = user?.role?.name;
 
   // Get current active menu key based on path
   const getSelectedKey = (): string => {
@@ -43,6 +58,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
       return 'dashboard';
     }
     
+    if (path.includes('/admins-otolor/profile')) return 'profile';
     if (path.includes('/admins-otolor/doctors')) return 'doctors';
     if (path.includes('/admins-otolor/services')) return 'services';
     if (path.includes('/admins-otolor/appointments')) return 'appointments';
@@ -54,51 +70,106 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
     return 'dashboard';
   };
 
-  // Navigation items
-  const menuItems: MenuItem[] = [
+  // All menu item definitions
+  const allMenuItems: MenuItemDefinition[] = [
     {
       key: 'dashboard',
       icon: <DashboardOutlined />,
-      label: <NavLink to="/admins-otolor">{t('admin.dashboard')}</NavLink>,
+      labelKey: 'admin.dashboard',
+      path: '/admins-otolor',
+    },
+    {
+      key: 'profile',
+      icon: <ProfileOutlined />,
+      labelKey: 'admin.profile',
+      path: '/admins-otolor/profile',
     },
     {
       key: 'doctors',
       icon: <TeamOutlined />,
-      label: <NavLink to="/admins-otolor/doctors">{t('admin.doctors')}</NavLink>,
+      labelKey: 'admin.doctors',
+      path: '/admins-otolor/doctors',
     },
     {
       key: 'services',
       icon: <MedicineBoxOutlined />,
-      label: <NavLink to="/admins-otolor/services">{t('admin.services')}</NavLink>,
+      labelKey: 'admin.services',
+      path: '/admins-otolor/services',
     },
     {
       key: 'appointments',
       icon: <CalendarOutlined />,
-      label: <NavLink to="/admins-otolor/appointments">{t('admin.appointments')}</NavLink>,
+      labelKey: 'admin.appointments',
+      path: '/admins-otolor/appointments',
     },
     {
       key: 'blogs',
       icon: <FileTextOutlined />,
-      label: <NavLink to="/admins-otolor/blogs">{t('admin.blogs')}</NavLink>,
+      labelKey: 'admin.blogs',
+      path: '/admins-otolor/blogs',
     },
-    // Divider
-    { type: 'divider' },
-    // Admin-only sections
-    ...(isSuperAdmin
-      ? [
-          {
-            key: 'users',
-            icon: <UserOutlined />,
-            label: <NavLink to="/admins-otolor/users">{t('admin.users')}</NavLink>,
-          },
-          {
-            key: 'roles',
-            icon: <SettingOutlined />,
-            label: <NavLink to="/admins-otolor/roles">{t('admin.rolesAndPermissions')}</NavLink>,
-          },
-        ]
-      : []),
+    // Admin-only sections (after divider)
+    {
+      key: 'users',
+      icon: <UserOutlined />,
+      labelKey: 'admin.users',
+      path: '/admins-otolor/users',
+      dividerBefore: true,
+    },
+    {
+      key: 'roles',
+      icon: <SettingOutlined />,
+      labelKey: 'admin.rolesAndPermissions',
+      path: '/admins-otolor/roles',
+    },
+    {
+      key: 'settings',
+      icon: <SettingOutlined />,
+      labelKey: 'admin.settings',
+      path: '/admins-otolor/settings',
+    },
   ];
+
+  // Filter menu items based on user role
+  const menuItems: MenuItem[] = useMemo(() => {
+    const items: MenuItem[] = [];
+    let needsDivider = false;
+    
+    for (const item of allMenuItems) {
+      // Check if user has access to this menu item
+      if (!hasMenuAccess(item.key, userRole)) {
+        continue;
+      }
+      
+      // Add divider before admin-only sections
+      if (item.dividerBefore && !needsDivider) {
+        items.push({ type: 'divider' });
+        needsDivider = true;
+      }
+      
+      items.push({
+        key: item.key,
+        icon: item.icon,
+        label: <NavLink to={item.path}>{t(item.labelKey, item.key)}</NavLink>,
+      });
+    }
+    
+    return items;
+  }, [userRole, t]);
+
+  // User role display name
+  const getRoleDisplayName = () => {
+    if (!userRole) return '';
+    
+    const roleDisplayNames: Record<string, string> = {
+      superadmin: t('admin.superAdmin', 'Super Admin'),
+      admin: t('admin.admin', 'Admin'),
+      doctor: t('admin.doctor', 'Doctor'),
+      user: t('admin.user', 'User'),
+    };
+    
+    return roleDisplayNames[userRole] || userRole;
+  };
 
   return (
     <Sider
@@ -131,7 +202,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
               {user.firstName} {user.lastName}
             </Text>
             <Text className="admin-sidebar__user-role">
-              {user.role?.name === 'superadmin' ? t('admin.superAdmin') : t('admin.admin')}
+              {getRoleDisplayName()}
             </Text>
           </div>
         </div>

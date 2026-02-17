@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Button, Tag, Avatar, Popconfirm, message, Tooltip } from 'antd';
+import { Space, Button, Tag, Avatar, Popconfirm, message, Tooltip, Drawer } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
   EditOutlined,
@@ -13,16 +13,27 @@ import {
   UserOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import DataTable from '../../../components/admin/DataTable';
-import { useDoctors, useDeleteDoctor } from '../../../api/query';
-import type { Doctor } from '../../../api/types';
+import { DoctorForm } from '../../../components/admin';
+import { useDoctors, useDeleteDoctor, useCreateDoctor, useUpdateDoctor, useDoctorWithUser } from '../../../api/query';
+import type { Doctor, ApiResponse } from '../../../api/types';
+import type { CreateDoctorRequest, UpdateDoctorRequest } from '../../../api/services/doctor.service';
 import './DoctorsPage.scss';
 
+type DrawerMode = 'create' | 'edit' | 'view' | null;
+
 const DoctorsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState('');
+  
+  // Drawer state
+  const [drawerMode, setDrawerMode] = useState<DrawerMode>(null);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
 
   // Fetch doctors with pagination
   const { data, isLoading, refetch } = useDoctors({
@@ -30,14 +41,21 @@ const DoctorsPage: React.FC = () => {
     limit: pageSize,
     search,
   });
-  
-  console.log(data)
 
+  // Fetch selected doctor with user info for edit
+  const { data: selectedDoctor, isLoading: isLoadingDoctor } = useDoctorWithUser(
+    selectedDoctorId || '',
+    !!selectedDoctorId && (drawerMode === 'edit' || drawerMode === 'view')
+  );
+
+  // Mutations
   const deleteMutation = useDeleteDoctor();
+  const createMutation = useCreateDoctor();
+  const updateMutation = useUpdateDoctor();
 
   const handleSearch = (value: string) => {
     setSearch(value);
-    setPage(1); // Reset to first page on search
+    setPage(1);
   };
 
   const handleRefresh = () => {
@@ -47,27 +65,64 @@ const DoctorsPage: React.FC = () => {
   };
 
   const handleCreate = () => {
-    // TODO: Open create doctor modal/drawer
-    message.info('Create doctor functionality - coming soon!');
+    setSelectedDoctorId(null);
+    setDrawerMode('create');
   };
 
   const handleEdit = (doctor: Doctor) => {
-    // TODO: Open edit doctor modal/drawer
-    message.info(`Edit doctor: ${doctor._id}`);
+    setSelectedDoctorId(doctor._id);
+    setDrawerMode('edit');
   };
 
   const handleView = (doctor: Doctor) => {
-    // TODO: Navigate to doctor detail page
-    message.info(`View doctor: ${doctor._id}`);
+    setSelectedDoctorId(doctor._id);
+    setDrawerMode('view');
+  };
+
+  const handleCloseDrawer = () => {
+    setDrawerMode(null);
+    setSelectedDoctorId(null);
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteMutation.mutateAsync(id);
-      message.success('Doctor deleted successfully');
+      message.success(t('admin.doctors.deleteSuccess', 'Doctor deleted successfully'));
       refetch();
     } catch (error) {
-      message.error('Failed to delete doctor');
+      const apiError = error as ApiResponse;
+      message.error(apiError.message || t('admin.doctors.deleteError', 'Failed to delete doctor'));
+    }
+  };
+
+  const handleCreateSubmit = async (values: CreateDoctorRequest | UpdateDoctorRequest) => {
+    try {
+      await createMutation.mutateAsync(values as CreateDoctorRequest);
+      message.success(t('admin.doctors.createSuccess', 'Doctor created successfully'));
+      handleCloseDrawer();
+      refetch();
+    } catch (error) {
+      const apiError = error as ApiResponse;
+      message.error(apiError.message || t('admin.doctors.createError', 'Failed to create doctor'));
+      throw error; // Re-throw to keep form in submitting state
+    }
+  };
+
+  const handleUpdateSubmit = async (values: CreateDoctorRequest | UpdateDoctorRequest) => {
+    if (!selectedDoctorId) return;
+    
+    try {
+      await updateMutation.mutateAsync({ 
+        id: selectedDoctorId, 
+        data: values as UpdateDoctorRequest 
+      });
+      message.success(t('admin.doctors.updateSuccess', 'Doctor updated successfully'));
+      handleCloseDrawer();
+      refetch();
+    } catch (error) {
+      const apiError = error as ApiResponse;
+      message.error(apiError.message || t('admin.doctors.updateError', 'Failed to update doctor'));
+      throw error;
     }
   };
 
@@ -78,7 +133,7 @@ const DoctorsPage: React.FC = () => {
 
   const columns: ColumnsType<Doctor> = [
     {
-      title: 'Doctor',
+      title: t('admin.doctors.columns.doctor', 'Doctor'),
       dataIndex: 'fullName',
       key: 'doctor',
       width: 250,
@@ -101,7 +156,7 @@ const DoctorsPage: React.FC = () => {
       },
     },
     {
-      title: 'Specialization',
+      title: t('admin.doctors.columns.specialization', 'Specialization'),
       dataIndex: 'specialization',
       key: 'specialization',
       width: 180,
@@ -110,32 +165,21 @@ const DoctorsPage: React.FC = () => {
       ),
     },
     {
-      title: 'Experience',
+      title: t('admin.doctors.columns.experience', 'Experience'),
       dataIndex: 'experience',
       key: 'experience',
       width: 120,
-      render: (experience: number) => `${experience} years`,
+      render: (experience: number) => `${experience} ${t('admin.doctors.years', 'years')}`,
     },
     {
-      title: 'Fee',
+      title: t('admin.doctors.columns.fee', 'Fee'),
       dataIndex: 'consultationFee',
       key: 'consultationFee',
       width: 120,
-      render: (fee: number) => `$${fee}`,
+      render: (fee: number) => `$${fee || 0}`,
     },
     {
-      title: 'Rating',
-      dataIndex: 'rating',
-      key: 'rating',
-      width: 100,
-      render: (rating: number, record) => (
-        <Tooltip title={`${record.totalReviews || 0} reviews`}>
-          <span>⭐ {rating ? rating.toFixed(1) : '0.0'}</span>
-        </Tooltip>
-      ),
-    },
-    {
-      title: 'Qualifications',
+      title: t('admin.doctors.columns.qualifications', 'Qualifications'),
       dataIndex: 'qualifications',
       key: 'qualifications',
       width: 150,
@@ -151,7 +195,7 @@ const DoctorsPage: React.FC = () => {
       ),
     },
     {
-      title: 'Status',
+      title: t('admin.doctors.columns.status', 'Status'),
       key: 'status',
       width: 120,
       render: (_, record) => (
@@ -159,18 +203,18 @@ const DoctorsPage: React.FC = () => {
           icon={record.isActive ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
           color={record.isActive ? 'success' : 'default'}
         >
-          {record.isActive ? 'Active' : 'Inactive'}
+          {record.isActive ? t('admin.doctors.active', 'Active') : t('admin.doctors.inactive', 'Inactive')}
         </Tag>
       ),
     },
     {
-      title: 'Actions',
+      title: t('admin.doctors.columns.actions', 'Actions'),
       key: 'actions',
       fixed: 'right',
       width: 150,
       render: (_, record) => (
         <Space size="small">
-          <Tooltip title="View">
+          <Tooltip title={t('common.view', 'View')}>
             <Button
               type="text"
               icon={<EyeOutlined />}
@@ -178,7 +222,7 @@ const DoctorsPage: React.FC = () => {
               size="small"
             />
           </Tooltip>
-          <Tooltip title="Edit">
+          <Tooltip title={t('common.edit', 'Edit')}>
             <Button
               type="text"
               icon={<EditOutlined />}
@@ -186,13 +230,13 @@ const DoctorsPage: React.FC = () => {
               size="small"
             />
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip title={t('common.delete', 'Delete')}>
             <Popconfirm
-              title="Delete doctor"
-              description="Are you sure you want to delete this doctor?"
+              title={t('admin.doctors.deleteTitle', 'Delete doctor')}
+              description={t('admin.doctors.deleteDescription', 'Are you sure you want to delete this doctor?')}
               onConfirm={() => handleDelete(record._id)}
-              okText="Yes"
-              cancelText="No"
+              okText={t('common.yes', 'Yes')}
+              cancelText={t('common.no', 'No')}
               okButtonProps={{ danger: true }}
             >
               <Button
@@ -208,10 +252,24 @@ const DoctorsPage: React.FC = () => {
     },
   ];
 
+  // Get drawer title based on mode
+  const getDrawerTitle = () => {
+    switch (drawerMode) {
+      case 'create':
+        return t('admin.doctors.createDoctor', 'Create Doctor');
+      case 'edit':
+        return t('admin.doctors.editDoctor', 'Edit Doctor');
+      case 'view':
+        return t('admin.doctors.viewDoctor', 'View Doctor');
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="doctors-page">
       <DataTable<Doctor>
-        pageTitle="Doctors Management"
+        pageTitle={t('admin.doctors.pageTitle', 'Doctors Management')}
         columns={columns}
         dataSource={data?.data || []}
         rowKey="_id"
@@ -221,9 +279,38 @@ const DoctorsPage: React.FC = () => {
         onRefresh={handleRefresh}
         onCreate={handleCreate}
         onPageChange={handlePageChange}
-        searchPlaceholder="Search by name, email, or specialization..."
-        createButtonText="Add Doctor"
+        searchPlaceholder={t('admin.doctors.searchPlaceholder', 'Search by name, email, or specialization...')}
+        createButtonText={t('admin.doctors.addDoctor', 'Add Doctor')}
       />
+
+      {/* Create/Edit Drawer */}
+      <Drawer
+        title={getDrawerTitle()}
+        open={drawerMode !== null}
+        onClose={handleCloseDrawer}
+        width={720}
+        destroyOnClose
+        footer={null}
+      >
+        {drawerMode === 'create' && (
+          <DoctorForm
+            isEditMode={false}
+            onSubmit={handleCreateSubmit}
+            onCancel={handleCloseDrawer}
+            isSubmitting={createMutation.isPending}
+          />
+        )}
+        {(drawerMode === 'edit' || drawerMode === 'view') && (
+          <DoctorForm
+            initialData={selectedDoctor}
+            isEditMode={drawerMode === 'edit'}
+            isLoading={isLoadingDoctor}
+            onSubmit={handleUpdateSubmit}
+            onCancel={handleCloseDrawer}
+            isSubmitting={updateMutation.isPending}
+          />
+        )}
+      </Drawer>
     </div>
   );
 };
