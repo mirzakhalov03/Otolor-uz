@@ -227,3 +227,39 @@ export const useMarkNoShow = () => {
     },
   });
 };
+
+/**
+ * Hook to get doctor's booked appointments
+ */
+export const useDoctorBookings = (params?: AppointmentFilters, enabled = true) => {
+  return useQuery({
+    queryKey: [...appointmentKeys.all, 'doctor-bookings', params],
+    queryFn: async () => {
+      const response = await appointmentService.getDoctorBookings(params);
+      if (!response.success) {
+        throw response;
+      }
+      return { data: response.data, meta: response.meta };
+    },
+    enabled,
+    staleTime: 15 * 1000, // 15 seconds
+  });
+};
+
+/**
+ * Hook to get today's queue for doctor
+ */
+export const useDoctorTodayQueue = (enabled = true) => {
+  return useQuery({
+    queryKey: [...appointmentKeys.all, 'doctor-queue'],
+    queryFn: async () => {
+      const response = await appointmentService.getDoctorTodayQueue();
+      if (!response.success) {
+        throw response;
+      }
+      return response.data;
+    },
+    enabled,
+    staleTime: 15 * 1000, // 15 seconds - frequent updates for live queue
+  });
+};

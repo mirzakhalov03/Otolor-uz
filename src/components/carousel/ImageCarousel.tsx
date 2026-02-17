@@ -4,9 +4,10 @@ import { doctorsImages } from '../../assets/images/doctors/doctorsImages';
 
 interface ImageCarouselProps {
     autoPlayInterval?: number;
+    showDoctorInfo?: boolean;
 }
 
-const ImageCarousel = ({ autoPlayInterval = 4000 }: ImageCarouselProps) => {
+const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false }: ImageCarouselProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     
@@ -40,7 +41,17 @@ const ImageCarousel = ({ autoPlayInterval = 4000 }: ImageCarouselProps) => {
                 >
                     {doctorsImages.map((image, index) => (
                         <div key={index} className="carousel-slide">
-                            <img src={image.src} alt={`Slide ${index + 1}`} />
+                            <img src={image.src} alt={image.alt || `Slide ${index + 1}`} />
+                            {showDoctorInfo && (
+                                <div className="carousel-doctor-info">
+                                    <div className="carousel-status-badge">
+                                        <span className="carousel-status-dot" />
+                                        AVAILABLE TODAY
+                                    </div>
+                                    <div className="carousel-doctor-name">{image.name}</div>
+                                    <div className="carousel-doctor-title">{image.title}</div>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

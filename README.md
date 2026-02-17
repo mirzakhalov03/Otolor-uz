@@ -12,9 +12,12 @@ Modern, multilingual medical clinic website built with React, TypeScript, and Vi
 - **Appointments** - Doctor selection and appointment booking system
 
 ### Admin Panel
-- **Dashboard** - Overview and analytics
-- **Authentication** - Secure JWT-based login with role-based access
-- **Management** - Doctors, services, appointments, users, and roles (modular and extensible)
+- **Dashboard** - Overview and analytics with real-time statistics
+- **Authentication** - Secure JWT-based login with role-based access control
+- **Doctors Management** - Full CRUD operations for doctor profiles with search and pagination
+- **Services Management** - Manage clinic services with multilingual support
+- **Appointments** - View and manage patient appointments (coming soon)
+- **Users & Roles** - User management and permission system (coming soon)
 
 ### Core Capabilities
 - **Multi-language Support** - Uzbek (default), Russian, and English with i18next
@@ -49,6 +52,12 @@ src/
 ├── assets/                 # Static assets (images, icons, fonts)
 ├── components/             # Reusable components
 │   ├── admin/              # Admin panel components
+│   │   ├── DataTable/      # Reusable table with pagination
+│   │   ├── header/         # Admin header with actions
+│   │   ├── layout/         # Admin layout wrapper
+│   │   ├── shared/         # Shared admin components
+│   │   │   └── PageHeader/ # Page header with search/filters
+│   │   └── sidebar/        # Navigation sidebar
 │   ├── buttons/            # Button components
 │   ├── carousel/           # Image carousel
 │   ├── CTA-buttons/        # Call-to-action buttons
@@ -66,7 +75,15 @@ src/
 ├── pages/                  # Page components
 │   ├── about/
 │   ├── academy/
-│   ├── admin/
+│   ├── admin/              # Admin pages
+│   │   ├── dashboard/      # Dashboard page
+│   │   ├── doctors/        # Doctors management
+│   │   │   ├── components/ # DoctorsList, Create, Edit
+│   │   │   └── config/     # Table columns config
+│   │   ├── login/          # Admin login
+│   │   └── services/       # Services management
+│   │       ├── components/ # ServicesList, Create, Edit
+│   │       └── config/     # Table columns config
 │   ├── appointments/
 │   ├── home/
 │   ├── servicesPage/
@@ -102,11 +119,99 @@ npm run lint
 
 ### Environment Variables
 
-Create a `.env` file:
+Creatdmin Page Structure
+Each admin page follows a consistent, scalable pattern:
+
+```
+pages/admin/{resource}/
+├── components/
+│   ├── {Resource}List.tsx      # Main list view with table
+│   ├── Create{Resource}.tsx    # Create form
+│   └── Edit{Resource}.tsx      # Edit form
+├── config/
+│   └── {resource}.config.tsx   # Table columns & settings
+└── index.ts                    # Exports for routing
+```
+
+**Benefits:**
+- **Separation of Concerns** - Config, UI, and logic are isolated
+- **Reusability** - Shared components (DataTable, PageHeader)
+- **Maintainability** - Easy to modify table structure in config
+- **Scalability** - Simple to add new admin pages following the pattern
+
+### Ae a `.env` file:
 
 ```env
-VITE_API_BASE_URL=http://localhost:3000/api/v1
-```
+- Admin services support multilingual content (uz, ru, en)
+Development Guidelines
+
+### Adding a New Admin Page
+
+1. **Create folder structure:**
+   ```
+   pages/admin/{resource}/
+   ├── components/
+   ├── config/
+   └── index.ts
+   ```
+
+2. **Create config file** (`config/{resource}.config.tsx`):
+   - Define table columns
+   - Set page constants (title, search placeholder, etc.)
+
+3. **Create List component** (`components/{Resource}List.tsx`):
+   - Use PageHeader and DataTable
+   - Implement search, refresh, create handlers
+   - Pass config to columns generator
+
+4. **Create forms** (Create & Edit components):
+   - Use Ant Design Form components
+   - Implement validation
+   - Handle API mutations
+
+5. **Export from index.ts** and add route in `router/routes.tsx`
+
+See [AGENTIC_PROMPT.md](./AGENTIC_PROMPT.md) for detailed coding guidelines.
+
+## 
+Follow the development guidelines above and see [AGENTIC_PROMPT.md](./AGENTIC_PROMPT.md) for coding standards.
+
+## Project Status
+
+**Completed:**
+- ✅ Admin authentication & authorization
+- ✅ Doctors management (full CRUD)
+- ✅ Services management (full CRUD)
+- ✅ Reusable admin components (DataTable, PageHeader)
+- ✅ Multilingual support (uz, ru, en)
+- ✅ Responsive design
+
+**Coming Soon:**
+- 🚧 Appointments management
+- 🚧 Users & roles management
+- 🚧 Analytics dashboard
+- 🚧 File uploads for services
+
+### Doctors Management
+- **List View** - Searchable, paginated table with filtering
+- **Create** - Add new doctors with profile information
+- **Edit** - Update doctor details, availability, and fees
+- **Delete** - Soft delete with confirmation
+- **Columns**: Doctor info, specialization, experience, fee, rating, languages, status
+
+### Services Management
+- **List View** - Multilingual service display with search
+- **Create** - Add services with translations in uz/ru/en
+- **Edit** - Update service details and pricing
+- **Delete** - Remove services with confirmation
+- **Columns**: Image, name (all languages), category, price, duration, status
+
+### Shared Components
+- **DataTable** - Reusable table with pagination, search, and actions
+- **PageHeader** - Consistent header with search, filters, and action buttons
+- **AdminLayout** - Sidebar navigation and header wrapper
+
+## Development Guideline
 
 ## Architecture Patterns
 

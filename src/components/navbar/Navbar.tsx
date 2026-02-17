@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 import { Menu, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -9,6 +9,7 @@ import './Navbar.scss'
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const { t } = useTranslation()
 
   const Tabs = [
@@ -28,8 +29,21 @@ const Navbar = () => {
     setIsMobileMenuOpen(false)
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <div className="navbar-wrapper">
+    <div className={`navbar-wrapper ${isScrolled ? 'navbar-wrapper--scrolled' : ''}`}>
       <div className="navbar-inner container">
         <ul className="navbar-list">
           <Logo />

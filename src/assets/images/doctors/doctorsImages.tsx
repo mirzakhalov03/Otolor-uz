@@ -11,49 +11,78 @@ import doctor10 from "./doctor10.jpg"
 import doctor11 from "./doctor11.jpg"
 
 
-export const doctorsImages = [
+export interface DoctorImage {
+    src: string;
+    alt: string;
+    name: string;
+    title: string;
+}
+
+export const doctorsImages: DoctorImage[] = [
     {
         src: doctor1,
-        alt: "Sherzod Gulyamov"
+        alt: "Sherzod Gulyamov",
+        name: "Sherzod Gulyamov",
+        title: "ENT Specialist"
     },
     {
         src: doctor2,
-        alt: "Tuyg'un Muzaffarov"
+        alt: "Tuyg'un Muzaffarov",
+        name: "Tuyg'un Muzaffarov",
+        title: "Head & Neck Surgeon"
     },
     {
         src: doctor3,
-        alt: "Sherzod Botirov"
+        alt: "Sherzod Botirov",
+        name: "Sherzod Botirov",
+        title: "ENT Specialist"
     },
     {
         src: doctor4,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Abdulaziz",
+        title: "Audiologist"
     },
     {
         src: doctor5,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Sardor",
+        title: "ENT Specialist"
     },
     {
         src: doctor6,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Javohir",
+        title: "Rhinologist"
     },
     {
         src: doctor7,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Olim",
+        title: "ENT Specialist"
     },
     {
         src: doctor8,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Bekzod",
+        title: "Pediatric ENT"
     },
     {
         src: doctor9,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Rustam",
+        title: "ENT Specialist"
     },
     {
         src: doctor10,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Akmal",
+        title: "ENT Specialist"
     },
     {
         src: doctor11,
-        alt: ""
+        alt: "Doctor",
+        name: "Dr. Dilshod",
+        title: "ENT Specialist"
     },
 ]

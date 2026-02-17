@@ -1,0 +1,29 @@
+/**
+ * Service Form Styles
+ */
+
+.service-form {
+  &__section {
+    margin-bottom: 24px;
+  }
+
+  &__section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .anticon {
+      color: #2DC263;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 8px;
+  }
+}

@@ -2,10 +2,36 @@
 // COLOR VARIABLES
 // ========================================
 
-// Primary Colors
-$primary-green: #2DC263;
-$primary-green-light: #1ed34d;
-$primary-green-dark: #01a02e;
+// Primary Colors - Deep Forest Green (Premium)
+$primary-green: #1A4D2E;
+$primary-green-light: #236B3E;
+$primary-green-dark: #0F3620;
+$primary-green-bright: #2DC263;
+
+// Deep Green Palette (Premium)
+$green-50: #f0fdf4;
+$green-100: #dcfce7;
+$green-200: #bbf7d0;
+$green-300: #86efac;
+$green-400: #4ade80;
+$green-500: #22c55e;
+$green-600: #16a34a;
+$green-700: #15803d;
+$green-800: #1A4D2E;
+$green-900: #0F3620;
+
+// Premium Beige/Cream Palette (Page backgrounds)
+$beige-50: #FAFAF8;
+$beige-100: #F5F5F0;
+$beige-200: #EFEEE8;
+$beige-300: #E8E6DE;
+$beige-400: #DDD9CE;
+$beige-500: #D1CBBE;
+$beige-600: #B5A48E;
+
+// Page Background
+$page-bg: #F5F5F0;
+$page-bg-light: #FAFAF8;
 
 // Neutral Colors
 $white: #ffffff;
@@ -22,8 +48,8 @@ $gray-800: #1f2937;
 $gray-900: #111827;
 
 // Background Colors
-$bg-primary: $white;
-$bg-secondary: $gray-50;
+$bg-primary: $page-bg;
+$bg-secondary: $beige-100;
 $bg-dark: $gray-900;
 
 // Text Colors
@@ -118,3 +144,44 @@ $z-modal-backdrop: 1040;
 $z-modal: 1050;
 $z-popover: 1060;
 $z-tooltip: 1070;
+
+// ========================================
+// PREMIUM GRADIENTS
+// ========================================
+$gradient-hero: linear-gradient(135deg, $page-bg 0%, $beige-50 100%);
+$gradient-hero-accent: radial-gradient(ellipse at 80% 20%, rgba($primary-green, 0.06) 0%, transparent 50%);
+$gradient-section-beige: linear-gradient(180deg, $page-bg 0%, $beige-100 100%);
+$gradient-section-green: linear-gradient(180deg, $green-900 0%, $green-800 100%);
+$gradient-card-green: linear-gradient(135deg, $primary-green 0%, $primary-green-light 100%);
+$gradient-card-beige: linear-gradient(135deg, $beige-100 0%, $beige-200 100%);
+$gradient-icon: linear-gradient(135deg, $primary-green 0%, $primary-green-light 100%);
+
+// CTA Button Gradient
+$gradient-btn-primary: linear-gradient(135deg, $primary-green 0%, $primary-green-light 50%, $primary-green 100%);
+$gradient-btn-primary-hover: linear-gradient(135deg, $primary-green-light 0%, $primary-green 50%, $primary-green-dark 100%);
+
+// Soft Glow Gradients (for decorative elements)
+$glow-green: radial-gradient(circle, rgba($primary-green, 0.15) 0%, transparent 70%);
+$glow-green-soft: radial-gradient(circle, rgba($primary-green, 0.08) 0%, transparent 60%);
+$glow-beige: radial-gradient(circle, rgba($beige-400, 0.4) 0%, transparent 70%);
+$glow-warm: radial-gradient(circle, rgba(#E8D5B7, 0.3) 0%, transparent 60%);
+
+// ========================================
+// PREMIUM SHADOWS
+// ========================================
+$shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+$shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.1);
+$shadow-elevated: 0 20px 40px rgba(0, 0, 0, 0.08);
+$shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.04);
+$shadow-glow-green: 0 8px 24px rgba($primary-green, 0.25);
+$shadow-glow-green-strong: 0 12px 32px rgba($primary-green, 0.35);
+$shadow-premium-btn: 0 4px 16px rgba($primary-green, 0.3);
+$shadow-doctor-card: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+
+// ========================================
+// PREMIUM TRANSITIONS
+// ========================================
+$ease-premium: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+$transition-premium: all 0.3s $ease-premium;
+$transition-hover: all 0.25s $ease-premium;

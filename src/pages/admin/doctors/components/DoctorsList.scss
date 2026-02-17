@@ -1,0 +1,27 @@
+/**
+ * Doctors List Styles
+ */
+
+.doctors-list-page {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+
+  .doctor-name {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+  }
+
+  .doctor-email {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .doctors-list-page {
+    padding: 16px;
+  }
+}

@@ -42,17 +42,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Show loading spinner while checking auth
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          background: '#f0f2f5',
-        }}
-      >
-        <Spin size="large" tip="Loading..." />
-      </div>
+      <Spin size="large" fullscreen tip="Loading..." />
     );
   }
 
@@ -84,9 +74,24 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 /**
  * Admin-only protected route
- * Convenience wrapper for admin/superadmin routes
+ * Convenience wrapper for admin/superadmin/doctor routes
+ * Doctors have limited access controlled at sidebar level
  */
 export const AdminRoute: React.FC<Omit<ProtectedRouteProps, 'requiredRoles'>> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <ProtectedRoute requiredRoles={['admin', 'superadmin', 'doctor']} {...props}>
+      {children}
+    </ProtectedRoute>
+  );
+};
+
+/**
+ * Admin/Superadmin only routes (excludes doctors)
+ */
+export const AdminOnlyRoute: React.FC<Omit<ProtectedRouteProps, 'requiredRoles'>> = ({
   children,
   ...props
 }) => {

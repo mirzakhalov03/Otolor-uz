@@ -3,23 +3,43 @@
 .selector-card {
   max-width: 400px;
   min-height: 150px;
-  background: $white;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-md;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: $radius-xl;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   cursor: pointer;
-  transition: $transition-base;
-  border: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255, 255, 255, 0.9);
 
   &:hover {
-    box-shadow: $shadow-lg;
+    box-shadow: 
+      0 12px 30px rgba(0, 0, 0, 0.08),
+      0 4px 12px rgba($primary-green, 0.1);
     transform: translateY(-4px);
     border-color: rgba($primary-green, 0.3);
   }
 
   &.selected {
     border-color: $primary-green;
-    box-shadow: 0 8px 20px rgba($primary-green, 0.3);
-    background: linear-gradient(135deg, rgba($primary-green, 0.05) 0%, $white 100%);
+    box-shadow: 
+      0 8px 24px rgba($primary-green, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, rgba($primary-green, 0.08) 0%, rgba(255, 255, 255, 0.9) 100%);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 24px;
+      height: 24px;
+      background: $primary-green;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   &:active {
@@ -34,9 +54,20 @@
 
 .doctor-selector {
   .section-title {
-    font-size: $font-size-2xl;
+    font-size: 20px;
     font-weight: $font-weight-semibold;
-    color: $primary-green;
+    color: $gray-900;
     margin-bottom: $spacing-lg;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    &::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: $primary-green;
+      border-radius: $radius-sm;
+    }
   }
 }

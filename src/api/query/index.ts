@@ -24,6 +24,8 @@ export {
   doctorKeys,
   useDoctors,
   useDoctor,
+  useDoctorWithUser,
+  useCheckUsername,
   useDoctorAvailability,
   useCreateDoctor,
   useUpdateDoctor,
@@ -53,6 +55,8 @@ export {
   useConfirmAppointment,
   useCompleteAppointment,
   useMarkNoShow,
+  useDoctorBookings,
+  useDoctorTodayQueue,
 } from './appointment.query';
 
 // User queries

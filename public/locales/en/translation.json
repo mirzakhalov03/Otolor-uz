@@ -112,15 +112,28 @@
     "moscadaver": "Moscadaver"
   },
   "hero": {
+    "tag": "PREMIUM ENT CARE",
+    "headlineAccent": "Otolor",
+    "headlineRest": "- Advanced ENT care",
     "title": "OTOLOR",
     "subtitle": "Advanced ENT care for adults and children",
     "description": "Healing starts here.",
     "descriptionLine2": "Effective treatment depends on proper diagnosis.",
     "descriptionLine3": "Our specialists identify and treat the most complex medical problems.",
-    "bookAppointment": "Book an appointment"
+    "bookAppointment": "Book Your Consultation",
+    "ourServices": "Our Services",
+    "learnMore": "Learn More",
+    "stat1Value": "15+ Years",
+    "stat1Label": "Clinical Excellence",
+    "stat2Value": "12,000+",
+    "stat2Label": "Happy Patients",
+    "stat3Value": "Advanced",
+    "stat3Label": "German Tech"
   },
   "features": {
-    "title": "Advantages",
+    "tag": "Why Choose Us",
+    "title": "Excellence in Every Detail",
+    "subtitle": "We combine medical expertise with advanced technology to provide a standard of care that is as precise as it is compassionate.",
     "feature1Title": "Modern Equipment",
     "feature1Description": "Equipment from leading manufacturers from Europe, USA, Japan and only certified consumables",
     "feature2Title": "Highly Qualified Doctors",
@@ -129,6 +142,7 @@
     "feature3Description": "Patient safety and comfort are the most important criteria for us"
   },
   "homeAbout": {
+    "tag": "About Our Clinic",
     "title": "About Us",
     "description1": "We are a team of highly qualified specialists providing quality medical services. Our clinic is equipped with modern equipment and uses advanced treatment methods.",
     "description2": "With many years of experience in the field of otolaryngology, we are proud to help people regain health and improve quality of life. Our doctors constantly improve their skills and follow the latest achievements in medicine.",
@@ -140,12 +154,13 @@
     "stat3Label": "Specialists"
   },
   "homeServices": {
-    "title": "Our Services",
+    "tag": "Our Services",
+    "title": "Comprehensive ENT Care",
     "service1Title": "ENT Doctor for Children and Adults",
     "service2Title": "Rhinosurgeon",
     "service3Title": "Speech Therapist",
     "learnMore": "Learn More",
-    "seeAll": "See All"
+    "seeAll": "See All Services"
   },
   "aboutPage": {
     "heroTitle": "Otolor – Your Health Is Our Top Priority",
@@ -293,6 +308,24 @@
   },
   "appointments": {
     "pageTitle": "Online Appointment Booking",
+    "tag": "BOOK YOUR VISIT",
+    "titlePart1": "Schedule Your",
+    "titleAccent": "Consultation",
+    "subtitle": "Book an appointment with our expert ENT specialists. Quick, easy, and convenient online booking.",
+    "stat1Value": "24/7",
+    "stat1Label": "Online Booking",
+    "stat2Value": "20 min",
+    "stat2Label": "Average Time",
+    "stat3Value": "100%",
+    "stat3Label": "No Long Waits",
+    "step1Title": "1. Select a Doctor",
+    "step2Title": "2. Select Date & Time",
+    "step3Title": "3. Enter Your Information",
+    "dateLabel": "Date",
+    "availableTimes": "Available Times",
+    "selectDoctorFirst": "Select a doctor first",
+    "selectDateFirst": "Select a date first",
+    "noTimesAvailable": "No times available for this date",
     "alertTitle": "Reminder",
     "alertMessage": "If you have called before and agreed with the institution, proceed to the next step",
     "selectDoctor": "Select a doctor",
@@ -301,7 +334,9 @@
     "previousStep": "Previous Step",
     "submitAppointment": "Book Appointment",
     "fullName": "Full Name",
+    "fullNamePlaceholder": "First Last Name",
     "phoneNumber": "Phone Number",
+    "age": "Age",
     "dateOfBirth": "Date of Birth",
     "appointmentDate": "Appointment Date",
     "appointmentTime": "Appointment Time",
@@ -310,7 +345,23 @@
     "selectDate": "Select Date",
     "selectTime": "Select Time",
     "requiredField": "This field is required",
+    "errorSelectAll": "Please select a doctor, date, and time",
+    "errorFullName": "Please enter your full name",
+    "errorPhone": "Please enter your phone number",
+    "errorAge": "Please enter your age",
     "success": "Your appointment has been successfully booked!",
-    "error": "An error occurred while booking. Please try again."
+    "error": "An error occurred while booking. Please try again.",
+    "modal": {
+      "title": "Booking Confirmed!",
+      "queueNumber": "Your Queue Number",
+      "patient": "Patient",
+      "doctor": "Doctor",
+      "datetime": "Date & Time",
+      "rulesTitle": "Important Guidelines",
+      "rule1": "Please arrive 15 minutes before your appointment time",
+      "rule2": "Bring your ID and any previous medical records",
+      "rule3": "If you need to cancel, please do so at least 24 hours in advance",
+      "rule4": "Wear a mask and follow clinic hygiene protocols"
+    }
   }
 }

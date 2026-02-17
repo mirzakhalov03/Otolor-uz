@@ -1,0 +1,20 @@
+/**
+ * Create Doctor Page Styles
+ */
+
+.create-doctor-page {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+
+  .ant-card {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-doctor-page {
+    padding: 16px;
+  }
+}

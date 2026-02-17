@@ -1,0 +1,242 @@
+// ========================================
+// ANIMATION KEYFRAMES
+// ========================================
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// ========================================
+// ANIMATION MIXINS
+// ========================================
+
+/// Entrance animation with stagger delay
+/// @param {Number} $delay - Animation delay in ms
+/// @param {String} $direction - Animation direction (up, down, fade, scale)
+@mixin entrance-animation($delay: 0ms, $direction: 'up') {
+  opacity: 0;
+  
+  @if $direction == 'up' {
+    animation: fadeInUp 0.6s $ease-premium forwards;
+    animation-delay: $delay;
+  } @else if $direction == 'down' {
+    animation: fadeInUp 0.6s $ease-premium forwards;
+    animation-delay: $delay;
+    transform: translateY(-24px);
+  } @else if $direction == 'fade' {
+    animation: fadeIn 0.5s $ease-premium forwards;
+    animation-delay: $delay;
+  } @else if $direction == 'scale' {
+    animation: scaleIn 0.5s $ease-premium forwards;
+    animation-delay: $delay;
+  }
+}
+
+/// Premium hover lift effect
+/// @param {String} $shadow - Shadow variable to use on hover
+@mixin hover-lift($shadow: $shadow-card-hover) {
+  transition: $transition-hover;
+  
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $shadow;
+  }
+}
+
+/// Button glow effect on hover
+/// @param {Color} $color - Glow color base
+@mixin button-glow($color: $primary-green) {
+  transition: $transition-premium;
+  
+  &:hover {
+    box-shadow: 0 8px 24px rgba($color, 0.35);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba($color, 0.25);
+  }
+}
+
+// ========================================
+// DECORATION MIXINS
+// ========================================
+
+/// Abstract blob decoration
+/// @param {String} $position - Position (top-left, top-right, bottom-left, bottom-right, center)
+/// @param {Color} $color - Blob color
+/// @param {Number} $size - Blob size in px
+/// @param {Number} $blur - Blur amount in px
+@mixin abstract-blob($position: 'top-right', $color: $primary-green, $size: 400px, $blur: 100px) {
+  content: '';
+  position: absolute;
+  width: $size;
+  height: $size;
+  background: radial-gradient(circle, rgba($color, 0.12) 0%, transparent 70%);
+  filter: blur($blur);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  
+  @if $position == 'top-right' {
+    top: -#{$size * 0.3};
+    right: -#{$size * 0.2};
+  } @else if $position == 'top-left' {
+    top: -#{$size * 0.3};
+    left: -#{$size * 0.2};
+  } @else if $position == 'bottom-right' {
+    bottom: -#{$size * 0.3};
+    right: -#{$size * 0.2};
+  } @else if $position == 'bottom-left' {
+    bottom: -#{$size * 0.3};
+    left: -#{$size * 0.2};
+  } @else if $position == 'center' {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/// Organic wave background pattern
+@mixin organic-wave-bg($color: $beige-200, $opacity: 0.5) {
+  background-image: 
+    radial-gradient(ellipse at 20% 80%, rgba($color, $opacity) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba($primary-green, 0.05) 0%, transparent 40%);
+}
+
+/// Subtle grid pattern overlay
+@mixin grid-pattern($color: $gray-200, $size: 40px) {
+  background-image: 
+    linear-gradient(to right, rgba($color, 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba($color, 0.3) 1px, transparent 1px);
+  background-size: $size $size;
+}
+
+// ========================================
+// CARD MIXINS
+// ========================================
+
+/// Premium card base styling
+@mixin premium-card {
+  background: $white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-card;
+  transition: $transition-hover;
+}
+
+/// Card with accent bar on top
+/// @param {Color} $color - Accent color
+/// @param {Number} $height - Bar height
+@mixin card-accent-bar($color: $primary-green, $height: 4px) {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $height;
+    background: $color;
+    border-radius: $radius-xl $radius-xl 0 0;
+  }
+}
+
+// ========================================
+// TYPOGRAPHY MIXINS
+// ========================================
+
+/// Editorial headline styling
+@mixin headline-editorial($size: 48px) {
+  font-size: $size;
+  font-weight: $font-weight-semibold;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: $gray-900;
+}
+
+/// Section tag styling (small uppercase label)
+@mixin section-tag {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $primary-green;
+  margin-bottom: $spacing-md;
+  display: inline-block;
+}
+
+// ========================================
+// RESPONSIVE MIXINS
+// ========================================
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (max-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (max-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (max-width: $breakpoint-xl) { @content; }
+  }
+}
+
+@mixin respond-above($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl) { @content; }
+  }
+}

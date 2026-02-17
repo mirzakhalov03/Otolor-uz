@@ -112,15 +112,28 @@
     "moscadaver": "Moskadaver"
   },
   "hero": {
+    "tag": "PREMIUM LOR XIZMATI",
+    "headlineAccent": "Otolor",
+    "headlineRest": "- Zamonaviy LOR xizmatlari",
     "title": "OTOLOR",
     "subtitle": "Kattalar va bolalar uchun ilg'or LOR yordami",
     "description": "Tuzalish shu yerdan boshlanadi.",
     "descriptionLine2": "Samarali davo olish - to'g'ri tashxis qo'yishga bog'liq.",
     "descriptionLine3": "Mutaxassislarimiz eng murakkab tibbiy muammolarni aniqlaydilar va davolashadilar.",
-    "bookAppointment": "Uchrashuv belgilash"
+    "bookAppointment": "Navbat olish",
+    "ourServices": "Xizmatlarimiz",
+    "learnMore": "Batafsil",
+    "stat1Value": "15+ Yil",
+    "stat1Label": "Klinik tajriba",
+    "stat2Value": "12,000+",
+    "stat2Label": "Baxtli bemorlar",
+    "stat3Value": "Ilg'or",
+    "stat3Label": "Germaniya texnologiyasi"
   },
   "features": {
-    "title": "Afzalliklar",
+    "tag": "Nega bizni tanlash kerak",
+    "title": "Har bir tafsilotda mukammallik",
+    "subtitle": "Biz tibbiy tajribani ilg'or texnologiyalar bilan birlashtiramiz va aniq hamda g'amxo'rlik bilan parvarishlash standartini ta'minlaymiz.",
     "feature1Title": "Zamonaviy uskunalar",
     "feature1Description": "Yevropa, AQSh, Yaponiyaning yetakchi ishlab chiqaruvchilaridan uskunalar va faqat sertifikatlangan materiallar",
     "feature2Title": "Yuqori malakali shifokorlar",
@@ -129,6 +142,7 @@
     "feature3Description": "Bemorlar xavfsizligi va qulayligi biz uchun eng muhim mezonlardir"
   },
   "homeAbout": {
+    "tag": "Klinikamiz haqida",
     "title": "Biz haqimizda",
     "description1": "Biz — yuqori malakali mutaxassislar jamoasi bo'lib, sifatli tibbiy xizmatlarni taqdim etamiz. Klinikamiz zamonaviy uskunalar bilan jihozlangan va ilg'or davolash usullaridan foydalanadi.",
     "description2": "Ko'p yillik otolaringologiya tajribasiga ega bo'lib, biz odamlarga sog'lig'ini tiklash va hayot sifatini yaxshilashga yordam berishdan faxrlanamiz. Shifokorlarimiz doimiy ravishda malakasini oshiradi va tibbiyotdagi eng yangi yutuqlarni kuzatib boradi.",
@@ -140,12 +154,13 @@
     "stat3Label": "Mutaxassislar"
   },
   "homeServices": {
-    "title": "Bizning xizmatlar",
+    "tag": "Bizning xizmatlarimiz",
+    "title": "To'liq LOR xizmati",
     "service1Title": "Kattalar va bolalar uchun LOR shifokor",
     "service2Title": "Rinoxirurg",
     "service3Title": "Logoped",
     "learnMore": "Batafsil",
-    "seeAll": "Hammasini ko'rish"
+    "seeAll": "Barcha xizmatlarni ko'rish"
   },
   "aboutPage": {
     "heroTitle": "Otolor – Salomatligingiz Bizning Ustuvor Vazifamiz",
@@ -293,6 +308,24 @@
   },
   "appointments": {
     "pageTitle": "Onlayn Navbat Olish",
+    "tag": "NAVBAT OLISH",
+    "titlePart1": "Konsultatsiyani",
+    "titleAccent": "Rejalashtiring",
+    "subtitle": "Tajribali LOR mutaxassislarimizga yoziling. Tez, oson va qulay onlayn navbat.",
+    "stat1Value": "24/7",
+    "stat1Label": "Onlayn navbat",
+    "stat2Value": "20 daqiqa",
+    "stat2Label": "Qabul vaqti",
+    "stat3Value": "100%",
+    "stat3Label": "Uzun navbatlarsiz",
+    "step1Title": "1. Shifokorni tanlang",
+    "step2Title": "2. Sana va vaqtni tanlang",
+    "step3Title": "3. Ma'lumotlaringizni kiriting",
+    "dateLabel": "Sana",
+    "availableTimes": "Mavjud vaqtlar",
+    "selectDoctorFirst": "Avval shifokorni tanlang",
+    "selectDateFirst": "Avval sanani tanlang",
+    "noTimesAvailable": "Bu sana uchun vaqt mavjud emas",
     "alertTitle": "Eslatma",
     "alertMessage": "Agar siz avval qo'ng'iroq qilgan bo'lsangiz va muassasa bilan kelishilgan bo'lsangiz, keyingi bosqichga o'ting",
     "selectDoctor": "Shifokorni tanlang",
@@ -301,7 +334,9 @@
     "previousStep": "Oldingi qadam",
     "submitAppointment": "Navbat Olish",
     "fullName": "To'liq ism",
+    "fullNamePlaceholder": "Familiya Ism",
     "phoneNumber": "Telefon raqami",
+    "age": "Yosh",
     "dateOfBirth": "Tug'ilgan sana",
     "appointmentDate": "Navbat sanasi",
     "appointmentTime": "Navbat vaqti",
@@ -310,7 +345,23 @@
     "selectDate": "Sanani tanlang",
     "selectTime": "Vaqtni tanlang",
     "requiredField": "Bu maydon to'ldirilishi shart",
+    "errorSelectAll": "Iltimos, shifokor, sana va vaqtni tanlang",
+    "errorFullName": "Iltimos, to'liq ismingizni kiriting",
+    "errorPhone": "Iltimos, telefon raqamingizni kiriting",
+    "errorAge": "Iltimos, yoshingizni kiriting",
     "success": "Navbatingiz muvaffaqiyatli qabul qilindi!",
-    "error": "Navbat olishda xatolik yuz berdi. Qayta urinib ko'ring."
+    "error": "Navbat olishda xatolik yuz berdi. Qayta urinib ko'ring.",
+    "modal": {
+      "title": "Navbat tasdiqlandi!",
+      "queueNumber": "Sizning navbat raqamingiz",
+      "patient": "Bemor",
+      "doctor": "Shifokor",
+      "datetime": "Sana va vaqt",
+      "rulesTitle": "Muhim qoidalar",
+      "rule1": "Iltimos, belgilangan vaqtdan 15 daqiqa oldin keling",
+      "rule2": "O'zingiz bilan shaxsni tasdiqlovchi hujjat va tibbiy hujjatlarni olib keling",
+      "rule3": "Agar bekor qilishingiz kerak bo'lsa, 24 soat oldin xabar bering",
+      "rule4": "Niqob taqing va klinika gigiena qoidalariga rioya qiling"
+    }
   }
 }

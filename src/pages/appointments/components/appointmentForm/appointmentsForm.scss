@@ -10,11 +10,14 @@
   }
 
   .form-section {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: $radius-xl;
     padding: $spacing-xl;
-    box-shadow: $shadow-md;
-    transition: $transition-base;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
 
     @media (max-width: $breakpoint-md) {
       padding: $spacing-md;
@@ -22,22 +25,35 @@
     }
 
     &:hover {
-      box-shadow: $shadow-lg;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     }
   }
 
   .section-title {
-    font-size: $font-size-2xl;
+    font-size: 20px;
     font-weight: $font-weight-semibold;
-    color: $primary-green;
+    color: $gray-900;
     margin-bottom: $spacing-lg;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    &::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: $primary-green;
+      border-radius: $radius-sm;
+    }
   }
 
   .subsection-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-medium;
-    color: $text-primary;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $gray-700;
     margin-bottom: $spacing-md;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   // Date & Time Container (Side by Side)
@@ -203,5 +219,152 @@
   p {
     font-size: $font-size-lg;
     font-weight: $font-weight-medium;
+  }
+}
+
+// Booking Confirmation Modal
+.booking-confirmation-modal {
+  .ant-modal-content {
+    border-radius: $radius-xl;
+    overflow: hidden;
+    padding: 0;
+    max-height: 580px;
+  }
+
+  .ant-modal-body {
+    padding: $spacing-lg $spacing-xl;
+  }
+
+  .ant-modal-footer {
+    padding: $spacing-sm $spacing-xl $spacing-lg;
+    border-top: none;
+    display: flex;
+    justify-content: center;
+
+    .ant-btn-primary {
+      background: $primary-green;
+      border-color: $primary-green;
+      min-width: 140px;
+      height: 40px;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      border-radius: $radius-lg;
+
+      &:hover {
+        background: darken($primary-green, 5%);
+        border-color: darken($primary-green, 5%);
+      }
+    }
+  }
+
+  .confirmation-content {
+    text-align: center;
+  }
+
+  .confirmation-icon {
+    color: $primary-green;
+    margin-bottom: $spacing-sm;
+    
+    svg {
+      stroke-width: 1.5;
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  .confirmation-title {
+    font-size: 22px;
+    font-weight: $font-weight-bold;
+    color: $gray-900;
+    margin-bottom: $spacing-md;
+  }
+
+  .queue-number {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, rgba($primary-green, 0.1) 0%, rgba($primary-green, 0.05) 100%);
+    border: 2px solid rgba($primary-green, 0.2);
+    border-radius: $radius-lg;
+    padding: $spacing-sm $spacing-xl;
+    margin-bottom: $spacing-md;
+
+    .queue-label {
+      font-size: 11px;
+      color: $gray-500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    .queue-value {
+      font-size: 36px;
+      font-weight: $font-weight-bold;
+      color: $primary-green;
+      line-height: 1;
+    }
+  }
+
+  .patient-info {
+    background: $gray-50;
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+    margin-bottom: $spacing-md;
+    text-align: left;
+
+    p {
+      margin: 0;
+      padding: 6px 0;
+      font-size: $font-size-sm;
+      color: $gray-700;
+      
+      &:not(:last-child) {
+        border-bottom: 1px solid $gray-200;
+      }
+
+      strong {
+        color: $gray-900;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  .rules-section {
+    text-align: left;
+    background: rgba(255, 193, 7, 0.08);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+
+    .rules-title {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-semibold;
+      color: $gray-900;
+      margin-bottom: $spacing-sm;
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+
+      &::before {
+        content: '⚠️';
+        font-size: 14px;
+      }
+    }
+
+    .rules-list {
+      margin: 0;
+      padding-left: $spacing-md;
+
+      li {
+        font-size: 12px;
+        color: $gray-600;
+        margin-bottom: 4px;
+        line-height: 1.4;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 }
