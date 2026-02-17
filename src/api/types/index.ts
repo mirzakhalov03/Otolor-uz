@@ -182,6 +182,16 @@ export interface Appointment {
   updatedAt: string;
 }
 
+export interface AppointmentListResponse {
+  appointments: Appointment[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 // ================== Pagination Types ==================
 
 export interface PaginationParams {
