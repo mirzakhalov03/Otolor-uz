@@ -1,33 +1,98 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .custom-btn {
-    padding: 12px 24px;
-    border-radius: 12px;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: 14px 28px;
+    border-radius: $radius-lg;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-base;
     cursor: pointer;
     border: none;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: $transition-premium;
+    
+    // ========================================
+    // PRIMARY VARIANT
+    // ========================================
     
     &--primary {
-        background-color: $primary-green;
-        color: #fff;
-        box-shadow: 0 4px 12px rgba($primary-green, 0.3);
+        background: $gradient-icon;
+        color: $white;
+        box-shadow: $shadow-premium-btn;
+        
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: $shadow-glow-green-strong;
+        }
+        
+        &:active {
+            transform: translateY(0);
+            box-shadow: $shadow-premium-btn;
+        }
     }
-
-    &:hover {
-        opacity: 0.9;
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(2, 197, 57, 0.4);
+    
+    // ========================================
+    // SECONDARY/OUTLINE VARIANT
+    // ========================================
+    
+    &--secondary,
+    &--outline {
+        background: transparent;
+        color: $primary-green;
+        border: 2px solid $primary-green;
+        
+        &:hover {
+            background: rgba($primary-green, 0.08);
+            transform: translateY(-1px);
+        }
+        
+        &:active {
+            transform: translateY(0);
+        }
     }
-
-    &:active {
-        transform: translateY(0);
+    
+    // ========================================
+    // DANGER VARIANT
+    // ========================================
+    
+    &--danger {
+        background: linear-gradient(135deg, $error 0%, darken($error, 10%) 100%);
+        color: $white;
+        box-shadow: 0 4px 12px rgba($error, 0.3);
+        
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba($error, 0.35);
+        }
     }
+    
+    // ========================================
+    // GHOST VARIANT
+    // ========================================
+    
+    &--ghost {
+        background: transparent;
+        color: $gray-700;
+        
+        &:hover {
+            background: $gray-100;
+            color: $gray-900;
+        }
+    }
+    
+    // ========================================
+    // STATES
+    // ========================================
 
     &:disabled {
-        opacity: 0.6;
+        opacity: 0.5;
         cursor: not-allowed;
-        transform: none;
+        transform: none !important;
+        box-shadow: none !important;
     }
+    
+    // Loading state handled by Spinner component
 }

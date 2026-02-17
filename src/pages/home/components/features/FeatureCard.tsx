@@ -5,11 +5,19 @@ interface FeatureCardProps {
     icon: React.ReactNode;
     title: string;
     description: string;
+    index?: number;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => {
+/**
+ * Premium feature card with accent bar and hover effects
+ */
+const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, index = 0 }) => {
     return (
-        <div className="feature-card">
+        <div 
+            className="feature-card"
+            style={{ animationDelay: `${index * 100}ms` }}
+        >
+            <div className="feature-card__accent" />
             <div className="feature-card__icon">
                 {icon}
             </div>

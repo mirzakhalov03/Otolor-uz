@@ -1,4 +1,7 @@
 import { type Doctor } from '../types/appointment.types';
+import doctor1 from '../../../assets/images/doctors/doctor1.jpg';
+import doctor2 from '../../../assets/images/doctors/doctor2.jpg';
+import doctor3 from '../../../assets/images/doctors/doctor3.jpg';
 
 // Helper function to generate dates for the next 30 days
 const generateAvailableDates = (daysOfWeek: number[]): string[] => {
@@ -29,20 +32,20 @@ const generateTimeSlots = (dates: string[], times: string[]) => {
 export const mockDoctors: Doctor[] = [
     {
         id: 1,
-        name: 'Dr. Alisher Karimov',
-        specialty: 'Otorinolaringolog',
-        image: 'https://randomuser.me/api/portraits/men/32.jpg',
-        availableDates: generateAvailableDates([1, 3, 5]), // Monday, Wednesday, Friday
+        name: 'Sherzod Gulyamov',
+        specialty: 'ENT Specialist',
+        image: doctor1,
+        availableDates: generateAvailableDates([1, 2, 3, 4, 5]), // Monday, Wednesday, Friday
         timeSlots: generateTimeSlots(
-            generateAvailableDates([1, 3, 5]),
+            generateAvailableDates([1, 2, 3, 4, 5]),
             ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']
         )
     },
     {
         id: 2,
-        name: 'Dr. Dilnoza Rashidova',
-        specialty: 'Otorinolaringolog',
-        image: 'https://randomuser.me/api/portraits/women/44.jpg',
+        name: "Tuyg'un Muzaffarov",
+        specialty: 'Head & Neck Surgeon',
+        image: doctor2,
         availableDates: generateAvailableDates([2, 4, 6]), // Tuesday, Thursday, Saturday
         timeSlots: generateTimeSlots(
             generateAvailableDates([2, 4, 6]),
@@ -51,9 +54,9 @@ export const mockDoctors: Doctor[] = [
     },
     {
         id: 3,
-        name: 'Dr. Sardor Yusupov',
-        specialty: 'Otorinolaringolog',
-        image: 'https://randomuser.me/api/portraits/men/68.jpg',
+        name: 'Sherzod Botirov',
+        specialty: 'ENT Specialist',
+        image: doctor3,
         availableDates: generateAvailableDates([1, 2, 3, 4, 5]), // Monday to Friday
         timeSlots: generateTimeSlots(
             generateAvailableDates([1, 2, 3, 4, 5]),
