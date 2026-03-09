@@ -31,39 +31,40 @@ const Partners = () => {
     const duplicatedPartners = [...partners, ...partners];
 
     return (
-        <section className="partners">
-            {/* Decorative background elements */}
-            <div className="partners__bg-glow partners__bg-glow--1" />
-            <div className="partners__bg-glow partners__bg-glow--2" />
+        <div className='partners-bg'>
+            <section className="partners">
+                {/* Decorative background elements */}
+                <div className="partners__bg-glow partners__bg-glow--1" />
+                <div className="partners__bg-glow partners__bg-glow--2" />
 
-            <div className="partners__container container">
-                <div className="partners__header">
-                    <span className="partners__tag">{t('partners.tag', 'Our Partners')}</span>
-                    <h2 className="partners__title">{t('partners.title', 'Trusted by Industry Leaders')}</h2>
+                <div className="partners__container container">
+                    <div className="partners__header">
+                        <h2 className="partners__title">{t('partners.tag', 'Trusted by Industry Leaders')}</h2>
+                    </div>
                 </div>
-            </div>
 
-            <div className="partners__carousel">
-                <div className="partners__gradient partners__gradient--left" />
-                <div className="partners__gradient partners__gradient--right" />
-                
-                <div className="partners__track">
-                    {duplicatedPartners.map((partner, index) => (
-                        <div key={`${partner.name}-${index}`} className="partners__item">
-                            <div className="partners__logo">
-                                {partner.logo ? (
-                                    <img src={partner.logo} alt={partner.name} />
-                                ) : (
-                                    <span className="partners__placeholder-text">
-                                        {partner.name}
-                                    </span>
-                                )}
+                <div className="partners__carousel">
+                    <div className="partners__gradient partners__gradient--left" />
+                    <div className="partners__gradient partners__gradient--right" />
+                    
+                    <div className="partners__track">
+                        {duplicatedPartners.map((partner, index) => (
+                            <div key={`${partner.name}-${index}`} className="partners__item">
+                                <div className="partners__logo">
+                                    {partner.logo ? (
+                                        <img src={partner.logo} alt={partner.name} />
+                                    ) : (
+                                        <span className="partners__placeholder-text">
+                                            {partner.name}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     );
 };
 

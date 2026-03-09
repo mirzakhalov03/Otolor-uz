@@ -4,7 +4,7 @@ import { BranchesSection } from './components/branches';
 import Hero from './components/hero/Hero';
 import { MidSection } from './components/midSection';
 import { Partners } from './components/partners';
-import { Services } from './components/services';
+// import { Services } from './components/services';
 
 const Home = () => {
     return (
@@ -15,7 +15,7 @@ const Home = () => {
             {/* <Features /> */}
             <Partners />
             {/* <AboutUs /> */}
-            <Services />
+            {/* <Services /> */}
         </>
     )
 }

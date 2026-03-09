@@ -5,16 +5,23 @@
 // PARTNERS SECTION - Premium Infinite Scroll
 // ========================================
 
+.partners-bg{
+    width: 100%;
+    background: linear-gradient(135deg, $primary-green 0%, $primary-green-dark 100%);
+}
+
 .partners {
     position: relative;
     width: 100%;
-    padding: 80px 0;
+    padding: 80px 0 100px;
     background: $white;
     overflow: hidden;
     background-image: url('../../../../assets/images/otolor-hero-bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
 
     // ========================================
     // BACKGROUND DECORATIONS
