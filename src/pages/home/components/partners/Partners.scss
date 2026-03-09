@@ -1,0 +1,304 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+// ========================================
+// PARTNERS SECTION - Premium Infinite Scroll
+// ========================================
+
+.partners {
+    position: relative;
+    width: 100%;
+    padding: 80px 0;
+    background: $white;
+    overflow: hidden;
+    background-image: url('../../../../assets/images/otolor-hero-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    // ========================================
+    // BACKGROUND DECORATIONS
+    // ========================================
+
+    &__bg-glow {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+
+        &--1 {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            right: -150px;
+            background: radial-gradient(circle, rgba($primary-green, 0.04) 0%, transparent 60%);
+            filter: blur(80px);
+        }
+
+        &--2 {
+            width: 500px;
+            height: 500px;
+            bottom: -150px;
+            left: -100px;
+            background: radial-gradient(circle, rgba($beige-300, 0.5) 0%, transparent 60%);
+            filter: blur(70px);
+        }
+    }
+
+    &__container {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    // ========================================
+    // HEADER
+    // ========================================
+
+    &__header {
+        text-align: center;
+        max-width: 640px;
+        margin: 0 auto 60px;
+    }
+
+    &__tag {
+        @include section-tag;
+    }
+
+    &__title {
+        @include headline-editorial(44px);
+        margin-bottom: $spacing-lg;
+    }
+
+    &__subtitle {
+        font-size: $font-size-lg;
+        line-height: 1.7;
+        color: $gray-500;
+    }
+
+    // ========================================
+    // CAROUSEL
+    // ========================================
+
+    &__carousel {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        padding: 20px 0;
+    }
+
+    // Gradient fade edges for premium feel
+    &__gradient {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 150px;
+        z-index: 10;
+        pointer-events: none;
+
+        &--left {
+            left: 0;
+            background: linear-gradient(90deg, $white 0%, transparent 100%);
+        }
+
+        &--right {
+            right: 0;
+            background: linear-gradient(270deg, $white 0%, transparent 100%);
+        }
+    }
+
+    // ========================================
+    // INFINITE SCROLL TRACK
+    // ========================================
+
+    &__track {
+        display: flex;
+        gap: 32px;
+        width: max-content;
+        animation: partnersScroll 35s linear infinite;
+    }
+
+    // ========================================
+    // PARTNER ITEM
+    // ========================================
+
+    &__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    // ========================================
+    // LOGO CONTAINER - Glass Effect
+    // ========================================
+
+    &__logo {
+        width: 180px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba($white, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: $radius-xl;
+        border: 1px solid rgba($gray-200, 0.5);
+        padding: 20px 24px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+    }
+
+    // ========================================
+    // PLACEHOLDER TEXT (When logo not available)
+    // ========================================
+
+    &__placeholder-text {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-medium;
+        color: $gray-500;
+        white-space: nowrap;
+        letter-spacing: -0.01em;
+    }
+}
+
+// ========================================
+// INFINITE SCROLL ANIMATION
+// ========================================
+
+@keyframes partnersScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+// ========================================
+// RESPONSIVE STYLES
+// ========================================
+
+@media (max-width: $breakpoint-xl) {
+    .partners {
+        padding: 60px 0;
+
+        &__header {
+            margin-bottom: 50px;
+        }
+
+        &__title {
+            font-size: 36px;
+        }
+
+        &__track {
+            gap: 28px;
+        }
+
+        &__logo {
+            width: 160px;
+            height: 80px;
+            padding: 18px 20px;
+        }
+    }
+}
+
+@media (max-width: $breakpoint-lg) {
+    .partners {
+        padding: 50px 0;
+
+        &__gradient {
+            width: 100px;
+        }
+
+        &__track {
+            gap: 24px;
+            animation-duration: 30s;
+        }
+
+        &__logo {
+            width: 140px;
+            height: 70px;
+            padding: 16px 18px;
+        }
+
+        &__placeholder-text {
+            font-size: $font-size-base;
+        }
+    }
+}
+
+@media (max-width: $breakpoint-md) {
+    .partners {
+        padding: 40px 0;
+
+        &__header {
+            margin-bottom: 40px;
+        }
+
+        &__title {
+            font-size: 28px;
+        }
+
+        &__gradient {
+            width: 60px;
+        }
+
+        &__track {
+            gap: 20px;
+            animation-duration: 25s;
+        }
+
+        &__logo {
+            width: 120px;
+            height: 60px;
+            padding: 12px 16px;
+        }
+
+        &__placeholder-text {
+            font-size: $font-size-sm;
+        }
+    }
+}
+
+@media (max-width: $breakpoint-sm) {
+    .partners {
+        padding: 32px 0;
+
+        &__header {
+            margin-bottom: 32px;
+        }
+
+        &__title {
+            font-size: 24px;
+        }
+
+        &__gradient {
+            width: 40px;
+        }
+
+        &__track {
+            gap: 16px;
+            animation-duration: 20s;
+        }
+
+        &__logo {
+            width: 100px;
+            height: 50px;
+            padding: 10px 12px;
+        }
+
+        &__placeholder-text {
+            font-size: $font-size-xs;
+        }
+    }
+}

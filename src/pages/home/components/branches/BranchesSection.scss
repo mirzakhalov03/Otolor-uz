@@ -1,0 +1,748 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+// ========================================
+// BRANCHES SECTION - UNIQUE GRID LAYOUT
+// ========================================
+
+.branches-section {
+    position: relative;
+    width: 100%;
+    padding: 50px 0 120px;
+    background: linear-gradient(
+        135deg,
+        $page-bg 0%,
+        darken($page-bg, 2%) 50%,
+        $page-bg 100%
+    );
+    overflow: hidden;
+
+    // ========================================
+    // ANIMATED GRID BACKGROUND
+    // ========================================
+
+    &__bg-pattern {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.4;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba($primary-green, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba($primary-green, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+        
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                ellipse at 50% 0%,
+                transparent 0%,
+                $page-bg 70%
+            );
+        }
+    }
+
+    &__grid-lines {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba($primary-green, 0.08),
+                transparent
+            );
+            animation: gridSweep 15s linear infinite;
+        }
+        
+        &::before {
+            width: 2px;
+            height: 100%;
+            left: 20%;
+        }
+        
+        &::after {
+            width: 2px;
+            height: 100%;
+            left: 80%;
+            animation-delay: -7.5s;
+        }
+    }
+
+    // ========================================
+    // FLOATING LOCATION MARKERS
+    // ========================================
+
+    &__floating-markers {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .floating-marker {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        color: $primary-green;
+        opacity: 0.15;
+        
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        &--1 {
+            top: 15%;
+            left: 8%;
+            animation: floatMarker1 12s ease-in-out infinite;
+        }
+        
+        &--2 {
+            top: 25%;
+            right: 12%;
+            animation: floatMarker2 10s ease-in-out infinite;
+            animation-delay: -3s;
+        }
+        
+        &--3 {
+            bottom: 20%;
+            left: 15%;
+            animation: floatMarker3 14s ease-in-out infinite;
+            animation-delay: -5s;
+        }
+    }
+
+    // ========================================
+    // HEADER SECTION
+    // ========================================
+
+    &__header {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 60px;
+        padding: 0 $spacing-lg;
+    }
+
+    &__header-content {
+        animation: fadeInUp 0.8s $ease-premium forwards;
+    }
+
+    &__tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: rgba($primary-green, 0.08);
+        border: 1px solid rgba($primary-green, 0.15);
+        border-radius: 50px;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        color: $primary-green;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 24px;
+        
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    &__title {
+        font-size: clamp(32px, 5vw, 48px);
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+        margin-bottom: 16px;
+        line-height: 1.2;
+        
+        background: linear-gradient(
+            135deg,
+            $text-primary 0%,
+            $primary-green 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__subtitle {
+        font-size: $font-size-lg;
+        color: $text-secondary;
+        line-height: 1.6;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    // ========================================
+    // CARDS CONTAINER
+    // ========================================
+
+    &__container {
+        position: relative;
+        z-index: 2;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 $spacing-lg;
+    }
+
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        
+        @media (min-width: 1200px) {
+            grid-template-columns: repeat(5, 1fr);
+        }
+        
+        @media (max-width: 1199px) and (min-width: 992px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        @media (max-width: 991px) and (min-width: 768px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    // ========================================
+    // BOTTOM CTA
+    // ========================================
+
+    &__cta {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 60px;
+        position: relative;
+        z-index: 2;
+        animation: fadeInUp 0.8s $ease-premium forwards;
+        animation-delay: 0.6s;
+        opacity: 0;
+    }
+
+    &__cta-text {
+        font-size: $font-size-base;
+        color: $text-secondary;
+    }
+
+    &__cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 28px;
+        background: transparent;
+        border: 2px solid $primary-green;
+        border-radius: 50px;
+        font-size: $font-size-base;
+        font-weight: $font-weight-semibold;
+        color: $primary-green;
+        text-decoration: none;
+        transition: all 0.3s $ease-premium;
+        
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        &:hover {
+            background: $primary-green;
+            color: $white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba($primary-green, 0.3);
+        }
+    }
+}
+
+// ========================================
+// BRANCH CARD COMPONENT
+// ========================================
+
+.branch-card {
+    position: relative;
+    background: $white;
+    border-radius: 20px;
+    padding: 28px;
+    transition: all 0.4s $ease-premium;
+    animation: cardEntrance 0.6s $ease-premium forwards;
+    animation-delay: calc(var(--card-index) * 0.1s);
+    opacity: 0;
+    transform: translateY(30px);
+    
+    // Default border
+    border: 1px solid rgba($gray-200, 0.8);
+    
+    // Subtle shadow
+    box-shadow: 
+        0 4px 20px rgba($black, 0.03),
+        0 1px 3px rgba($black, 0.02);
+
+    // ========================================
+    // GLOW EFFECT (Hidden by default)
+    // ========================================
+
+    &__glow {
+        position: absolute;
+        inset: -2px;
+        border-radius: 22px;
+        background: linear-gradient(
+            135deg,
+            rgba($primary-green, 0.15) 0%,
+            rgba($primary-green-bright, 0.1) 50%,
+            rgba($primary-green, 0.15) 100%
+        );
+        opacity: 0;
+        transition: opacity 0.4s $ease-premium;
+        z-index: -1;
+        filter: blur(10px);
+    }
+
+    // ========================================
+    // ANIMATED BORDER
+    // ========================================
+
+    &__border-animation {
+        position: absolute;
+        inset: 0;
+        border-radius: 20px;
+        padding: 2px;
+        background: linear-gradient(
+            var(--border-angle, 0deg),
+            rgba($primary-green, 0.6),
+            rgba($primary-green-bright, 0.3),
+            rgba($primary-green, 0.1),
+            rgba($primary-green-bright, 0.3),
+            rgba($primary-green, 0.6)
+        );
+        -webkit-mask: 
+            linear-gradient($white 0 0) content-box, 
+            linear-gradient($white 0 0);
+        mask: 
+            linear-gradient($white 0 0) content-box, 
+            linear-gradient($white 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.4s $ease-premium;
+        pointer-events: none;
+    }
+
+    // ========================================
+    // CARD CONTENT
+    // ========================================
+
+    &__content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    // ========================================
+    // ICON WRAPPER
+    // ========================================
+
+    &__icon-wrapper {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    &__icon {
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+            135deg,
+            rgba($primary-green, 0.1) 0%,
+            rgba($primary-green, 0.05) 100%
+        );
+        border-radius: 14px;
+        color: $primary-green;
+        transition: all 0.3s $ease-premium;
+        
+        svg {
+            width: 26px;
+            height: 26px;
+        }
+    }
+
+    &__badge {
+        padding: 6px 12px;
+        background: linear-gradient(135deg, $primary-green 0%, $primary-green-light 100%);
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: $font-weight-semibold;
+        color: $white;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    // ========================================
+    // BRANCH INFO
+    // ========================================
+
+    &__info {
+        margin-bottom: 20px;
+    }
+
+    &__name {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+        margin-bottom: 8px;
+        line-height: 1.3;
+        transition: color 0.3s $ease-premium;
+    }
+
+    &__address {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: $font-size-sm;
+        color: $text-secondary;
+        line-height: 1.5;
+        
+        svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            color: $primary-green;
+            opacity: 0.7;
+        }
+    }
+
+    // ========================================
+    // DETAILS
+    // ========================================
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px 0;
+        border-top: 1px solid $gray-100;
+        margin-bottom: 20px;
+    }
+
+    &__detail {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: $font-size-sm;
+        color: $text-secondary;
+        
+        svg {
+            width: 16px;
+            height: 16px;
+            color: $primary-green;
+            opacity: 0.6;
+        }
+    }
+
+    // ========================================
+    // ACTION BUTTON
+    // ========================================
+
+    &__action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 12px 20px;
+        background: $gray-50;
+        border-radius: 12px;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $text-primary;
+        text-decoration: none;
+        transition: all 0.3s $ease-premium;
+        margin-top: auto;
+        
+        svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s $ease-premium;
+        }
+        
+        &:hover {
+            background: $primary-green;
+            color: $white;
+            
+            svg {
+                transform: translateX(4px);
+            }
+        }
+    }
+
+    // ========================================
+    // DECORATIVE CORNERS
+    // ========================================
+
+    &__corner {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s $ease-premium;
+        
+        &--top {
+            top: 10px;
+            right: 10px;
+            border-top: 2px solid $primary-green;
+            border-right: 2px solid $primary-green;
+            border-radius: 0 8px 0 0;
+        }
+        
+        &--bottom {
+            bottom: 10px;
+            left: 10px;
+            border-bottom: 2px solid $primary-green;
+            border-left: 2px solid $primary-green;
+            border-radius: 0 0 0 8px;
+        }
+    }
+
+    // ========================================
+    // HOVER STATE
+    // ========================================
+
+    &:hover,
+    &--active {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 
+            0 20px 40px rgba($black, 0.08),
+            0 8px 16px rgba($primary-green, 0.06);
+        border-color: transparent;
+        
+        .branch-card__glow {
+            opacity: 1;
+        }
+        
+        .branch-card__border-animation {
+            opacity: 1;
+            animation: borderRotate 4s linear infinite;
+        }
+        
+        .branch-card__icon {
+            background: linear-gradient(
+                135deg,
+                $primary-green 0%,
+                $primary-green-light 100%
+            );
+            color: $white;
+            transform: scale(1.05);
+        }
+        
+        .branch-card__name {
+            color: $primary-green;
+        }
+        
+        .branch-card__corner {
+            opacity: 0.3;
+        }
+    }
+
+    // ========================================
+    // MAIN BRANCH MODIFIER
+    // ========================================
+
+    &--main {
+        background: linear-gradient(
+            135deg,
+            $white 0%,
+            rgba($primary-green, 0.02) 100%
+        );
+        border-color: rgba($primary-green, 0.15);
+        
+        .branch-card__icon {
+            background: linear-gradient(
+                135deg,
+                rgba($primary-green, 0.15) 0%,
+                rgba($primary-green, 0.08) 100%
+            );
+        }
+    }
+}
+
+// ========================================
+// KEYFRAME ANIMATIONS
+// ========================================
+
+@keyframes gridPulse {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes gridSweep {
+    0% {
+        transform: translateX(-100vw);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100vw);
+        opacity: 0;
+    }
+}
+
+@keyframes floatMarker1 {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(10px, -15px) rotate(5deg);
+    }
+    50% {
+        transform: translate(-5px, -25px) rotate(-3deg);
+    }
+    75% {
+        transform: translate(-15px, -10px) rotate(3deg);
+    }
+}
+
+@keyframes floatMarker2 {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(-20px, 15px) scale(1.1);
+    }
+    66% {
+        transform: translate(10px, -20px) scale(0.9);
+    }
+}
+
+@keyframes floatMarker3 {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(15px, -20px) rotate(-5deg);
+    }
+}
+
+@keyframes cardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes borderRotate {
+    0% {
+        --border-angle: 0deg;
+    }
+    100% {
+        --border-angle: 360deg;
+    }
+}
+
+// ========================================
+// RESPONSIVE
+// ========================================
+
+@media (max-width: 768px) {
+    .branches-section {
+        padding: 60px 0 80px;
+        
+        &__header {
+            margin-bottom: 40px;
+        }
+        
+        &__title {
+            font-size: 28px;
+        }
+        
+        &__subtitle {
+            font-size: $font-size-base;
+        }
+        
+        &__cards {
+            gap: 16px;
+        }
+        
+        &__cta {
+            margin-top: 40px;
+        }
+    }
+    
+    .branch-card {
+        padding: 24px;
+        
+        &__icon {
+            width: 46px;
+            height: 46px;
+            
+            svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
+        
+        &__name {
+            font-size: $font-size-base;
+        }
+    }
+    
+    .floating-marker {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .branches-section {
+        padding: 40px 0 60px;
+        
+        &__container {
+            padding: 0 $spacing-md;
+        }
+    }
+    
+    .branch-card {
+        padding: 20px;
+    }
+}
+
+// CSS custom properties support for border animation
+@property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}

@@ -1,0 +1,527 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+// ========================================
+// MID SECTION - THREE PILLARS LAYOUT
+// ========================================
+
+.mid-section {
+    position: relative;
+    width: 100%;
+    padding: 100px 0;
+    background: linear-gradient(180deg, $page-bg 0%, $beige-50 30%, $beige-100 70%, $page-bg 100%);
+    overflow: hidden;
+
+    // ========================================
+    // DECORATIVE ELEMENTS
+    // ========================================
+
+    &__decoration {
+        position: absolute;
+        pointer-events: none;
+        z-index: 0;
+
+        &--1 {
+            width: 400px;
+            height: 400px;
+            top: 10%;
+            right: 5%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%231A4D2E' fill-opacity='0.03' d='M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.5,-32.6,90.2,-16.3,88.5,-1C86.8,14.3,80.7,28.6,72.1,41.1C63.6,53.6,52.6,64.3,39.6,71.8C26.6,79.3,11.7,83.6,-2.8,87.4C-17.3,91.2,-31.2,94.5,-44.4,89.2C-57.6,83.9,-70.1,70,-77.5,54.2C-84.9,38.4,-87.2,20.7,-85.8,3.8C-84.4,-13.1,-79.3,-29.2,-70.2,-42.1C-61.1,-55,-48,-64.7,-34.4,-72.2C-20.8,-79.7,-6.7,-85,5.3,-93.9C17.2,-102.8,30.5,-115.3,44.7,-76.4Z' transform='translate(100 100)'/%3E%3C/svg%3E") no-repeat center;
+            background-size: contain;
+            opacity: 0.8;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        &--2 {
+            width: 350px;
+            height: 350px;
+            bottom: 5%;
+            left: 3%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%231A4D2E' fill-opacity='0.04' d='M39.9,-65.7C51.1,-60.3,59.5,-48.6,66.3,-35.8C73.1,-23,78.3,-9,77.6,4.4C76.9,17.8,70.3,30.6,61.4,41.2C52.5,51.8,41.3,60.2,28.5,66.5C15.7,72.8,1.3,77,-13.5,77.2C-28.3,77.4,-43.5,73.6,-55.3,65C-67.1,56.4,-75.5,43,-79.3,28.4C-83.1,13.8,-82.3,-2,-77.4,-16C-72.5,-30,-63.5,-42.2,-51.8,-47.8C-40.1,-53.4,-25.7,-52.4,-13.1,-55.8C-0.5,-59.2,10.3,-67,22.6,-69.8C34.9,-72.6,48.7,-70.4,39.9,-65.7Z' transform='translate(100 100)'/%3E%3C/svg%3E") no-repeat center;
+            background-size: contain;
+            opacity: 0.7;
+            animation: float 18s ease-in-out infinite reverse;
+        }
+
+        &--3 {
+            width: 250px;
+            height: 250px;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%231A4D2E' fill-opacity='0.02' d='M47.5,-79.1C60.9,-72.5,70.6,-58.6,77.6,-43.6C84.6,-28.6,88.9,-12.5,87.7,3C86.5,18.5,79.8,33.5,70.3,46.2C60.8,58.9,48.5,69.3,34.3,75.8C20.1,82.3,4,84.9,-12.3,83.7C-28.6,82.5,-45.1,77.5,-57.8,67.6C-70.5,57.7,-79.4,42.9,-83.6,27C-87.8,11.1,-87.3,-5.9,-82.4,-21.2C-77.5,-36.5,-68.2,-50.1,-55.7,-57.1C-43.2,-64.1,-27.5,-64.5,-12.8,-70.3C1.9,-76.1,15.5,-87.3,31.4,-87.9C47.3,-88.5,65.5,-78.5,47.5,-79.1Z' transform='translate(100 100)'/%3E%3C/svg%3E") no-repeat center;
+            background-size: contain;
+            opacity: 0.5;
+            animation: pulse-soft 8s ease-in-out infinite;
+        }
+    }
+
+    // ========================================
+    // GLOW EFFECTS
+    // ========================================
+
+    &__glow {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+
+        &--1 {
+            width: 500px;
+            height: 500px;
+            top: -100px;
+            left: -150px;
+            background: radial-gradient(circle, rgba($primary-green, 0.08) 0%, rgba($primary-green, 0.02) 40%, transparent 70%);
+            filter: blur(40px);
+        }
+
+        &--2 {
+            width: 600px;
+            height: 600px;
+            bottom: -200px;
+            right: -100px;
+            background: radial-gradient(circle, rgba($primary-green, 0.06) 0%, rgba($beige-400, 0.1) 40%, transparent 70%);
+            filter: blur(60px);
+        }
+    }
+
+    // ========================================
+    // SECTION HEADER
+    // ========================================
+
+    &__header {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto $spacing-3xl;
+        padding: 0 $spacing-lg;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__tag {
+        @include section-tag;
+        display: inline-block;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__title {
+        @include headline-editorial(42px);
+        margin-bottom: $spacing-md;
+        
+        @include respond-to('md') {
+            font-size: 32px;
+        }
+        
+        @include respond-to('sm') {
+            font-size: 28px;
+        }
+    }
+
+    &__subtitle {
+        font-size: $font-size-lg;
+        color: $gray-500;
+        line-height: 1.7;
+        
+        @include respond-to('sm') {
+            font-size: $font-size-base;
+        }
+    }
+
+    // ========================================
+    // CONTAINER & GRID
+    // ========================================
+
+    &__container {
+        position: relative;
+        z-index: 1;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr 1fr;
+        gap: 32px;
+        align-items: stretch;
+
+        @include respond-to('lg') {
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        @include respond-to('md') {
+            grid-template-columns: 1fr;
+            gap: 32px;
+            max-width: 420px;
+        }
+    }
+
+    // ========================================
+    // PILLARS
+    // ========================================
+
+    &__pillar {
+        opacity: 0;
+        animation: fadeInUp 0.6s $ease-premium forwards;
+        display: flex;
+        flex-direction: column;
+
+        &--hospital {
+            animation-delay: 100ms;
+            
+            @include respond-to('md') {
+                order: 1;
+            }
+        }
+
+        &--team {
+            animation-delay: 200ms;
+            
+            @include respond-to('lg') {
+                grid-column: 1 / -1;
+                order: 0;
+                max-width: 380px;
+                margin: 0 auto;
+            }
+            
+            @include respond-to('md') {
+                order: 2;
+                max-width: 100%;
+            }
+        }
+
+        &--academy {
+            animation-delay: 300ms;
+            
+            @include respond-to('md') {
+                order: 3;
+            }
+        }
+    }
+}
+
+// ========================================
+// PILLAR HEADER (TITLES OUTSIDE CARDS)
+// ========================================
+
+.pillar-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+
+    &--center {
+        justify-content: center;
+        text-align: center;
+    }
+
+    &__icon {
+        width: 48px;
+        height: 48px;
+        background: $gradient-icon;
+        border-radius: $radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        flex-shrink: 0;
+        box-shadow: $shadow-glow-green;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &__title {
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-bold;
+        color: $gray-900;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+
+        @include respond-to('md') {
+            font-size: $font-size-xl;
+        }
+    }
+}
+
+// ========================================
+// PILLAR IMAGE CARD (WITH IMAGE)
+// ========================================
+
+.pillar-image-card {
+    position: relative;
+    background: $white;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-card;
+    transition: $transition-hover;
+    overflow: hidden;
+    border: 1px solid rgba($beige-400, 0.3);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: $shadow-elevated;
+
+        .pillar-image-card__image--cover img {
+            transform: scale(1.05);
+        }
+    }
+
+    // ========================================
+    // IMAGE SECTION
+    // ========================================
+
+    &__image {
+        position: relative;
+        width: 100%;
+        height: 280px;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        // Cover mode - for hospital (crops to fill)
+        &--cover {
+            background: linear-gradient(135deg, $beige-100 0%, $beige-200 100%);
+            
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s $ease-premium;
+            }
+        }
+
+        // Contain mode - for academy logo (shows full image)
+        &--contain {
+            background: linear-gradient(135deg, $green-50 0%, $beige-50 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: $spacing-lg;
+            
+            img {
+                width: auto;
+                height: auto;
+                max-width: 85%;
+                max-height: 85%;
+                object-fit: contain;
+                transition: transform 0.3s $ease-premium;
+                filter: drop-shadow(0 4px 12px rgba($primary-green, 0.15));
+            }
+            
+            &:hover img {
+                transform: scale(1.03);
+            }
+        }
+
+        @include respond-to('md') {
+            height: 240px;
+        }
+        
+        @include respond-to('sm') {
+            height: 220px;
+        }
+    }
+
+    // ========================================
+    // CONTENT SECTION
+    // ========================================
+
+    &__content {
+        padding: 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        @include respond-to('sm') {
+            padding: 20px 16px;
+        }
+    }
+
+    &__title {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        color: $gray-900;
+        margin-bottom: $spacing-sm;
+        line-height: 1.3;
+
+        @include respond-to('sm') {
+            font-size: $font-size-lg;
+        }
+    }
+
+    &__description {
+        font-size: $font-size-sm;
+        color: $gray-500;
+        line-height: 1.6;
+        margin-bottom: $spacing-md;
+    }
+
+    // ========================================
+    // LIST ITEMS
+    // ========================================
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+    }
+
+    &__list-item {
+        display: flex;
+        align-items: flex-start;
+        gap: $spacing-sm;
+        font-size: $font-size-sm;
+        color: $gray-700;
+        line-height: 1.5;
+    }
+
+    &__bullet {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        background: rgba($primary-green, 0.1);
+        border-radius: $radius-full;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $primary-green;
+        margin-top: 2px;
+
+        svg {
+            width: 10px;
+            height: 10px;
+        }
+    }
+}
+
+// ========================================
+// PILLAR CARD (CONTENT BOX - LEGACY)
+// ========================================
+
+.pillar-card {
+    position: relative;
+    background: $white;
+    border-radius: $radius-xl;
+    padding: 28px 24px;
+    box-shadow: $shadow-card;
+    transition: $transition-hover;
+    overflow: hidden;
+    border: 1px solid rgba($beige-400, 0.3);
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-card-hover;
+    }
+
+    // ========================================
+    // TEXT CONTENT
+    // ========================================
+
+    &__description {
+        font-size: $font-size-sm;
+        color: $gray-500;
+        line-height: 1.6;
+        margin-bottom: $spacing-lg;
+    }
+
+    // ========================================
+    // LIST ITEMS
+    // ========================================
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+    }
+
+    &__list-item {
+        display: flex;
+        align-items: flex-start;
+        gap: $spacing-sm;
+        font-size: $font-size-sm;
+        color: $gray-700;
+        line-height: 1.5;
+    }
+
+    &__bullet {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        background: rgba($primary-green, 0.1);
+        border-radius: $radius-full;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $primary-green;
+        margin-top: 2px;
+
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+    }
+}
+
+// ========================================
+// TEAM CAROUSEL WRAPPER
+// ========================================
+
+.team-carousel-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    height: 100%;
+    
+    .image-carousel {
+        width: 100%;
+        max-width: 340px;
+        height: 100%;
+        
+        @include respond-to('lg') {
+            max-width: 380px;
+        }
+        
+        @include respond-to('md') {
+            max-width: 100%;
+        }
+    }
+}
+
+// ========================================
+// RESPONSIVE ADJUSTMENTS
+// ========================================
+
+@include respond-to('lg') {
+    .mid-section {
+        padding: 80px 0;
+    }
+}
+
+@include respond-to('md') {
+    .mid-section {
+        padding: 60px 0;
+    }
+
+    .pillar-card {
+        padding: 24px 20px;
+    }
+}
+
+@include respond-to('sm') {
+    .mid-section {
+        padding: 48px 0;
+    }
+
+    .pillar-card {
+        padding: 20px 16px;
+    }
+}

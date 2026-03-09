@@ -109,17 +109,19 @@
     "academy": "Akademiya",
     "blog": "Blog",
     "microtia": "Mikrotiya",
-    "moscadaver": "Moskadaver"
+    "moscadaver": "MosCadaver",
+    "courses": "Kurslar",
+    "books": "Kitoblar",
+    "ordinatura": "Ordinatura"
   },
   "hero": {
     "tag": "PREMIUM LOR XIZMATI",
     "headlineAccent": "Otolor",
-    "headlineRest": "- Zamonaviy LOR xizmatlari",
+    "headlineRest": "- Hayotdan bahra oling",
     "title": "OTOLOR",
     "subtitle": "Kattalar va bolalar uchun ilg'or LOR yordami",
-    "description": "Tuzalish shu yerdan boshlanadi.",
-    "descriptionLine2": "Samarali davo olish - to'g'ri tashxis qo'yishga bog'liq.",
-    "descriptionLine3": "Mutaxassislarimiz eng murakkab tibbiy muammolarni aniqlaydilar va davolashadilar.",
+    "description": "Aniq tashxis. To‘g‘ri davolash. Tez natija.",
+    "descriptionLine2": "Zamonaviy LOR markazi — sog‘lig‘ingiz uchun professional yechim.",
     "bookAppointment": "Navbat olish",
     "ourServices": "Xizmatlarimiz",
     "learnMore": "Batafsil",
@@ -140,6 +142,34 @@
     "feature2Description": "Bizning barcha shifokorlarimiz o'z sohasining mutaxassislari va muntazam malaka oshiradilar",
     "feature3Title": "Xavfsiz davolash",
     "feature3Description": "Bemorlar xavfsizligi va qulayligi biz uchun eng muhim mezonlardir"
+  },
+  "partners": {
+    "tag": "Bizning hamkorlar",
+    "title": "Yetakchi kompaniyalar ishonchi",
+    "subtitle": "Ajoyib tibbiy yordam ko'rsatish uchun yetakchi tibbiyot tashkilotlari bilan hamkorlik qilamiz."
+  },
+  "midSection": {
+    "tag": "Bizning asos",
+    "title": "Otolor ning Uch Ustuni",
+    "subtitle": "Sog'liqni saqlashda mukammallik, jamoamizning tajribasi va ta'lim orqali rivojlanish",
+    "hospital": {
+      "title": "Otolor Shifoxonasi",
+      "description": "Keng qamrovli LOR xizmatlarini taqdim etuvchi zamonaviy tibbiyot muassasasi",
+      "item1": "Zamonaviy diagnostika uskunalari",
+      "item2": "Zamonaviy jarrohlik bo'limlari",
+      "item3": "Qulay bemor xonalari"
+    },
+    "team": {
+      "tag": "Bizning jamoa",
+      "title": "Otolor Jamoasi"
+    },
+    "academy": {
+      "title": "Otolor Akademiyasi",
+      "description": "LOR tibbiyotida ta'lim mukammalligi",
+      "item1": "Professional rivojlanish dasturlari",
+      "item2": "Tibbiy o'quv seminarlari",
+      "item3": "Tadqiqot va innovatsiyalar"
+    }
   },
   "homeAbout": {
     "tag": "Klinikamiz haqida",
@@ -208,6 +238,36 @@
     "emptyStateIcon": "🏥",
     "emptyStateTitle": "Kategoriyani tanlang",
     "emptyStateDesc": "Xizmatlarni ko'rish uchun yuqoridagi kategoriyalardan birini tanlang"
+  },
+  "branches": {
+    "tag": "Bizni toping",
+    "title": "Sizga yaqin klinikalar",
+    "subtitle": "Shahar bo'ylab qulay joylashgan filiallarimizdan tashrif buyuring",
+    "workingHours": "Du-Sha: 08:00 - 20:00",
+    "mainBranch": "Asosiy",
+    "getDirections": "Yo'nalishni olish",
+    "ctaText": "Sizga yaqin filial topa olmayapsizmi?",
+    "callUs": "Bizga qo'ng'iroq qiling",
+    "branch1": {
+      "name": "Otolor Hospital (Asosiy)",
+      "address": "Qashqar massivi, 24A"
+    },
+    "branch2": {
+      "name": "Otolor Medez",
+      "address": "Amir Temur shoh ko'chasi, 1196"
+    },
+    "branch3": {
+      "name": "Otolor M-Clinic",
+      "address": "Taltana ko'chasi, 1"
+    },
+    "branch4": {
+      "name": "Otolor Chilanzar",
+      "address": "Chilonzor tumani, 7-mavze"
+    },
+    "branch5": {
+      "name": "Otolor Sergeli",
+      "address": "Sergeli tumani, 12A"
+    }
   },
   "footer": {
     "description": "Otolar - Quloq-Bogoq-Tomoq kasalliklari bo'yicha malakali shifokorlar.",

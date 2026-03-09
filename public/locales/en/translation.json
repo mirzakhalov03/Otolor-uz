@@ -109,7 +109,10 @@
     "academy": "Academy",
     "blog": "Blog",
     "microtia": "Microtia",
-    "moscadaver": "Moscadaver"
+    "moscadaver": "MosCadaver",
+    "courses": "Courses",
+    "books": "Books",
+    "ordinatura": "Ordinatura"
   },
   "hero": {
     "tag": "PREMIUM ENT CARE",
@@ -140,6 +143,34 @@
     "feature2Description": "All our doctors are specialists in their field and regularly improve their qualifications",
     "feature3Title": "Safe Treatment",
     "feature3Description": "Patient safety and comfort are the most important criteria for us"
+  },
+  "partners": {
+    "tag": "Our Partners",
+    "title": "Trusted by Industry Leaders",
+    "subtitle": "We collaborate with leading healthcare organizations to deliver exceptional care."
+  },
+  "midSection": {
+    "tag": "Our Foundation",
+    "title": "The Three Pillars of Otolor",
+    "subtitle": "Excellence in healthcare, expertise in our team, and advancement through education",
+    "hospital": {
+      "title": "Otolor Hospital",
+      "description": "Advanced medical facility providing comprehensive ENT care",
+      "item1": "State-of-the-art diagnostic equipment",
+      "item2": "Modern surgical facilities",
+      "item3": "Comfortable patient rooms"
+    },
+    "team": {
+      "tag": "Our Team",
+      "title": "Otolor Team"
+    },
+    "academy": {
+      "title": "Otolor Academy",
+      "description": "Educational excellence in ENT medicine",
+      "item1": "Professional development programs",
+      "item2": "Medical training workshops",
+      "item3": "Research and innovation"
+    }
   },
   "homeAbout": {
     "tag": "About Our Clinic",
@@ -208,6 +239,36 @@
     "emptyStateIcon": "🏥",
     "emptyStateTitle": "Choose a Category",
     "emptyStateDesc": "Select one of the categories above to view services"
+  },
+  "branches": {
+    "tag": "Find Us",
+    "title": "Clinics Near You",
+    "subtitle": "Visit any of our convenient locations across the city",
+    "workingHours": "Mon-Sat: 08:00 - 20:00",
+    "mainBranch": "Main",
+    "getDirections": "Get Directions",
+    "ctaText": "Can't find a branch near you?",
+    "callUs": "Call Us",
+    "branch1": {
+      "name": "Otolor Hospital (Main)",
+      "address": "Kashgar massif, 24A"
+    },
+    "branch2": {
+      "name": "Otolor Medez",
+      "address": "Amir Temur Avenue, 1196"
+    },
+    "branch3": {
+      "name": "Otolor M-Clinic",
+      "address": "Taltana Street, 1"
+    },
+    "branch4": {
+      "name": "Otolor Chilanzar",
+      "address": "Chilanzar district, Block 7"
+    },
+    "branch5": {
+      "name": "Otolor Sergeli",
+      "address": "Sergeli district, 12A"
+    }
   },
   "footer": {
     "description": "Otolar - Qualified specialists in Ear-Nose-Throat diseases.",

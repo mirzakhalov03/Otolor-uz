@@ -6,10 +6,33 @@
     width: 100%;
     min-height: 100vh;
     background: $glow-warm;
-    overflow: hidden;
+    background-size: contain;
+    background-position: center right;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    padding: 120px 0 80px;
+    padding: 180px 0 100px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            $page-bg 0%,
+            rgba($page-bg, 0.92) 8%,
+            rgba($page-bg, 0.7) 16%,
+            rgba($page-bg, 0.3) 26%,
+            transparent 38%,
+            transparent 62%,
+            rgba($page-bg, 0.3) 74%,
+            rgba($page-bg, 0.7) 84%,
+            rgba($page-bg, 0.92) 92%,
+            $page-bg 100%
+        );
+        z-index: 1;
+        pointer-events: none;
+    }
     
     // ========================================
     // SOFT GRADIENT GLOWS
@@ -45,8 +68,8 @@
     
     &__grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 60px;
+        grid-template-columns: minmax(0, 55%) 1fr;
+        gap: 0;
         align-items: center;
     }
     
@@ -225,31 +248,8 @@
     }
     
     // ========================================
-    // RIGHT - DOCTOR CARD
+    // RIGHT SIDE - empty column (image is background)
     // ========================================
-    
-    &__visual {
-        display: flex;
-        justify-content: center;
-        position: relative;
-    }
-    
-    &__doctor-card {
-        position: relative;
-        animation: fadeInUp 0.8s $ease-premium 0.2s forwards;
-        opacity: 0;
-    }
-    
-    &__doctor-circle {
-        position: absolute;
-        top: -40px;
-        right: -40px;
-        width: 120px;
-        height: 120px;
-        border: 2px solid #86efad51;
-        border-radius: 50%;
-        z-index: -1;
-    }
     
     // ========================================
     // RESPONSIVE
@@ -262,11 +262,12 @@
     }
     
     @include respond-to('lg') {
-        padding: 100px 0 60px;
+        padding: 160px 0 120px;
+        background-position: 65% center;
         
         &__grid {
             grid-template-columns: 1fr;
-            gap: 60px;
+            gap: 0;
             text-align: center;
         }
         
@@ -293,15 +294,11 @@
         &__headline {
             font-size: 48px;
         }
-        
-        &__visual {
-            order: -1;
-        }
     }
     
     @include respond-to('md') {
         min-height: auto;
-        padding: 100px 0 60px;
+        padding: 160px 0 120px;
         
         &__headline {
             font-size: 36px;
