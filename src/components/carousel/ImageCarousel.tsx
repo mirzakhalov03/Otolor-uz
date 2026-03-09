@@ -5,9 +5,10 @@ import { doctorsImages } from '../../assets/images/doctors/doctorsImages';
 interface ImageCarouselProps {
     autoPlayInterval?: number;
     showDoctorInfo?: boolean;
+    height?: number | string;
 }
 
-const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false }: ImageCarouselProps) => {
+const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height }: ImageCarouselProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     
@@ -32,8 +33,12 @@ const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false }: Imag
         return () => clearInterval(interval);
     }, [goToNext, autoPlayInterval]);
 
+    const carouselStyle = height ? { 
+        height: typeof height === 'number' ? `${height}px` : height 
+    } : undefined;
+
     return (
-        <div className="image-carousel">
+        <div className="image-carousel" style={carouselStyle}>
             <div className="carousel-container">
                 <div 
                     className="carousel-track"

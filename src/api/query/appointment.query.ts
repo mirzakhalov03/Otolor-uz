@@ -239,7 +239,10 @@ export const useDoctorBookings = (params?: AppointmentFilters, enabled = true) =
       if (!response.success) {
         throw response;
       }
-      return { data: response.data, meta: response.meta };
+      return {
+        data: response.data?.appointments || [],
+        pagination: response.data?.pagination
+      };
     },
     enabled,
     staleTime: 15 * 1000, // 15 seconds
@@ -257,7 +260,10 @@ export const useDoctorTodayQueue = (enabled = true) => {
       if (!response.success) {
         throw response;
       }
-      return response.data;
+      return {
+        data: response.data?.appointments || [],
+        pagination: response.data?.pagination
+      };
     },
     enabled,
     staleTime: 15 * 1000, // 15 seconds - frequent updates for live queue

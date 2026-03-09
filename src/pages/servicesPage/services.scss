@@ -1,13 +1,22 @@
 @import "../../styles/variables";
 
+.service-bg{
+    width: 100%;
+    background: linear-gradient(135deg, $primary-green 0%, $primary-green-dark 100%);
+}
+
 .services {
     width: 100%;
-    min-height: 100vh;
+    min-height: 80vh;
     background-image: url('../../assets/images/otolor-hero-bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
     padding-bottom: $spacing-3xl;
+    overflow: hidden;
+
 
     .container {
         padding-top: 30px;

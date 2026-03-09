@@ -1,10 +1,30 @@
 @import "../../styles/variables";
 
+// Footer height variable for sticky reveal effect
+$footer-height: 400px;
+$footer-height-tablet: 500px;
+$footer-height-mobile: 650px;
+
 .footer {
   width: 100%;
   background: linear-gradient(135deg, $primary-green 0%, $primary-green-dark 100%);
   color: white;
   padding: 60px 0 20px;
+  
+  // Sticky reveal footer styles
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: $footer-height;
+  
+  @media (max-width: 1024px) {
+    height: $footer-height-tablet;
+  }
+  
+  @media (max-width: 768px) {
+    height: $footer-height-mobile;
+  }
 
   &__container {
     max-width: 1200px;

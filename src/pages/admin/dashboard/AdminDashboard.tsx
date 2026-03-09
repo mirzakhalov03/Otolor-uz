@@ -60,7 +60,7 @@ const AdminDashboard: React.FC = () => {
   const stats = isDoctor ? [
     {
       title: t('stats.todayAppointments', "Today's Appointments"),
-      value: (todayQueue as Appointment[] | undefined)?.length || 0,
+      value: todayQueue?.data?.length || 0,
       icon: <CalendarOutlined />,
       color: '#2DC263',
     },
@@ -72,7 +72,7 @@ const AdminDashboard: React.FC = () => {
     },
     {
       title: t('stats.completedToday', 'Completed Today'),
-      value: (todayQueue as Appointment[] | undefined)?.filter(a => a.status === 'completed').length || 0,
+      value: todayQueue?.data?.filter((a: Appointment) => a.status === 'completed').length || 0,
       icon: <MedicineBoxOutlined />,
       color: '#1ed34d',
     },
@@ -199,7 +199,7 @@ const AdminDashboard: React.FC = () => {
         {stats.map((stat, index) => (
           <Col xs={24} sm={12} lg={6} key={index}>
             <Card className="stat-card">
-              <Space direction="vertical" size={8} style={{ width: '100%' }}>
+              <Space style={{ width: '100%' }} size={8}>
                 <div
                   className="stat-card__icon"
                   style={{ backgroundColor: `${stat.color}15`, color: stat.color }}
@@ -249,10 +249,10 @@ const AdminDashboard: React.FC = () => {
                 <div style={{ textAlign: 'center', padding: 40 }}>
                   <Spin size="large" />
                 </div>
-              ) : (todayQueue as Appointment[] | undefined)?.length ? (
+              ) : todayQueue?.data?.length ? (
                 <Table
                   columns={appointmentColumns}
-                  dataSource={todayQueue as Appointment[]}
+                  dataSource={todayQueue.data}
                   rowKey="_id"
                   pagination={false}
                   size="middle"
@@ -331,7 +331,7 @@ const AdminDashboard: React.FC = () => {
               title={t('admin.quickActions')}
               className="admin-page__card"
             >
-              <Space direction="vertical" size={12} style={{ width: '100%' }}>
+              <Space style={{ width: '100%', flexDirection: 'column' }} size={12}>
                 <Card size="small" hoverable>
                   <Space>
                     <TeamOutlined style={{ color: '#2DC263' }} />

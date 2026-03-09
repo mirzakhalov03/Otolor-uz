@@ -5,7 +5,7 @@
  */
 
 import baseService from '../baseService';
-import type { Appointment, AppointmentStatus, SearchParams } from '../types';
+import type { Appointment, AppointmentStatus, AppointmentListResponse, SearchParams } from '../types';
 
 export interface CreateAppointmentRequest {
   doctor: string;
@@ -111,7 +111,7 @@ export const appointmentService = {
    * GET /appointments/doctor/bookings
    */
   async getDoctorBookings(params?: AppointmentFilters) {
-    return baseService.get<Appointment[]>('/appointments/doctor/bookings', params);
+    return baseService.get<AppointmentListResponse>('/appointments/doctor/bookings', params);
   },
 
   /**
@@ -119,7 +119,7 @@ export const appointmentService = {
    * GET /appointments/doctor/queue
    */
   async getDoctorTodayQueue() {
-    return baseService.get<Appointment[]>('/appointments/doctor/queue');
+    return baseService.get<AppointmentListResponse>('/appointments/doctor/queue');
   },
 };
 

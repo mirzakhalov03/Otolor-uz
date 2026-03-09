@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ChevronDown, Lock } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Logo from "../../assets/Logo"
 import CallButton from "../CTA-buttons/CallButton"
@@ -10,15 +10,21 @@ import './Navbar.scss'
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileAcademyOpen, setIsMobileAcademyOpen] = useState(false)
   const { t } = useTranslation()
 
   const Tabs = [
     { name: t('nav.home'), to: "/" },
     { name: t('nav.services'), to: "/services" },
-    { name: t('nav.academy'), to: "/academy" },
     { name: t('nav.about'), to: "/about" },
-    { name: t('nav.microtia'), to: "/microtia" },
-    { name: t('nav.moscadaver'), to: "/moscadaver" },
+  ]
+
+  const academyDropdownItems = [
+    { name: t('nav.courses'), to: "/courses", disabled: true },
+    { name: t('nav.microtia'), to: "/microtia", disabled: true },
+    { name: t('nav.moscadaver'), to: "/moscadaver", disabled: true },
+    { name: t('nav.books'), to: "/kitoblar", disabled: true },
+    { name: t('nav.ordinatura'), to: "/ordinatura", disabled: true },
   ]
 
   const toggleMobileMenu = () => {
@@ -62,6 +68,38 @@ const Navbar = () => {
                 {tab.name}
               </NavLink>
             ))}
+            
+            {/* Academy Dropdown */}
+            <div className="nav-dropdown">
+              <NavLink
+                to="/academy"
+                className={({ isActive }) =>
+                  `nav-link nav-dropdown__trigger ${isActive ? "active" : ""}`
+                }
+              >
+                {t('nav.academy')}
+                <ChevronDown size={16} className="nav-dropdown__icon" />
+              </NavLink>
+              <div className="nav-dropdown__menu">
+                {academyDropdownItems.map((item) => (
+                  item.disabled ? (
+                    <span key={item.name} className="nav-dropdown__item nav-dropdown__item--disabled">
+                      {item.name}
+                      <Lock size={14} className="nav-dropdown__lock" />
+                    </span>
+                  ) : (
+                    <NavLink
+                      key={item.name}
+                      to={item.to}
+                      className="nav-dropdown__item"
+                    >
+                      {item.name}
+                    </NavLink>
+                  )
+                ))}
+              </div>
+            </div>
+            
             <LangSelector />
             <CallButton />
           </div>
@@ -105,6 +143,38 @@ const Navbar = () => {
                 {tab.name}
               </NavLink>
             ))}
+            
+            {/* Mobile Academy Dropdown */}
+            <div className="navbar-mobile__dropdown">
+              <button
+                className={`navbar-mobile__dropdown-trigger ${isMobileAcademyOpen ? 'navbar-mobile__dropdown-trigger--open' : ''}`}
+                onClick={() => setIsMobileAcademyOpen(!isMobileAcademyOpen)}
+              >
+                {t('nav.academy')}
+                <ChevronDown size={18} className="navbar-mobile__dropdown-icon" />
+              </button>
+              {isMobileAcademyOpen && (
+                <div className="navbar-mobile__dropdown-menu">
+                  {academyDropdownItems.map((item) => (
+                    item.disabled ? (
+                      <span key={item.name} className="navbar-mobile__dropdown-item navbar-mobile__dropdown-item--disabled">
+                        {item.name}
+                        <Lock size={14} className="navbar-mobile__dropdown-lock" />
+                      </span>
+                    ) : (
+                      <NavLink
+                        key={item.name}
+                        to={item.to}
+                        className="navbar-mobile__dropdown-item"
+                        onClick={closeMobileMenu}
+                      >
+                        {item.name}
+                      </NavLink>
+                    )
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="navbar-mobile__footer">

@@ -1,0 +1,28 @@
+@import "../../styles/variables";
+
+// Footer height variables (must match Footer.scss)
+$footer-height: 400px;
+$footer-height-tablet: 500px;
+$footer-height-mobile: 650px;
+
+.main-content {
+  position: relative;
+  z-index: 10;
+  background-color: #F5F5F0; // Match body background
+  min-height: 100vh;
+  
+  // Add margin-bottom equal to footer height so content doesn't overlap footer
+  // and footer is revealed when scrolling to bottom
+  margin-bottom: $footer-height;
+  
+  // Add shadow for depth effect - makes it look like content is "above" footer
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  
+  @media (max-width: 1024px) {
+    margin-bottom: $footer-height-tablet;
+  }
+  
+  @media (max-width: 768px) {
+    margin-bottom: $footer-height-mobile;
+  }
+}
