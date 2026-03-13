@@ -4,26 +4,22 @@ export const categories: CategoryInfo[] = [
     {
         id: 'ear',
         title: 'Quloq',
-        icon: '👂',
         description: 'Quloq kasalliklari va muolajasi'
     },
     {
         id: 'nose',
         title: 'Burun',
-        icon: '👃',
         description: 'Burun kasalliklari va muolajasi'
     },
     {
         id: 'throat',
         title: 'Tomoq',
-        icon: '🗣️',
         description: 'Tomoq kasalliklari va muolajasi'
     },
     {
         id: 'larynx',
-        title: 'Halqum',
-        icon: '🫁',
-        description: 'Halqum kasalliklari va muolajasi'
+        title: 'Hiqildoq',
+        description: 'Hiqildoq kasalliklari va muolajasi'
     }
 ];
 
@@ -59,12 +55,12 @@ export const services: Service[] = [
     { id: 24, name: 'Tomoqni yumshatish muolajasi', price: '180,000', category: 'throat' },
 
     // Larynx Services
-    { id: 25, name: 'Halqum ko\'rigi', price: '200,000', category: 'larynx' },
+    { id: 25, name: 'Hiqildoq ko\'rigi', price: '200,000', category: 'larynx' },
     { id: 26, name: 'Laringoskopiya', price: '280,000', category: 'larynx' },
     { id: 27, name: 'Ovoz yo\'qolishi davolash', price: '350,000', category: 'larynx' },
     { id: 28, name: 'Laringit davolash', price: '300,000', category: 'larynx' },
     { id: 29, name: 'Ovoz paychalarini tekshirish', price: '320,000', category: 'larynx' },
-    { id: 30, name: 'Halqum yallig\'lanishini davolash', price: '280,000', category: 'larynx' },
+    { id: 30, name: 'Hiqildoq yallig\'lanishini davolash', price: '280,000', category: 'larynx' },
     { id: 31, name: 'Ovoz terapiyasi', price: '400,000', category: 'larynx' },
-    { id: 32, name: 'Halqum poliplari tekshiruvi', price: '350,000', category: 'larynx' }
+    { id: 32, name: 'Hiqildoq poliplari tekshiruvi', price: '350,000', category: 'larynx' }
 ];

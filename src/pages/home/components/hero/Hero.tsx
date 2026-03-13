@@ -64,10 +64,6 @@ const Hero = () => {
               <em>{t('hero.headlineAccent', 'Otolor')}</em>{t('hero.headlineRest', ' - Advanced ENT care')}
             </h1>
 
-            <p className='hero__description'>
-              {t('hero.description')} <br /> {t('hero.descriptionLine2')} 
-            </p>
-
             <div className='hero__actions'>
               <button
                 onClick={() => navigate('/appointments')}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { NavLink } from "react-router-dom"
 import { Menu, X, ChevronDown, Lock } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -11,6 +11,8 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileAcademyOpen, setIsMobileAcademyOpen] = useState(false)
+  const [isDesktopAcademyOpen, setIsDesktopAcademyOpen] = useState(false)
+  const academyDropdownRef = useRef<HTMLDivElement | null>(null)
   const { t } = useTranslation()
 
   const Tabs = [
@@ -20,11 +22,10 @@ const Navbar = () => {
   ]
 
   const academyDropdownItems = [
-    { name: t('nav.courses'), to: "/courses", disabled: true },
-    { name: t('nav.microtia'), to: "/microtia", disabled: true },
+    { name: t('nav.courses'), to: "/courses", disabled: false },
+    { name: t('nav.books'), to: "/books", disabled: true },
     { name: t('nav.moscadaver'), to: "/moscadaver", disabled: true },
-    { name: t('nav.books'), to: "/kitoblar", disabled: true },
-    { name: t('nav.ordinatura'), to: "/ordinatura", disabled: true },
+    { name: t('nav.microtia'), to: "/microtia", disabled: true },
   ]
 
   const toggleMobileMenu = () => {
@@ -46,6 +47,17 @@ const Navbar = () => {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (academyDropdownRef.current && !academyDropdownRef.current.contains(event.target as Node)) {
+        setIsDesktopAcademyOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleOutsideClick)
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
   }, [])
 
   return (
@@ -70,34 +82,43 @@ const Navbar = () => {
             ))}
             
             {/* Academy Dropdown */}
-            <div className="nav-dropdown">
-              <NavLink
-                to="/academy"
-                className={({ isActive }) =>
-                  `nav-link nav-dropdown__trigger ${isActive ? "active" : ""}`
-                }
+            <div
+              ref={academyDropdownRef}
+              className={`nav-dropdown ${isDesktopAcademyOpen ? 'nav-dropdown--open' : ''}`}
+              onMouseEnter={() => setIsDesktopAcademyOpen(true)}
+              onMouseLeave={() => setIsDesktopAcademyOpen(false)}
+            >
+              <button
+                type="button"
+                className="nav-link nav-dropdown__trigger"
+                aria-haspopup="menu"
+                aria-expanded={isDesktopAcademyOpen}
+                onClick={() => setIsDesktopAcademyOpen((prev) => !prev)}
               >
                 {t('nav.academy')}
                 <ChevronDown size={16} className="nav-dropdown__icon" />
-              </NavLink>
-              <div className="nav-dropdown__menu">
-                {academyDropdownItems.map((item) => (
-                  item.disabled ? (
-                    <span key={item.name} className="nav-dropdown__item nav-dropdown__item--disabled">
-                      {item.name}
-                      <Lock size={14} className="nav-dropdown__lock" />
-                    </span>
-                  ) : (
-                    <NavLink
-                      key={item.name}
-                      to={item.to}
-                      className="nav-dropdown__item"
-                    >
-                      {item.name}
-                    </NavLink>
-                  )
-                ))}
-              </div>
+              </button>
+              {isDesktopAcademyOpen && (
+                <div className="nav-dropdown__menu">
+                  {academyDropdownItems.map((item) => (
+                    item.disabled ? (
+                      <span key={item.name} className="nav-dropdown__item nav-dropdown__item--disabled">
+                        {item.name}
+                        <Lock size={14} className="nav-dropdown__lock" />
+                      </span>
+                    ) : (
+                      <NavLink
+                        key={item.name}
+                        to={item.to}
+                        className="nav-dropdown__item"
+                        onClick={() => setIsDesktopAcademyOpen(false)}
+                      >
+                        {item.name}
+                      </NavLink>
+                    )
+                  ))}
+                </div>
+              )}
             </div>
             
             <LangSelector />
@@ -166,7 +187,10 @@ const Navbar = () => {
                         key={item.name}
                         to={item.to}
                         className="navbar-mobile__dropdown-item"
-                        onClick={closeMobileMenu}
+                        onClick={() => {
+                          setIsMobileAcademyOpen(false)
+                          closeMobileMenu()
+                        }}
                       >
                         {item.name}
                       </NavLink>

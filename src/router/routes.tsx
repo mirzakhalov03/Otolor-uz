@@ -1,7 +1,6 @@
 import { useRoutes } from "react-router-dom"
 import Home from "../pages/home/Home"
 import About from "../pages/about/About"
-import Academy from "../pages/academy/Academy"
 import Layout from "../components/layout/Layout"
 import Appointments from "../pages/appointments/Appointments"
 import Services from "../pages/servicesPage/Services"
@@ -13,6 +12,7 @@ import { AdminLogin, AdminDashboard, ProfilePage } from "../pages/admin"
 import { AdminRoute, GuestRoute } from "../components/guards"
 import DoctorsPage from "../pages/admin/doctors"
 import ServicesPage from "../pages/admin/services"
+import Courses from "@/pages/academy/courses/Courses"
 
 export const RouteController = () => {
 
@@ -31,8 +31,8 @@ export const RouteController = () => {
                     element: <About />
                 },
                 {
-                    path: 'academy',
-                    element: <Academy />
+                    path: 'courses',
+                    element: <Courses />
                 },
                 {
                     path: 'appointments',

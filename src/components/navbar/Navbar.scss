@@ -107,12 +107,16 @@
                 // Dropdown styles
                 .nav-dropdown {
                     position: relative;
+                    z-index: 1001;
 
                     &__trigger {
                         display: flex;
                         align-items: center;
                         gap: 4px;
                         cursor: pointer;
+                        border: none;
+                        background: transparent;
+                        font: inherit;
                     }
 
                     &__icon {
@@ -123,11 +127,15 @@
                         transform: rotate(180deg);
                     }
 
+                    &--open &__icon {
+                        transform: rotate(180deg);
+                    }
+
                     &__menu {
                         position: absolute;
                         top: calc(100% + 8px);
                         left: 50%;
-                        transform: translateX(-50%);
+                        transform: translateX(-50%) translateY(0);
                         min-width: 180px;
                         background: rgba(255, 255, 255, 0.95);
                         backdrop-filter: blur(20px);
@@ -137,11 +145,8 @@
                             0 4px 12px rgba($primary-green, 0.08);
                         border: 1px solid rgba(255, 255, 255, 0.6);
                         padding: 8px;
-                        opacity: 0;
-                        visibility: hidden;
-                        transform: translateX(-50%) translateY(10px);
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        z-index: 100;
+                        z-index: 1200;
+                        animation: dropdownFadeIn 0.18s ease;
 
                         &::before {
                             content: '';
@@ -153,10 +158,15 @@
                         }
                     }
 
-                    &:hover &__menu {
-                        opacity: 1;
-                        visibility: visible;
-                        transform: translateX(-50%) translateY(0);
+                    @keyframes dropdownFadeIn {
+                        from {
+                            opacity: 0;
+                            transform: translateX(-50%) translateY(6px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateX(-50%) translateY(0);
+                        }
                     }
 
                     &__item {

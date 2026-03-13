@@ -63,7 +63,6 @@ const Services = () => {
                                             <CheckCircle size={24} />
                                         </div>
                                     )}
-                                    <div className='category-icon'>{category.icon}</div>
                                     <h3 className='category-title'>{category.title}</h3>
                                     <p className='category-description'>{category.description}</p>
                                 </div>

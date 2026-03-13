@@ -10,6 +10,6 @@ export interface Service {
 export interface CategoryInfo {
     id: ServiceCategory;
     title: string;
-    icon: string;
+    icon?: string;
     description: string;
 }
