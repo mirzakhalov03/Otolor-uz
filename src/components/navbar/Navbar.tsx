@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { NavLink } from "react-router-dom"
+import { NavLink, useLocation, matchPath } from "react-router-dom"
 import { Menu, X, ChevronDown, Lock } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Logo from "../../assets/Logo"
@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isMobileAcademyOpen, setIsMobileAcademyOpen] = useState(false)
   const [isDesktopAcademyOpen, setIsDesktopAcademyOpen] = useState(false)
   const academyDropdownRef = useRef<HTMLDivElement | null>(null)
+  const location = useLocation()
   const { t } = useTranslation()
 
   const Tabs = [
@@ -27,6 +28,14 @@ const Navbar = () => {
     { name: t('nav.moscadaver'), to: "/moscadaver", disabled: true },
     { name: t('nav.microtia'), to: "/microtia", disabled: true },
   ]
+
+  const isAcademyActive = academyDropdownItems.some((item) => {
+    if (item.disabled) {
+      return false
+    }
+
+    return Boolean(matchPath({ path: `${item.to}/*` }, location.pathname) || location.pathname === item.to)
+  })
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -90,7 +99,7 @@ const Navbar = () => {
             >
               <button
                 type="button"
-                className="nav-link nav-dropdown__trigger"
+                className={`nav-link nav-dropdown__trigger ${isAcademyActive ? 'active' : ''}`}
                 aria-haspopup="menu"
                 aria-expanded={isDesktopAcademyOpen}
                 onClick={() => setIsDesktopAcademyOpen((prev) => !prev)}
@@ -168,7 +177,7 @@ const Navbar = () => {
             {/* Mobile Academy Dropdown */}
             <div className="navbar-mobile__dropdown">
               <button
-                className={`navbar-mobile__dropdown-trigger ${isMobileAcademyOpen ? 'navbar-mobile__dropdown-trigger--open' : ''}`}
+                className={`navbar-mobile__dropdown-trigger ${isMobileAcademyOpen ? 'navbar-mobile__dropdown-trigger--open' : ''} ${isAcademyActive ? 'navbar-mobile__dropdown-trigger--active' : ''}`}
                 onClick={() => setIsMobileAcademyOpen(!isMobileAcademyOpen)}
               >
                 {t('nav.academy')}

@@ -415,6 +415,12 @@
                     transform: rotate(180deg);
                 }
             }
+
+            &--active {
+                background: rgba($primary-green, 0.12);
+                color: $primary-green;
+                font-weight: 600;
+            }
         }
 
         &__dropdown-icon {
