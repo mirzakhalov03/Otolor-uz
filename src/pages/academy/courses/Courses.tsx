@@ -1,8 +1,10 @@
+import { Play } from 'lucide-react'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const Courses = () => {
   const { t } = useTranslation()
+  const [loadedVideoIds, setLoadedVideoIds] = useState<number[]>([])
   const [contactForm, setContactForm] = useState({
     fullName: '',
     phoneNumber: '',
@@ -36,31 +38,37 @@ const Courses = () => {
   const videos = [
     {
       id: 1,
+      youtubeId: '-tngi6x3usI',
       title: t('academyCourses.videos.video1Title'),
       src: 'https://www.youtube.com/embed/-tngi6x3usI'
     },
     {
       id: 2,
+      youtubeId: 'm9V2MRUAmR0',
       title: t('academyCourses.videos.video2Title'),
       src: 'https://www.youtube.com/embed/m9V2MRUAmR0'
     },
     {
       id: 3,
+      youtubeId: '4fmGZIWflXI',
       title: t('academyCourses.videos.video3Title'),
       src: 'https://www.youtube.com/embed/4fmGZIWflXI'
     },
     {
       id: 4,
+      youtubeId: 'jLp9lcb4Dfk',
       title: t('academyCourses.videos.video4Title'),
       src: 'https://www.youtube.com/embed/jLp9lcb4Dfk'
     },
     {
       id: 5,
+      youtubeId: 'HjrbKL0shIg',
       title: t('academyCourses.videos.video5Title'),
       src: 'https://www.youtube.com/embed/HjrbKL0shIg'
     },
     {
       id: 6,
+      youtubeId: 'FyFGoOu8X4Y',
       title: t('academyCourses.videos.video6Title'),
       src: 'https://www.youtube.com/embed/FyFGoOu8X4Y'
     }
@@ -72,7 +80,6 @@ const Courses = () => {
       title: t('academyCourses.otherCourses.courses.course1Title'),
       type: 'free',
       level: t('academyCourses.otherCourses.levels.beginner'),
-      access: t('academyCourses.otherCourses.access.open'),
       link: 'https://www.youtube.com/watch?v=-tngi6x3usI'
     },
     {
@@ -80,7 +87,6 @@ const Courses = () => {
       title: t('academyCourses.otherCourses.courses.course2Title'),
       type: 'paid',
       level: t('academyCourses.otherCourses.levels.intermediate'),
-      access: t('academyCourses.otherCourses.access.premium'),
       link: 'https://www.youtube.com/watch?v=m9V2MRUAmR0'
     },
     {
@@ -88,7 +94,6 @@ const Courses = () => {
       title: t('academyCourses.otherCourses.courses.course3Title'),
       type: 'paid',
       level: t('academyCourses.otherCourses.levels.advanced'),
-      access: t('academyCourses.otherCourses.access.premium'),
       link: 'https://www.youtube.com/watch?v=4fmGZIWflXI'
     },
     {
@@ -96,7 +101,6 @@ const Courses = () => {
       title: t('academyCourses.otherCourses.courses.course4Title'),
       type: 'free',
       level: t('academyCourses.otherCourses.levels.intermediate'),
-      access: t('academyCourses.otherCourses.access.open'),
       link: 'https://www.youtube.com/watch?v=FyFGoOu8X4Y'
     }
   ]
@@ -119,11 +123,15 @@ const Courses = () => {
     })
   }
 
+  const handleLoadVideo = (videoId: number) => {
+    setLoadedVideoIds((prev) => (prev.includes(videoId) ? prev : [...prev, videoId]))
+  }
+
   return (
     <div className="min-h-screen bg-[#e9e9e9]">
-      <section className="px-6 pt-[8.5rem] pb-6 max-[900px]:pt-[7.5rem]">
-        <div className="container">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#165b35] via-[#1d7a43] to-[#2db866] px-8 py-10 text-white shadow-md max-[900px]:px-5 max-[900px]:py-7">
+      <section className="px-6 pt-[8.5rem] pb-6 max-[900px]:px-2 max-[900px]:pt-[7.5rem]">
+        <div className="container max-[900px]:px-0">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#165b35] via-[#1d7a43] to-[#2db866] px-8 py-10 text-white shadow-md max-[900px]:px-4 max-[900px]:py-7">
             <div className="pointer-events-none absolute -left-20 bottom-[-90px] h-[220px] w-[220px] rounded-full bg-white/20 blur-2xl" />
             <div className="pointer-events-none absolute -right-16 top-[-80px] h-[220px] w-[220px] rounded-full bg-white/20 blur-2xl" />
 
@@ -161,29 +169,52 @@ const Courses = () => {
         </div>
       </section>
 
-      <section id="academy-courses-videos" className="px-6 pt-2 pb-12 max-[900px]:pt-2">
-        <div className="container">
+      <section id="academy-courses-videos" className="px-6 pt-2 pb-12 max-[900px]:px-2 max-[900px]:pt-2">
+        <div className="container max-[900px]:px-0">
           <h2 className="m-0 mb-4 text-[2.2rem] leading-[1.2] font-bold text-[#3f3f3f]">{t('academyCourses.videoSectionTitle')}</h2>
           <div className="grid grid-cols-2 gap-3 max-[900px]:grid-cols-1">
             {videos.map((video) => (
               <article key={video.id} className="overflow-hidden rounded-xl bg-[#111]">
-                <iframe
-                  src={video.src}
-                  title={video.title}
-                  className="block aspect-video w-full border-0 rounded-lg"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
+                {loadedVideoIds.includes(video.id) ? (
+                  <iframe
+                    src={`${video.src}?autoplay=1`}
+                    title={video.title}
+                    className="block aspect-video w-full border-0 rounded-lg"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleLoadVideo(video.id)}
+                    className="relative block aspect-video w-full border-0 bg-[#111] p-0 text-left"
+                    aria-label={video.title}
+                  >
+                    <img
+                      src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                      alt={video.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                    <span className="absolute inset-0 bg-black/15" />
+                    <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90">
+                      <Play/>
+                    </span>
+                    <span className="absolute bottom-3 left-3 right-3 text-[0.95rem] font-medium text-white">
+                      {video.title}
+                    </span>
+                  </button>
+                )}
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-6 pt-1 pb-16">
-        <div className="container">
+      <section className="px-6 pt-1 pb-16 max-[900px]:px-2">
+        <div className="container max-[900px]:px-0">
           <div className="rounded-3xl bg-[#f4f4f4] p-6 shadow-sm max-[900px]:p-4">
             <h2 className="m-0 text-[2rem] leading-[1.2] font-bold text-[#2f2f2f] max-[900px]:text-[1.7rem]">
               {t('academyCourses.otherCourses.title')}
@@ -192,38 +223,34 @@ const Courses = () => {
               {t('academyCourses.otherCourses.subtitle')}
             </p>
 
-            <div className="mt-5 overflow-x-auto rounded-2xl border border-[#e2e2e2] bg-white">
-              <table className="w-full min-w-[760px] border-collapse">
+            <div className="mt-5 overflow-hidden rounded-2xl border border-[#e2e2e2] bg-white">
+              <table className="w-full border-collapse table-fixed">
                 <thead>
                   <tr className="bg-[#f8f8f8] text-left">
-                    <th className="px-4 py-3 text-[0.96rem] font-semibold text-[#4b4b4b]">{t('academyCourses.otherCourses.table.course')}</th>
-                    <th className="px-4 py-3 text-[0.96rem] font-semibold text-[#4b4b4b]">{t('academyCourses.otherCourses.table.type')}</th>
-                    <th className="px-4 py-3 text-[0.96rem] font-semibold text-[#4b4b4b]">{t('academyCourses.otherCourses.table.level')}</th>
-                    <th className="px-4 py-3 text-[0.96rem] font-semibold text-[#4b4b4b]">{t('academyCourses.otherCourses.table.access')}</th>
-                    <th className="px-4 py-3 text-[0.96rem] font-semibold text-[#4b4b4b]">{t('academyCourses.otherCourses.table.link')}</th>
+                    <th className="w-[55%] px-3 py-3 text-[0.9rem] font-semibold text-[#4b4b4b] max-[900px]:w-[50%] max-[900px]:text-[0.84rem]">{t('academyCourses.otherCourses.table.course')}</th>
+                    <th className="w-[22.5%] px-3 py-3 text-[0.9rem] font-semibold text-[#4b4b4b] max-[900px]:w-[25%] max-[900px]:text-[0.84rem]">{t('academyCourses.otherCourses.table.type')}</th>
+                    <th className="w-[22.5%] px-3 py-3 text-[0.9rem] font-semibold text-[#4b4b4b] max-[900px]:w-[25%] max-[900px]:text-[0.84rem]">{t('academyCourses.otherCourses.table.level')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {otherCourses.map((course) => (
                     <tr key={course.id} className="border-t border-[#ededed]">
-                      <td className="px-4 py-3 text-[0.98rem] font-medium text-[#303030]">{course.title}</td>
-                      <td className="px-4 py-3">
-                        <span className={`inline-flex rounded-full px-3 py-1 text-[0.84rem] font-semibold ${course.type === 'free' ? 'bg-[#e7f8ec] text-[#1a8d4a]' : 'bg-[#fff0e4] text-[#bf6b2a]'}`}>
-                          {course.type === 'free' ? t('academyCourses.otherCourses.types.free') : t('academyCourses.otherCourses.types.paid')}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-[0.95rem] text-[#505050]">{course.level}</td>
-                      <td className="px-4 py-3 text-[0.95rem] text-[#505050]">{course.access}</td>
-                      <td className="px-4 py-3">
+                      <td className="px-3 py-3 text-[0.95rem] font-medium text-[#303030] max-[900px]:text-[0.86rem]">
                         <a
                           href={course.link}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex rounded-lg bg-[#1b7340] px-3.5 py-2 text-[0.88rem] font-semibold text-white transition-all duration-200 hover:bg-[#155c33]"
+                          className="line-clamp-2 text-[#1b7340] underline-offset-2 transition-all hover:underline"
                         >
-                          {t('academyCourses.otherCourses.table.viewCourse')}
+                          {course.title}
                         </a>
                       </td>
+                      <td className="px-3 py-3 align-middle">
+                        <span className={`inline-flex rounded-full px-2.5 py-1 text-[0.78rem] font-semibold max-[900px]:px-2 max-[900px]:text-[0.72rem] ${course.type === 'free' ? 'bg-[#e7f8ec] text-[#1a8d4a]' : 'bg-[#fff0e4] text-[#bf6b2a]'}`}>
+                          {course.type === 'free' ? t('academyCourses.otherCourses.types.free') : t('academyCourses.otherCourses.types.paid')}
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 text-[0.9rem] text-[#505050] max-[900px]:text-[0.82rem]">{course.level}</td>
                     </tr>
                   ))}
                 </tbody>
