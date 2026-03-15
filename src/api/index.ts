@@ -3,8 +3,8 @@
  * Main entry point for all API-related exports
  */
 
-// Axios instance and token management
-export { axiosInstance, tokenManager } from './axiosInstance';
+// Axios instance
+export { axiosInstance } from './axiosInstance';
 
 // Base service with HTTP methods
 export { baseService } from './baseService';

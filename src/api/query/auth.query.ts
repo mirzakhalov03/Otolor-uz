@@ -6,6 +6,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services';
+import { emitAuthLogin } from '../axiosInstance';
 import type { LoginRequest, RegisterRequest, ChangePasswordRequest, ApiResponse } from '../types';
 
 // Query keys for cache management
@@ -24,11 +25,10 @@ export const useCurrentUser = () => {
     queryFn: async () => {
       const response = await authService.getMe();
       if (!response.success) {
-        throw new Error(response.message);
+        throw response;
       }
       return response.data;
     },
-    enabled: authService.isAuthenticated(),
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: false,
   });
@@ -47,20 +47,22 @@ export const useLogin = () => {
       if (!response.success) {
         throw response;
       }
-      return response.data;
-    },
-    onSuccess: (data) => {
-      // Update user cache with login response
-      if (data?.user) {
-        queryClient.setQueryData(authKeys.me(), data.user);
+
+      const meResponse = await authService.getMe();
+      if (!meResponse.success || !meResponse.data) {
+        throw meResponse;
       }
+
+      return meResponse.data;
+    },
+    onSuccess: (user) => {
+      queryClient.setQueryData(authKeys.me(), user);
+      emitAuthLogin(user);
       
       // Check if user is admin/superadmin and redirect accordingly
-      const role = data?.user?.role?.name;
-      if (role === 'admin' || role === 'superadmin') {
+      const role = user?.role?.name;
+      if (role === 'admin' || role === 'superadmin' || role === 'doctor') {
         navigate('/admins-otolor');
-      } else if (role === 'doctor') {
-        navigate('/doctor-dashboard');
       } else {
         navigate('/');
       }
@@ -85,12 +87,17 @@ export const useAdminLogin = () => {
       if (!response.success) {
         throw response;
       }
+
+      const meResponse = await authService.getMe();
+      if (!meResponse.success || !meResponse.data) {
+        throw meResponse;
+      }
       
       // Validate allowed roles for admin panel access
-      const role = response.data?.user?.role?.name;
+      const role = meResponse.data.role?.name;
       const allowedRoles = ['admin', 'superadmin', 'doctor'];
       if (!role || !allowedRoles.includes(role)) {
-        authService.clearAuth();
+        await authService.logout();
         throw { 
           success: false, 
           status: 403, 
@@ -98,12 +105,11 @@ export const useAdminLogin = () => {
         } as ApiResponse;
       }
       
-      return response.data;
+      return meResponse.data;
     },
-    onSuccess: (data) => {
-      if (data?.user) {
-        queryClient.setQueryData(authKeys.me(), data.user);
-      }
+    onSuccess: (user) => {
+      queryClient.setQueryData(authKeys.me(), user);
+      emitAuthLogin(user);
       navigate('/admins-otolor');
     },
     onError: (error: ApiResponse) => {
@@ -125,12 +131,17 @@ export const useRegister = () => {
       if (!response.success) {
         throw response;
       }
-      return response.data;
-    },
-    onSuccess: (data) => {
-      if (data?.user) {
-        queryClient.setQueryData(authKeys.me(), data.user);
+
+      const meResponse = await authService.getMe();
+      if (!meResponse.success || !meResponse.data) {
+        throw meResponse;
       }
+
+      return meResponse.data;
+    },
+    onSuccess: (user) => {
+      queryClient.setQueryData(authKeys.me(), user);
+      emitAuthLogin(user);
       navigate('/');
     },
     onError: (error: ApiResponse) => {
@@ -152,12 +163,13 @@ export const useLogout = () => {
       // Clear all auth-related cache
       queryClient.removeQueries({ queryKey: authKeys.all });
       queryClient.clear();
-      navigate('/');
+      navigate('/admins-otolor/login');
     },
     onError: () => {
       // Even on error, clear local state
       queryClient.removeQueries({ queryKey: authKeys.all });
-      navigate('/');
+      queryClient.clear();
+      navigate('/admins-otolor/login');
     },
   });
 };
@@ -197,6 +209,7 @@ export const useChangePassword = () => {
     onSuccess: () => {
       // Clear cache as user needs to re-login
       queryClient.removeQueries({ queryKey: authKeys.all });
+      queryClient.clear();
       navigate('/admins-otolor/login');
     },
   });
@@ -206,7 +219,8 @@ export const useChangePassword = () => {
  * Hook to check authentication status
  */
 export const useIsAuthenticated = (): boolean => {
-  return authService.isAuthenticated();
+  const { data: user } = useCurrentUser();
+  return !!user;
 };
 
 /**

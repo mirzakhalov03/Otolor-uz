@@ -36,11 +36,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   loginPath = '/admins-otolor/login',
   unauthorizedPath = '/unauthorized',
 }) => {
-  const { isAuthenticated, isLoading, hasRole, hasPermission } = useAuth();
+  const { isAuthenticated, isInitializing, hasRole, hasPermission } = useAuth();
   const location = useLocation();
 
   // Show loading spinner while checking auth
-  if (isLoading) {
+  if (isInitializing) {
     return (
       <Spin size="large" fullscreen tip="Loading..." />
     );

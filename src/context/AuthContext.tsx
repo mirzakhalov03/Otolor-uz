@@ -3,15 +3,19 @@
  * Centralized authentication state management
  */
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import type { User } from '../api/types';
+import type { ApiResponse } from '../api/types';
 import { authService } from '../api/services';
-import { useCurrentUser } from '../api/query';
+import { authKeys } from '../api/query';
+import { AUTH_LOGIN_EVENT, AUTH_LOGOUT_EVENT } from '../api/axiosInstance';
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  isInitializing: boolean;
   isLoading: boolean;
   isAdmin: boolean;
   isSuperAdmin: boolean;
@@ -26,26 +30,90 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isInitialized, setIsInitialized] = useState(false);
-  
-  // Use React Query to fetch current user
-  const { data: user, isLoading, error } = useCurrentUser();
+  const queryClient = useQueryClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  const clearAuthState = useCallback(() => {
+    setUser(null);
+    setIsAuthenticated(false);
+    queryClient.removeQueries({ queryKey: authKeys.me() });
+  }, [queryClient]);
+
+  const bootstrapSession = useCallback(async () => {
+    setIsInitializing(true);
+
+    try {
+      const meResponse = await authService.getMe();
+
+      if (meResponse.success && meResponse.data) {
+        setUser(meResponse.data);
+        setIsAuthenticated(true);
+        queryClient.setQueryData(authKeys.me(), meResponse.data);
+        return;
+      }
+
+      throw meResponse;
+    } catch (error) {
+      const apiError = error as ApiResponse;
+
+      // Session bootstrap fallback: try refresh once on initial 401
+      if (apiError?.status === 401) {
+        try {
+          const refreshResponse = await authService.refreshToken();
+          if (refreshResponse.success) {
+            const retryMeResponse = await authService.getMe();
+            if (retryMeResponse.success && retryMeResponse.data) {
+              setUser(retryMeResponse.data);
+              setIsAuthenticated(true);
+              queryClient.setQueryData(authKeys.me(), retryMeResponse.data);
+              return;
+            }
+          }
+        } catch {
+          // Refresh failed: fall through to logged-out state
+        }
+      }
+
+      clearAuthState();
+    } finally {
+      setIsInitializing(false);
+    }
+  }, [clearAuthState, queryClient]);
 
   useEffect(() => {
-    // Mark as initialized once initial check is complete
-    if (!isLoading) {
-      setIsInitialized(true);
-    }
-  }, [isLoading]);
+    void bootstrapSession();
+  }, [bootstrapSession]);
 
-  // Clear token if fetching user failed (invalid token)
   useEffect(() => {
-    if (error && authService.isAuthenticated()) {
-      authService.clearAuth();
-    }
-  }, [error]);
+    const handleLogout = () => {
+      clearAuthState();
+      setIsInitializing(false);
+    };
 
-  const isAuthenticated = !!user && authService.isAuthenticated();
+    const handleLogin = (event: Event) => {
+      const customEvent = event as CustomEvent<{ user?: User }>;
+      const loggedInUser = customEvent.detail?.user;
+
+      if (loggedInUser) {
+        setUser(loggedInUser);
+        queryClient.setQueryData(authKeys.me(), loggedInUser);
+      }
+
+      setIsAuthenticated(true);
+      setIsInitializing(false);
+    };
+
+    window.addEventListener(AUTH_LOGOUT_EVENT, handleLogout);
+    window.addEventListener(AUTH_LOGIN_EVENT, handleLogin as EventListener);
+
+    return () => {
+      window.removeEventListener(AUTH_LOGOUT_EVENT, handleLogout);
+      window.removeEventListener(AUTH_LOGIN_EVENT, handleLogin as EventListener);
+    };
+  }, [clearAuthState, queryClient]);
+
   const userRole = user?.role?.name;
   const isAdmin = userRole === 'admin' || userRole === 'superadmin';
   const isSuperAdmin = userRole === 'superadmin';
@@ -63,7 +131,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextType = {
     user: user ?? null,
     isAuthenticated,
-    isLoading: !isInitialized || isLoading,
+    isInitializing,
+    isLoading: isInitializing,
     isAdmin,
     isSuperAdmin,
     hasRole,

@@ -20,11 +20,11 @@ export const GuestRoute: React.FC<GuestRouteProps> = ({
   children,
   redirectTo = '/admins-otolor',
 }) => {
-  const { isAuthenticated, isLoading, isAdmin } = useAuth();
+  const { isAuthenticated, isInitializing } = useAuth();
   const location = useLocation();
 
   // Show loading spinner while checking auth
-  if (isLoading) {
+  if (isInitializing) {
     return (
       <div
         style={{
@@ -41,7 +41,7 @@ export const GuestRoute: React.FC<GuestRouteProps> = ({
   }
 
   // Already authenticated - redirect
-  if (isAuthenticated && isAdmin) {
+  if (isAuthenticated) {
     // Get the intended destination from location state
     const from = (location.state as { from?: Location })?.from?.pathname || redirectTo;
     return <Navigate to={from} replace />;

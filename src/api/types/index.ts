@@ -89,12 +89,11 @@ export interface User {
 }
 
 export interface AuthResponse {
-  user: User;
-  accessToken: string;
+  user?: User;
 }
 
 export interface RefreshTokenResponse {
-  accessToken: string;
+  success?: boolean;
 }
 
 // ================== Doctor Types ==================

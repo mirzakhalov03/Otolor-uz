@@ -25,8 +25,34 @@ const AdminLogin: React.FC = () => {
       message.success(t('auth.loginSuccess'));
     } catch (error) {
       const apiError = error as ApiResponse;
+      if (apiError?.status === 401) {
+        message.error(t('errors.invalidCredentials', { defaultValue: 'Invalid credentials' }));
+        return;
+      }
+
+      if (apiError?.status === 403) {
+        message.error(apiError?.message || t('errors.accountInactive', { defaultValue: 'Your account is inactive' }));
+        return;
+      }
+
       message.error(apiError?.message || t('errors.loginFailed'));
     }
+  };
+
+  const getErrorDescription = () => {
+    if (!loginMutation.isError) return undefined;
+
+    const apiError = loginMutation.error as ApiResponse;
+
+    if (apiError?.status === 401) {
+      return t('errors.invalidCredentials', { defaultValue: 'Invalid credentials' });
+    }
+
+    if (apiError?.status === 403) {
+      return apiError?.message || t('errors.accountInactive', { defaultValue: 'Your account is inactive' });
+    }
+
+    return apiError?.message || t('errors.loginFailed');
   };
 
   return (
@@ -51,7 +77,7 @@ const AdminLogin: React.FC = () => {
           {loginMutation.isError && (
             <Alert
               message={t('errors.loginFailed')}
-              description={(loginMutation.error as ApiResponse)?.message || t('errors.invalidCredentials')}
+              description={getErrorDescription()}
               type="error"
               showIcon
               className="admin-login__error"

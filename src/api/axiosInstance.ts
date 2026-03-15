@@ -1,6 +1,6 @@
 /**
  * Axios Instance Configuration
- * Centralized HTTP client with interceptors for JWT handling and error normalization
+ * Centralized HTTP client with interceptors for cookie-based auth and error normalization
  */
 
 import axios from 'axios';
@@ -10,8 +10,16 @@ import type { ApiResponse } from './types';
 // Get base URL from environment variable
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
 
-// Token storage keys
-const ACCESS_TOKEN_KEY = 'otolor_access_token';
+export const AUTH_LOGOUT_EVENT = 'auth:logout';
+export const AUTH_LOGIN_EVENT = 'auth:login';
+
+export const emitAuthLogout = (): void => {
+  window.dispatchEvent(new Event(AUTH_LOGOUT_EVENT));
+};
+
+export const emitAuthLogin = <T = unknown>(user?: T): void => {
+  window.dispatchEvent(new CustomEvent(AUTH_LOGIN_EVENT, { detail: { user } }));
+};
 
 // Create axios instance
 export const axiosInstance = axios.create({
@@ -23,59 +31,41 @@ export const axiosInstance = axios.create({
   withCredentials: true, // Required for HTTP-only refresh token cookie
 });
 
-/**
- * Token management utilities
- */
-export const tokenManager = {
-  getAccessToken: (): string | null => {
-    return localStorage.getItem(ACCESS_TOKEN_KEY);
-  },
-
-  setAccessToken: (token: string): void => {
-    localStorage.setItem(ACCESS_TOKEN_KEY, token);
-  },
-
-  clearAccessToken: (): void => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-  },
-
-  isAuthenticated: (): boolean => {
-    return !!localStorage.getItem(ACCESS_TOKEN_KEY);
-  },
-};
-
 // Flag to prevent multiple refresh attempts
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (token: string | null) => void;
+  resolve: () => void;
   reject: (error: Error) => void;
 }> = [];
 
-const processQueue = (error: Error | null, token: string | null = null) => {
+const processQueue = (error: Error | null) => {
   failedQueue.forEach((promise) => {
     if (error) {
       promise.reject(error);
     } else {
-      promise.resolve(token);
+      promise.resolve();
     }
   });
   failedQueue = [];
 };
 
+const shouldSkipRefresh = (url?: string): boolean => {
+  if (!url) return false;
+
+  return (
+    url.includes('/auth/login') ||
+    url.includes('/auth/register') ||
+    url.includes('/auth/refresh') ||
+    url.includes('/auth/logout')
+  );
+};
+
 /**
  * Request Interceptor
- * - Attaches JWT token to Authorization header
+ * - Sends credentials via cookies only
  */
 axiosInstance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = tokenManager.getAccessToken();
-
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
+  (config: InternalAxiosRequestConfig) => config,
   (error: AxiosError) => {
     return Promise.reject(error);
   }
@@ -93,20 +83,26 @@ axiosInstance.interceptors.response.use(
   },
   async (error: AxiosError<ApiResponse>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const normalizedError: ApiResponse = {
+      success: false,
+      status: error.response?.status || 500,
+      message: error.response?.data?.message || error.message || 'An unexpected error occurred',
+      errors: error.response?.data?.errors,
+    };
 
     // Handle 401 Unauthorized
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry &&
+      !shouldSkipRefresh(originalRequest.url)
+    ) {
       // Prevent retry loop
       if (isRefreshing) {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then((token) => {
-            if (originalRequest.headers) {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
-            }
-            return axiosInstance(originalRequest);
-          })
+          .then(() => axiosInstance(originalRequest))
           .catch((err) => {
             return Promise.reject(err);
           });
@@ -116,50 +112,33 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Attempt to refresh the token
-        const response = await axios.post<ApiResponse<{ accessToken: string }>>(
+        // Attempt to refresh cookies
+        const response = await axios.post<ApiResponse>(
           `${API_BASE_URL}/auth/refresh`,
           {},
           { withCredentials: true }
         );
 
-        if (response.data.success && response.data.data?.accessToken) {
-          const newAccessToken = response.data.data.accessToken;
-          tokenManager.setAccessToken(newAccessToken);
-          processQueue(null, newAccessToken);
-
-          if (originalRequest.headers) {
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          }
-
+        if (response.data.success) {
+          processQueue(null);
           return axiosInstance(originalRequest);
         } else {
           throw new Error('Failed to refresh token');
         }
       } catch (refreshError) {
-        processQueue(refreshError as Error, null);
-        
-        // Clear tokens and redirect to login
-        tokenManager.clearAccessToken();
+        processQueue(refreshError as Error);
+        emitAuthLogout();
         
         // Redirect to admin login
         if (window.location.pathname.startsWith('/admins-otolor')) {
           window.location.href = '/admins-otolor/login';
         }
 
-        return Promise.reject(refreshError);
+        return Promise.reject(normalizedError);
       } finally {
         isRefreshing = false;
       }
     }
-
-    // Normalize error response
-    const normalizedError: ApiResponse = {
-      success: false,
-      status: error.response?.status || 500,
-      message: error.response?.data?.message || error.message || 'An unexpected error occurred',
-      errors: error.response?.data?.errors,
-    };
 
     return Promise.reject(normalizedError);
   }
