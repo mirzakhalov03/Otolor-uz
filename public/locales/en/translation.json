@@ -367,6 +367,73 @@
     "enrollNow": "Enroll Now",
     "contactUs": "Contact Us"
   },
+  "academyCourses": {
+    "bannerTag": "Otolor Academy",
+    "bannerTitle": "Master modern ENT practice with practical online courses",
+    "bannerDescription": "Learn directly from high-volume specialists through structured modules, live sessions, and clinic-grade materials designed for doctors who want measurable outcomes.",
+    "stats": {
+      "stat1Value": "1,300+",
+      "stat1Label": "Active learners",
+      "stat2Value": "95%",
+      "stat2Label": "Completion rate",
+      "stat3Value": "4.9/5",
+      "stat3Label": "Average rating"
+    },
+    "primaryButton": "Explore Programs",
+    "secondaryButton": "Watch Demo",
+    "videoSectionTitle": "Topic Videos",
+    "videos": {
+      "video1Title": "Temporal Bone Computed Tomography Course",
+      "video2Title": "Nose and Paranasal Sinus Computed Tomography Course",
+      "video3Title": "Online Computed Tomography Course - Sherzod Gulyamov",
+      "video4Title": "Online Computed Tomography Course - Osteomeatal Complex",
+      "video5Title": "Successful Completion of the First Step",
+      "video6Title": "Endoscopic Nasal Cavity Surgery Course"
+    },
+    "otherCourses": {
+      "title": "Other Courses",
+      "subtitle": "Explore additional Otolor Academy programs with direct links. Choose free modules for quick learning or premium tracks for deeper practical training.",
+      "table": {
+        "course": "Course",
+        "type": "Type",
+        "level": "Level",
+        "access": "Access",
+        "link": "Link",
+        "viewCourse": "View Course"
+      },
+      "types": {
+        "free": "Free",
+        "paid": "Paid"
+      },
+      "levels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "access": {
+        "open": "Open access",
+        "premium": "Premium access"
+      },
+      "courses": {
+        "course1Title": "ENT CT Basics for Daily Practice",
+        "course2Title": "Advanced Sinus Imaging Interpretation",
+        "course3Title": "Surgical Planning from CT Cases",
+        "course4Title": "Endoscopic Anatomy Refresher"
+      }
+    },
+    "contactForm": {
+      "title": "Contact the Instructors",
+      "subtitle": "Send your question and our instructors will get back to you with guidance on course selection, schedule, and enrollment.",
+      "fullNameLabel": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Write your question or request",
+      "submitButton": "Send Message",
+      "successMessage": "Your message has been sent successfully."
+    }
+  },
   "appointments": {
     "pageTitle": "Online Appointment Booking",
     "tag": "BOOK YOUR VISIT",

@@ -366,6 +366,73 @@
     "enrollNow": "Hoziroq Ro'yxatdan O'ting",
     "contactUs": "Biz Bilan Bog'laning"
   },
+  "academyCourses": {
+    "bannerTag": "Otolor Akademiyasi",
+    "bannerTitle": "Amaliy onlayn kurslar bilan zamonaviy LOR amaliyotini egallang",
+    "bannerDescription": "Yuqori tajribali mutaxassislardan tuzilgan modullar, jonli sessiyalar va klinik darajadagi materiallar orqali natijaga yo'naltirilgan bilim oling.",
+    "stats": {
+      "stat1Value": "1 300+",
+      "stat1Label": "Faol o'quvchilar",
+      "stat2Value": "95%",
+      "stat2Label": "Yakunlash darajasi",
+      "stat3Value": "4.9/5",
+      "stat3Label": "O'rtacha baho"
+    },
+    "primaryButton": "Dasturlarni ko'rish",
+    "secondaryButton": "Demo ko'rish",
+    "videoSectionTitle": "Mavzuga oid videolar",
+    "videos": {
+      "video1Title": "Chakka suyagi kompyuter tomografiya kursi",
+      "video2Title": "Burun va burunyondosh bo'shliqlari kompyuter tomografiya kursi",
+      "video3Title": "Kompyuter tomografiyasi online kursi - Sherzod Gulyamov",
+      "video4Title": "Kompyuter tomografiyasi online kursi - Osteomeatal majmua",
+      "video5Title": "Birinchi qadamning muvaffaqiyatli yakuni",
+      "video6Title": "Endoskopik burun bo'shlig'i jarrohligi kursi"
+    },
+    "otherCourses": {
+      "title": "Boshqa kurslar",
+      "subtitle": "To'g'ridan-to'g'ri havolalar orqali Otolor Akademiyasining qo'shimcha dasturlarini ko'rib chiqing. Tez o'rganish uchun bepul modullarni yoki chuqur amaliyot uchun premium yo'nalishlarni tanlang.",
+      "table": {
+        "course": "Kurs",
+        "type": "Turi",
+        "level": "Daraja",
+        "access": "Kirish",
+        "link": "Havola",
+        "viewCourse": "Kursni ko'rish"
+      },
+      "types": {
+        "free": "Bepul",
+        "paid": "Pullik"
+      },
+      "levels": {
+        "beginner": "Boshlang'ich",
+        "intermediate": "O'rta",
+        "advanced": "Yuqori"
+      },
+      "access": {
+        "open": "Ochiq kirish",
+        "premium": "Premium kirish"
+      },
+      "courses": {
+        "course1Title": "Amaliyot uchun LOR KT asoslari",
+        "course2Title": "Sinus KT natijalarini chuqur tahlil qilish",
+        "course3Title": "KT holatlaridan jarrohlik rejalashtirish",
+        "course4Title": "Endoskopik anatomiya bo'yicha takrorlash"
+      }
+    },
+    "contactForm": {
+      "title": "Instruktorlar bilan bog'lanish",
+      "subtitle": "Savolingizni yuboring, instruktorlarimiz kurs tanlash, jadval va ro'yxatdan o'tish bo'yicha sizga yordam beradi.",
+      "fullNameLabel": "To'liq ism",
+      "fullNamePlaceholder": "To'liq ismingizni kiriting",
+      "phoneLabel": "Telefon raqami",
+      "phonePlaceholder": "Telefon raqamingizni kiriting",
+      "messageLabel": "Xabar",
+      "messagePlaceholder": "Savol yoki so'rovingizni yozing",
+      "submitButton": "Xabar yuborish",
+      "successMessage": "Xabaringiz muvaffaqiyatli yuborildi."
+    }
+  },
   "appointments": {
     "pageTitle": "Onlayn Navbat Olish",
     "tag": "NAVBAT OLISH",
