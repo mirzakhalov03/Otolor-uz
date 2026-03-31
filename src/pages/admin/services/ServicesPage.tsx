@@ -23,9 +23,8 @@ import {
   useCreateClinicService,
   useUpdateClinicService,
   useClinicService,
-} from '../../../api/query';
-import type { ClinicService } from '../../../api/types';
-import type { CreateServiceRequest, UpdateServiceRequest } from '../../../api/services/clinicService.service';
+} from '../../../mocks/uiApi';
+import type { ClinicService, CreateServiceRequest, UpdateServiceRequest } from '../../../mocks/uiTypes';
 import './ServicesPage.scss';
 
 type DrawerMode = 'create' | 'edit' | 'view' | null;
@@ -357,7 +356,7 @@ const ServicesPage: React.FC = () => {
           ) : (
             <ServiceForm
               isEditMode={true}
-              initialData={selectedService}
+              initialData={selectedService ?? undefined}
               onSubmit={handleEditSubmit}
               onCancel={handleCloseDrawer}
               isLoading={updateMutation.isPending}

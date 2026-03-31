@@ -3,7 +3,7 @@
  * Defines routes and permissions for each role
  */
 
-import type { Role } from '../api/types';
+import type { RoleName } from '../mocks/uiTypes';
 
 /**
  * Menu item configuration for sidebar
@@ -11,7 +11,7 @@ import type { Role } from '../api/types';
 export interface MenuItemConfig {
   key: string;
   path: string;
-  requiredRoles: Role['name'][];
+  requiredRoles: RoleName[];
   requiredPermissions?: string[];
 }
 
@@ -19,7 +19,7 @@ export interface MenuItemConfig {
  * Role definitions with their allowed menu items
  * This is the single source of truth for RBAC in the frontend
  */
-export const ROLE_MENU_ACCESS: Record<Role['name'], string[]> = {
+export const ROLE_MENU_ACCESS: Record<RoleName, string[]> = {
   superadmin: [
     'dashboard',
     'doctors',
@@ -111,7 +111,7 @@ export const MENU_ITEMS_CONFIG: MenuItemConfig[] = [
  * Route protection configuration
  * Defines which roles can access which routes
  */
-export const PROTECTED_ROUTES: Record<string, Role['name'][]> = {
+export const PROTECTED_ROUTES: Record<string, RoleName[]> = {
   '/admins-otolor': ['user', 'doctor', 'admin', 'superadmin'],
   '/admins-otolor/profile': ['user', 'doctor', 'admin', 'superadmin'],
   '/admins-otolor/doctors': ['admin', 'superadmin'],
@@ -131,7 +131,7 @@ export const PROTECTED_ROUTES: Record<string, Role['name'][]> = {
  * @param userRole - The user's role name
  * @returns boolean - Whether the user has access
  */
-export const hasMenuAccess = (menuKey: string, userRole?: Role['name']): boolean => {
+export const hasMenuAccess = (menuKey: string, userRole?: RoleName): boolean => {
   if (!userRole) return false;
   const allowedMenus = ROLE_MENU_ACCESS[userRole] || [];
   return allowedMenus.includes(menuKey);
@@ -142,7 +142,7 @@ export const hasMenuAccess = (menuKey: string, userRole?: Role['name']): boolean
  * @param userRole - The user's role name
  * @returns string[] - Array of allowed menu keys
  */
-export const getAllowedMenuItems = (userRole?: Role['name']): string[] => {
+export const getAllowedMenuItems = (userRole?: RoleName): string[] => {
   if (!userRole) return [];
   return ROLE_MENU_ACCESS[userRole] || [];
 };
@@ -153,7 +153,7 @@ export const getAllowedMenuItems = (userRole?: Role['name']): string[] => {
  * @param userRole - The user's role name
  * @returns boolean - Whether the user has access
  */
-export const canAccessRoute = (routePath: string, userRole?: Role['name']): boolean => {
+export const canAccessRoute = (routePath: string, userRole?: RoleName): boolean => {
   if (!userRole) return false;
   
   // Check exact match first
@@ -179,7 +179,7 @@ export const canAccessRoute = (routePath: string, userRole?: Role['name']): bool
  * @param userRole - The user's role name
  * @returns string - The default redirect path
  */
-export const getDefaultRedirectPath = (userRole?: Role['name']): string => {
+export const getDefaultRedirectPath = (userRole?: RoleName): string => {
   if (!userRole) return '/admins-otolor/login';
   return '/admins-otolor'; // Dashboard is accessible to all authenticated users
 };

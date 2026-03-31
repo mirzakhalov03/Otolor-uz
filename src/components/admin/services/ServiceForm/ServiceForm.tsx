@@ -24,8 +24,7 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import type { ClinicService } from '../../../../api/types';
-import type { CreateServiceRequest, UpdateServiceRequest } from '../../../../api/services/clinicService.service';
+import type { ClinicService, CreateServiceRequest, UpdateServiceRequest } from '../../../../mocks/uiTypes';
 import './ServiceForm.scss';
 
 const { TextArea } = Input;

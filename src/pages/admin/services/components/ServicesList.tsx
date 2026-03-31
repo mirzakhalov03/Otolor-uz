@@ -7,8 +7,8 @@ import React, { useState } from 'react';
 import { message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, DataTable } from '../../../../components/admin/shared';
-import { useClinicServices, useDeleteClinicService } from '../../../../api/query';
-import type { ClinicService } from '../../../../api/types';
+import { useClinicServices, useDeleteClinicService } from '../../../../mocks/uiApi';
+import type { ClinicService } from '../../../../mocks/uiTypes';
 import { getServiceColumns, SERVICES_PAGE_CONFIG } from '../config/services.config';
 import './ServicesList.scss';
 

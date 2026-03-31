@@ -7,8 +7,8 @@ import React from 'react';
 import { Form, Input, Button, Card, Typography, message, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { useAdminLogin } from '../../../api/query';
-import type { LoginRequest, ApiResponse } from '../../../api/types';
+import { useAdminLogin } from '../../../mocks/uiApi';
+import type { LoginRequest, ApiResponse } from '../../../mocks/uiTypes';
 import LanguageSelector from '../../../components/languageSelector/LanguageSelector';
 import './AdminLogin.scss';
 
@@ -94,7 +94,7 @@ const AdminLogin: React.FC = () => {
             autoComplete="off"
           >
             <Form.Item
-              name="login"
+              name="identifier"
               label={t('auth.usernameOrEmail')}
               rules={[
                 { required: true, message: t('errors.usernameRequired') },

@@ -6,8 +6,8 @@
 import React, { useEffect } from 'react';
 import { Card, Form, Input, InputNumber, Select, Button, Space, message, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useClinicService, useUpdateClinicService } from '../../../../api/query';
-import type { UpdateServiceRequest } from '../../../../api/services/clinicService.service';
+import { useClinicService, useUpdateClinicService } from '../../../../mocks/uiApi';
+import type { UpdateServiceRequest } from '../../../../mocks/uiTypes';
 import './EditService.scss';
 
 const { TextArea } = Input;

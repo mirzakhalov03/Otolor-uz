@@ -48,7 +48,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
   const { t } = useTranslation();
   const { user } = useAuth();
   
-  const userRole = user?.role?.name;
+  const userRole = user?.role?.roleName;
 
   // Get current active menu key based on path
   const getSelectedKey = (): string => {

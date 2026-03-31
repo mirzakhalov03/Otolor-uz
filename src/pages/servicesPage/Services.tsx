@@ -1,28 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { categories, services } from './data/servicesData';
-import { type ServiceCategory } from './types/service.types';
+import { type IService } from './types/service.types';
 import Spinner from '../../components/spinner/Spinner';
 import './services.scss';
+import { useService } from '@/mocks/uiApi';
 
 const Services = () => {
-    const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(categories[0].id);
-    const [isLoading, setIsLoading] = useState(true);
     const { t } = useTranslation();
+    const { data, isLoading } = useService();
+
+    const apiServices: IService[] = useMemo(() => {
+        return (data as any)?.data?.services || [];
+    }, [data]);
+
+    const categories = useMemo(() => {
+        const cats = Array.from(new Set(apiServices.map(s => s.category))).filter(Boolean);
+        return cats.map(c => ({
+            id: c,
+            title: c,
+            description: '' 
+        }));
+    }, [apiServices]);
+
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     useEffect(() => {
-        // Simulate initial data loading
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 800);
+        if (categories.length > 0 && !selectedCategory) {
+            setSelectedCategory(categories[0].id);
+        }
+    }, [categories, selectedCategory]);
 
-        return () => clearTimeout(timer);
-    }, []);
-
-    const filteredServices = selectedCategory
-        ? services.filter(service => service.category === selectedCategory)
-        : [];
+    const filteredServices = useMemo(() => {
+        return selectedCategory
+            ? apiServices.filter(service => service.category === selectedCategory)
+            : [];
+    }, [apiServices, selectedCategory]);
 
     if (isLoading) {
         return (
@@ -84,10 +97,10 @@ const Services = () => {
                                 </div>
                                 <div className='table-body'>
                                     {filteredServices.map((service, index) => (
-                                        <div key={service.id} className='table-row'>
+                                        <div key={service._id} className='table-row'>
                                             <div className='table-cell number-cell'>{index + 1}</div>
-                                            <div className='table-cell name-cell'>{service.name}</div>
-                                            <div className='table-cell price-cell'>{service.price} {t('servicesPage.currency')}</div>
+                                            <div className='table-cell name-cell'>{service.serviceName}</div>
+                                            <div className='table-cell price-cell'>{service.price?.toLocaleString()} {t('servicesPage.currency')}</div>
                                         </div>
                                     ))}
                                 </div>

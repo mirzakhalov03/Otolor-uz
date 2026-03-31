@@ -6,8 +6,8 @@
 import React from 'react';
 import { Card, Form, Input, InputNumber, Select, Button, Space, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useCreateClinicService } from '../../../../api/query';
-import type { CreateServiceRequest } from '../../../../api/services/clinicService.service';
+import { useCreateClinicService } from '../../../../mocks/uiApi';
+import type { CreateServiceRequest } from '../../../../mocks/uiTypes';
 import './CreateService.scss';
 
 const { TextArea } = Input;

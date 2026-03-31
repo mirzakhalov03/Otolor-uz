@@ -6,8 +6,8 @@
 import React, { useState } from 'react';
 import { message } from 'antd';
 import { PageHeader, DataTable } from '../../../../components/admin/shared';
-import { useDoctors, useDeleteDoctor } from '../../../../api/query';
-import type { Doctor } from '../../../../api/types';
+import { useDoctors, useDeleteDoctor } from '../../../../mocks/uiApi';
+import type { Doctor } from '../../../../mocks/uiTypes';
 import { getDoctorColumns, DOCTORS_PAGE_CONFIG } from '../config/doctors.config';
 import './DoctorsList.scss';
 

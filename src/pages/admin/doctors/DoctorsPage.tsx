@@ -1,8 +1,3 @@
-/**
- * Doctors Management Page
- * Admin page for managing doctors with search and pagination
- */
-
 import React, { useState } from 'react';
 import { Space, Button, Tag, Avatar, Popconfirm, message, Tooltip, Drawer } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -11,15 +6,12 @@ import {
   DeleteOutlined,
   EyeOutlined,
   UserOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import DataTable from '../../../components/admin/DataTable';
 import { DoctorForm } from '../../../components/admin';
-import { useDoctors, useDeleteDoctor, useCreateDoctor, useUpdateDoctor, useDoctorWithUser } from '../../../api/query';
-import type { Doctor, ApiResponse } from '../../../api/types';
-import type { CreateDoctorRequest, UpdateDoctorRequest } from '../../../api/services/doctor.service';
+import { useDoctors, useDeleteDoctor, useCreateDoctor, useUpdateDoctor, useDoctorWithUser } from '../../../mocks/uiApi';
+import type { Doctor, ApiResponse, CreateDoctorRequest, UpdateDoctorRequest } from '../../../mocks/uiTypes';
 import './DoctorsPage.scss';
 
 type DrawerMode = 'create' | 'edit' | 'view' | null;
@@ -156,55 +148,19 @@ const DoctorsPage: React.FC = () => {
     },
     {
       title: t('admin.doctors.columns.specialization', 'Specialization'),
-      dataIndex: 'specialization',
-      key: 'specialization',
+      dataIndex: 'specialty',
+      key: 'specialty',
       width: 180,
-      render: (specialization: string) => (
-        <Tag color="blue">{specialization}</Tag>
+      render: (specialization: string | string[]) => (
+        <Tag color="blue">{Array.isArray(specialization) ? specialization.join(', ') : specialization}</Tag>
       ),
     },
     {
       title: t('admin.doctors.columns.experience', 'Experience'),
-      dataIndex: 'experience',
-      key: 'experience',
+      dataIndex: 'experienceYears',
+      key: 'experienceYears',
       width: 120,
       render: (experience: number) => `${experience} ${t('admin.doctors.years', 'years')}`,
-    },
-    {
-      title: t('admin.doctors.columns.fee', 'Fee'),
-      dataIndex: 'consultationFee',
-      key: 'consultationFee',
-      width: 120,
-      render: (fee: number) => `$${fee || 0}`,
-    },
-    {
-      title: t('admin.doctors.columns.qualifications', 'Qualifications'),
-      dataIndex: 'qualifications',
-      key: 'qualifications',
-      width: 150,
-      render: (qualifications: string[]) => (
-        <Space size={[0, 4]} wrap>
-          {qualifications?.slice(0, 2).map((qual) => (
-            <Tag key={qual} color="geekblue">
-              {qual}
-            </Tag>
-          )) || <Tag>N/A</Tag>}
-          {qualifications && qualifications.length > 2 && <Tag>+{qualifications.length - 2}</Tag>}
-        </Space>
-      ),
-    },
-    {
-      title: t('admin.doctors.columns.status', 'Status'),
-      key: 'status',
-      width: 120,
-      render: (_, record) => (
-        <Tag
-          icon={record.isActive ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-          color={record.isActive ? 'success' : 'default'}
-        >
-          {record.isActive ? t('admin.doctors.active', 'Active') : t('admin.doctors.inactive', 'Inactive')}
-        </Tag>
-      ),
     },
     {
       title: t('admin.doctors.columns.actions', 'Actions'),
@@ -287,7 +243,7 @@ const DoctorsPage: React.FC = () => {
         title={getDrawerTitle()}
         open={drawerMode !== null}
         onClose={handleCloseDrawer}
-        width={720}
+        size="large"
         destroyOnClose
         footer={null}
       >

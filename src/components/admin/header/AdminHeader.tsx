@@ -16,7 +16,7 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../context/AuthContext';
-import { useLogout } from '../../../api/query';
+import { useLogout } from '../../../mocks/uiApi';
 import LanguageSelector from '../../languageSelector/LanguageSelector';
 import './AdminHeader.scss';
 

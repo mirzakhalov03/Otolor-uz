@@ -13,7 +13,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from '@ant-design/icons';
-import type { Doctor } from '../../../../api/types';
+import type { Doctor } from '../../../../mocks/uiTypes';
 
 interface DoctorColumnActions {
   onView: (doctor: Doctor) => void;
@@ -58,8 +58,8 @@ export const getDoctorColumns = (actions: DoctorColumnActions): ColumnsType<Doct
   },
   {
     title: 'Experience',
-    dataIndex: 'experience',
-    key: 'experience',
+    dataIndex: 'experienceYears',
+    key: 'experienceYears',
     width: 120,
     render: (experience: number) => `${experience} years`,
   },

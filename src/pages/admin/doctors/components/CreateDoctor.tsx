@@ -6,8 +6,8 @@
 import React from 'react';
 import { Card, Form, Input, InputNumber, Select, Button, Space, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useCreateDoctor } from '../../../../api/query';
-import type { CreateDoctorRequest } from '../../../../api/services/doctor.service';
+import { useCreateDoctor } from '../../../../mocks/uiApi';
+import type { CreateDoctorRequest } from '../../../../mocks/uiTypes';
 import './CreateDoctor.scss';
 
 const { TextArea } = Input;
@@ -96,7 +96,7 @@ const CreateDoctor: React.FC = () => {
 
           <Form.Item
             label="Experience (years)"
-            name="experience"
+            name="experienceYears"
             rules={[{ required: true, message: 'Please enter experience' }]}
           >
             <InputNumber min={0} max={50} style={{ width: '100%' }} />

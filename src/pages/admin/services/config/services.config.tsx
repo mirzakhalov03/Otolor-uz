@@ -13,7 +13,7 @@ import {
   CloseCircleOutlined,
   FileImageOutlined,
 } from '@ant-design/icons';
-import type { ClinicService } from '../../../../api/types';
+import type { ClinicService } from '../../../../mocks/uiTypes';
 
 interface ServiceColumnActions {
   onView: (service: ClinicService) => void;

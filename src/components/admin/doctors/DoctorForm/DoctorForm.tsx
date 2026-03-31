@@ -19,9 +19,8 @@ import {
 } from 'antd';
 import { UserOutlined, LockOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { useCheckUsername } from '../../../../api/query';
-import type { Doctor } from '../../../../api/types';
-import type { CreateDoctorRequest, UpdateDoctorRequest } from '../../../../api/services/doctor.service';
+import { useCheckUsername } from '../../../../mocks/uiApi';
+import type { Doctor, CreateDoctorRequest, UpdateDoctorRequest } from '../../../../mocks/uiTypes';
 import { debounce } from '../../../../utils';
 import './DoctorForm.scss';
 
@@ -103,7 +102,7 @@ const DoctorForm: React.FC<DoctorFormProps> = ({
         phone: initialData.phone,
         specialization: initialData.specialization,
         qualifications: initialData.qualifications,
-        experience: initialData.experience,
+        experience: initialData.experienceYears,
         bio: initialData.bio,
         consultationFee: initialData.consultationFee,
         availableDays: initialData.availableDays,
@@ -326,7 +325,7 @@ const DoctorForm: React.FC<DoctorFormProps> = ({
           <Col xs={24} md={12}>
             <Form.Item
               label={t('admin.doctorForm.experience', 'Experience (years)')}
-              name="experience"
+              name="experienceYears"
               rules={[
                 { required: true, message: t('admin.doctorForm.experienceRequired', 'Experience is required') },
               ]}

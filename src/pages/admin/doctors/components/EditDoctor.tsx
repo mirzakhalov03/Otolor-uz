@@ -6,8 +6,8 @@
 import React, { useEffect } from 'react';
 import { Card, Form, Input, InputNumber, Select, Button, Space, message, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDoctor, useUpdateDoctor } from '../../../../api/query';
-import type { UpdateDoctorRequest } from '../../../../api/services/doctor.service';
+import { useDoctor, useUpdateDoctor } from '../../../../mocks/uiApi';
+import type { UpdateDoctorRequest } from '../../../../mocks/uiTypes';
 import './EditDoctor.scss';
 
 const { TextArea } = Input;
@@ -24,7 +24,7 @@ const EditDoctor: React.FC = () => {
     if (doctor) {
       form.setFieldsValue({
         specialization: doctor.specialization,
-        experience: doctor.experience,
+        experience: doctor.experienceYears,
         qualifications: doctor.qualifications,
         bio: doctor.bio,
         consultationFee: doctor.consultationFee,
@@ -87,7 +87,7 @@ const EditDoctor: React.FC = () => {
 
           <Form.Item
             label="Experience (years)"
-            name="experience"
+            name="experienceYears"
             rules={[{ required: true, message: 'Please enter experience' }]}
           >
             <InputNumber min={0} max={50} style={{ width: '100%' }} />

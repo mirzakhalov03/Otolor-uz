@@ -3,14 +3,9 @@
  * Centralized authentication state management
  */
 
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import type { User } from '../api/types';
-import type { ApiResponse } from '../api/types';
-import { authService } from '../api/services';
-import { authKeys } from '../api/query';
-import { AUTH_LOGIN_EVENT, AUTH_LOGOUT_EVENT } from '../api/axiosInstance';
+import type { User } from '../mocks/uiTypes';
 
 interface AuthContextType {
   user: User | null;
@@ -30,91 +25,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const queryClient = useQueryClient();
-  const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(true);
-
-  const clearAuthState = useCallback(() => {
-    setUser(null);
-    setIsAuthenticated(false);
-    queryClient.removeQueries({ queryKey: authKeys.me() });
-  }, [queryClient]);
-
-  const bootstrapSession = useCallback(async () => {
-    setIsInitializing(true);
-
-    try {
-      const meResponse = await authService.getMe();
-
-      if (meResponse.success && meResponse.data) {
-        setUser(meResponse.data);
-        setIsAuthenticated(true);
-        queryClient.setQueryData(authKeys.me(), meResponse.data);
-        return;
-      }
-
-      throw meResponse;
-    } catch (error) {
-      const apiError = error as ApiResponse;
-
-      // Session bootstrap fallback: try refresh once on initial 401
-      if (apiError?.status === 401) {
-        try {
-          const refreshResponse = await authService.refreshToken();
-          if (refreshResponse.success) {
-            const retryMeResponse = await authService.getMe();
-            if (retryMeResponse.success && retryMeResponse.data) {
-              setUser(retryMeResponse.data);
-              setIsAuthenticated(true);
-              queryClient.setQueryData(authKeys.me(), retryMeResponse.data);
-              return;
-            }
-          }
-        } catch {
-          // Refresh failed: fall through to logged-out state
-        }
-      }
-
-      clearAuthState();
-    } finally {
-      setIsInitializing(false);
-    }
-  }, [clearAuthState, queryClient]);
-
-  useEffect(() => {
-    void bootstrapSession();
-  }, [bootstrapSession]);
-
-  useEffect(() => {
-    const handleLogout = () => {
-      clearAuthState();
-      setIsInitializing(false);
-    };
-
-    const handleLogin = (event: Event) => {
-      const customEvent = event as CustomEvent<{ user?: User }>;
-      const loggedInUser = customEvent.detail?.user;
-
-      if (loggedInUser) {
-        setUser(loggedInUser);
-        queryClient.setQueryData(authKeys.me(), loggedInUser);
-      }
-
-      setIsAuthenticated(true);
-      setIsInitializing(false);
-    };
-
-    window.addEventListener(AUTH_LOGOUT_EVENT, handleLogout);
-    window.addEventListener(AUTH_LOGIN_EVENT, handleLogin as EventListener);
-
-    return () => {
-      window.removeEventListener(AUTH_LOGOUT_EVENT, handleLogout);
-      window.removeEventListener(AUTH_LOGIN_EVENT, handleLogin as EventListener);
-    };
-  }, [clearAuthState, queryClient]);
-
-  const userRole = user?.role?.name;
+  const user = null as User | null;
+  const isAuthenticated = false;
+  const isInitializing = false;
+  const userRole = user?.role?.roleName;
   const isAdmin = userRole === 'admin' || userRole === 'superadmin';
   const isSuperAdmin = userRole === 'superadmin';
 
@@ -123,9 +37,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const hasPermission = (permission: string): boolean => {
-    if (!user?.role?.permissions) return false;
     if (isSuperAdmin) return true; // Superadmin has all permissions
-    return user.role.permissions.includes(permission);
+    const permissions: string[] = [];
+    return permissions.includes(permission);
   };
 
   const value: AuthContextType = {

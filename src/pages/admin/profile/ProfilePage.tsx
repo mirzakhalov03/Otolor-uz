@@ -38,8 +38,8 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../context/AuthContext';
-import { useDoctorWithUser, useUpdateDoctor } from '../../../api/query';
-import type { Doctor } from '../../../api/types';
+import { useDoctorWithUser, useUpdateDoctor } from '../../../mocks/uiApi';
+import type { Doctor } from '../../../mocks/uiTypes';
 import './ProfilePage.scss';
 
 const { Title, Text, Paragraph } = Typography;
@@ -50,7 +50,7 @@ interface DoctorProfileFormValues {
   lastName: string;
   phone: string;
   specialization?: string;
-  experience?: number;
+  experienceYears?: number;
   consultationFee?: number;
   bio?: string;
   qualifications?: string[];
@@ -63,7 +63,7 @@ const ProfilePage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm<DoctorProfileFormValues>();
 
-  const isDoctor = user?.role?.name === 'doctor';
+  const isDoctor = user?.role?.roleName === 'doctor';
   const doctorProfileId = user?.doctorProfile;
   
   // Fetch doctor profile if user is a doctor
@@ -85,7 +85,7 @@ const ProfilePage: React.FC = () => {
         lastName: doctor.lastName || user?.lastName || '',
         phone: doctor.phone || user?.phone || '',
         specialization: doctor.specialization || '',
-        experience: doctor.experience || 0,
+        experienceYears: doctor.experienceYears || 0,
         consultationFee: doctor.consultationFee || 0,
         bio: doctor.bio || '',
         qualifications: doctor.qualifications || [],
@@ -115,7 +115,7 @@ const ProfilePage: React.FC = () => {
             lastName: values.lastName,
             phone: values.phone,
             specialization: values.specialization,
-            experience: values.experience,
+            experienceYears: values.experienceYears,
             consultationFee: values.consultationFee,
             bio: values.bio,
             qualifications: values.qualifications,
@@ -131,7 +131,7 @@ const ProfilePage: React.FC = () => {
 
   // Get role display config
   const getRoleConfig = () => {
-    const roleName = user?.role?.name;
+    const roleName = user?.role?.roleName;
     const configs: Record<string, { color: string; label: string; icon: React.ReactNode }> = {
       superadmin: { color: 'purple', label: t('admin.superAdmin', 'Super Admin'), icon: <SafetyCertificateOutlined /> },
       admin: { color: 'blue', label: t('admin.admin', 'Admin'), icon: <UserOutlined /> },
@@ -266,8 +266,8 @@ const ProfilePage: React.FC = () => {
                   </Col>
                   <Col xs={24} md={6}>
                     <Form.Item
-                      name="experience"
-                      label={t('profile.experience', 'Years of Experience')}
+                      name="experienceYears"
+                      label={t('profile.experienceYears', 'Years of Experience')}
                     >
                       <InputNumber 
                         size="large" 
@@ -374,7 +374,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div className="profile-page__stat-info">
                       <Text type="secondary">{t('profile.experience', 'Experience')}</Text>
-                      <Title level={3}>{doctor.experience || 0} {t('common.years', 'yrs')}</Title>
+                      <Title level={3}>{doctor.experienceYears || 0} {t('common.years', 'yrs')}</Title>
                     </div>
                   </Card>
                 </Col>

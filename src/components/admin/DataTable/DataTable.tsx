@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Table, Input, Space, Button, Card } from 'antd';
 import type { TableProps, PaginationProps } from 'antd';
 import { SearchOutlined, ReloadOutlined, PlusOutlined } from '@ant-design/icons';
-import type { PaginationMeta } from '../../../api/types';
+import type { PaginationMeta } from '../../../mocks/uiTypes';
 import './DataTable.scss';
 
 const { Search } = Input;
@@ -57,9 +57,9 @@ function DataTable<T extends Record<string, any>>({
   // Convert meta to Ant Design pagination format
   const paginationConfig: PaginationProps | false = meta
     ? {
-        current: meta.pagination.currentPage,
-        pageSize: meta.pagination.perPage,
-        total: meta.pagination.totalItems,
+        current: meta.currentPage,
+        pageSize: meta.perPage,
+        total: meta.totalItems,
         showSizeChanger: true,
         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
         pageSizeOptions: ['10', '20', '50', '100'],

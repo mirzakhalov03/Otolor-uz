@@ -1,15 +1,10 @@
-export type ServiceCategory = 'ear' | 'nose' | 'throat' | 'larynx';
-
-export interface Service {
-    id: number;
-    name: string;
-    price: string;
-    category: ServiceCategory;
-}
-
-export interface CategoryInfo {
-    id: ServiceCategory;
-    title: string;
-    icon?: string;
+export interface IService {
+    _id: string;
+    serviceName: string;
+    category: string;
+    price: number;
     description: string;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
 }
