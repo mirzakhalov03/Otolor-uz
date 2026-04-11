@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { type IService } from './types/service.types';
@@ -24,18 +24,13 @@ const Services = () => {
     }, [apiServices]);
 
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (categories.length > 0 && !selectedCategory) {
-            setSelectedCategory(categories[0].id);
-        }
-    }, [categories, selectedCategory]);
+    const activeCategory = selectedCategory ?? categories[0]?.id ?? null;
 
     const filteredServices = useMemo(() => {
-        return selectedCategory
-            ? apiServices.filter(service => service.category === selectedCategory)
+        return activeCategory
+            ? apiServices.filter(service => service.category === activeCategory)
             : [];
-    }, [apiServices, selectedCategory]);
+    }, [apiServices, activeCategory]);
 
     if (isLoading) {
         return (
@@ -65,13 +60,13 @@ const Services = () => {
                             {categories.map((category) => (
                                 <div
                                     key={category.id}
-                                    className={`category-card ${selectedCategory === category.id ? 'selected' : ''}`}
+                                    className={`category-card ${activeCategory === category.id ? 'selected' : ''}`}
                                     onClick={() => setSelectedCategory(category.id)}
                                     role='button'
                                     tabIndex={0}
                                     onKeyDown={(e) => e.key === 'Enter' && setSelectedCategory(category.id)}
                                 >
-                                    {selectedCategory === category.id && (
+                                    {activeCategory === category.id && (
                                         <div className='check-icon'>
                                             <CheckCircle size={24} />
                                         </div>
@@ -84,10 +79,10 @@ const Services = () => {
                     </div>
 
                     {/* Services Display */}
-                    {selectedCategory && (
+                    {activeCategory && (
                         <div className='services-section'>
                             <h2 className='section-title'>
-                                {categories.find(c => c.id === selectedCategory)?.title} {t('servicesPage.servicesTitle')}
+                                {categories.find(c => c.id === activeCategory)?.title} {t('servicesPage.servicesTitle')}
                             </h2>
                             <div className='services-table'>
                                 <div className='table-header'>
@@ -109,7 +104,7 @@ const Services = () => {
                     )}
 
                     {/* Empty State */}
-                    {!selectedCategory && (
+                    {!activeCategory && (
                         <div className='empty-state'>
                             <div className='empty-state-icon'>{t('servicesPage.emptyStateIcon')}</div>
                             <h3 className='empty-state-title'>{t('servicesPage.emptyStateTitle')}</h3>

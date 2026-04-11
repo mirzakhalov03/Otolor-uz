@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import './ImageCarousel.scss';
 import { doctorsImages } from '../../assets/images/doctors/doctorsImages';
 
@@ -11,6 +11,9 @@ interface ImageCarouselProps {
 const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height }: ImageCarouselProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [isPageVisible, setIsPageVisible] = useState(!document.hidden);
+    const [isInViewport, setIsInViewport] = useState(true);
+    const rootRef = useRef<HTMLDivElement | null>(null);
     
     const totalSlides = useMemo(() => doctorsImages.length, []);
 
@@ -29,16 +32,40 @@ const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height
     };
 
     useEffect(() => {
+        const handleVisibilityChange = () => {
+            setIsPageVisible(!document.hidden);
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, []);
+
+    useEffect(() => {
+        if (!rootRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsInViewport(entry.isIntersecting);
+            },
+            { threshold: 0.15 }
+        );
+
+        observer.observe(rootRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (!isPageVisible || !isInViewport) return;
         const interval = setInterval(goToNext, autoPlayInterval);
         return () => clearInterval(interval);
-    }, [goToNext, autoPlayInterval]);
+    }, [goToNext, autoPlayInterval, isPageVisible, isInViewport]);
 
     const carouselStyle = height ? { 
         height: typeof height === 'number' ? `${height}px` : height 
     } : undefined;
 
     return (
-        <div className="image-carousel" style={carouselStyle}>
+        <div className="image-carousel" style={carouselStyle} ref={rootRef}>
             <div className="carousel-container">
                 <div 
                     className="carousel-track"
@@ -46,7 +73,12 @@ const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height
                 >
                     {doctorsImages.map((image, index) => (
                         <div key={index} className="carousel-slide">
-                            <img src={image.src} alt={image.alt || `Slide ${index + 1}`} />
+                            <img
+                                src={image.src}
+                                alt={image.alt || `Slide ${index + 1}`}
+                                loading={index <= 1 ? 'eager' : 'lazy'}
+                                decoding="async"
+                            />
                             {showDoctorInfo && (
                                 <div className="carousel-doctor-info">
                                     <div className="carousel-status-badge">

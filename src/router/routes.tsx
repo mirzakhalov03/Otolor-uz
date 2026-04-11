@@ -1,18 +1,28 @@
+import { lazy, Suspense } from "react"
 import { useRoutes } from "react-router-dom"
-import Home from "../pages/home/Home"
-import About from "../pages/about/About"
 import Layout from "../components/layout/Layout"
-import Appointments from "../pages/appointments/Appointments"
-import Services from "../pages/servicesPage/Services"
-import Unauthorized from "../pages/unauthorized/Unauthorized"
 
 // Admin imports
 import { AdminLayout } from "../components/admin"
-import { AdminLogin, AdminDashboard, ProfilePage } from "../pages/admin"
 import { AdminRoute, GuestRoute } from "../components/guards"
-import DoctorsPage from "../pages/admin/doctors"
-import ServicesPage from "../pages/admin/services"
-import Courses from "@/pages/academy/courses/Courses"
+
+const Home = lazy(() => import("../pages/home/Home"))
+const About = lazy(() => import("../pages/about/About"))
+const Appointments = lazy(() => import("../pages/appointments/Appointments"))
+const Services = lazy(() => import("../pages/servicesPage/Services"))
+const Unauthorized = lazy(() => import("../pages/unauthorized/Unauthorized"))
+const Courses = lazy(() => import("@/pages/academy/courses/Courses"))
+const AdminLogin = lazy(() => import("../pages/admin/login/AdminLogin"))
+const AdminDashboard = lazy(() => import("../pages/admin/dashboard/AdminDashboard"))
+const ProfilePage = lazy(() => import("../pages/admin/profile/ProfilePage"))
+const DoctorsPage = lazy(() => import("../pages/admin/doctors"))
+const ServicesPage = lazy(() => import("../pages/admin/services"))
+
+const withSuspense = (node: React.ReactNode) => (
+    <Suspense fallback={<div style={{ padding: 24 }}>Loading...</div>}>
+        {node}
+    </Suspense>
+)
 
 export const RouteController = () => {
 
@@ -24,23 +34,23 @@ export const RouteController = () => {
             children: [
                 {
                     index: true,
-                    element: <Home />
+                    element: withSuspense(<Home />)
                 },
                 {
                     path: 'about',
-                    element: <About />
+                    element: withSuspense(<About />)
                 },
                 {
                     path: 'courses',
-                    element: <Courses />
+                    element: withSuspense(<Courses />)
                 },
                 {
                     path: 'appointments',
-                    element: <Appointments />
+                    element: withSuspense(<Appointments />)
                 },
                 {
                     path: 'services',
-                    element: <Services />
+                    element: withSuspense(<Services />)
                 }
             ]
         },
@@ -48,7 +58,7 @@ export const RouteController = () => {
         // Unauthorized page
         {
             path: '/unauthorized',
-            element: <Unauthorized />
+            element: withSuspense(<Unauthorized />)
         },
         
         // Admin login (guest only - redirects if authenticated)
@@ -56,7 +66,7 @@ export const RouteController = () => {
             path: '/admins-otolor/login',
             element: (
                 <GuestRoute>
-                    <AdminLogin />
+                    {withSuspense(<AdminLogin />)}
                 </GuestRoute>
             )
         },
@@ -72,19 +82,19 @@ export const RouteController = () => {
             children: [
                 {
                     index: true,
-                    element: <AdminDashboard />
+                    element: withSuspense(<AdminDashboard />)
                 },
                 {
                     path: 'profile',
-                    element: <ProfilePage />
+                    element: withSuspense(<ProfilePage />)
                 },
                 {
                     path: 'doctors',
-                    element: <DoctorsPage />
+                    element: withSuspense(<DoctorsPage />)
                 },
                 {
                     path: 'services',
-                    element: <ServicesPage />
+                    element: withSuspense(<ServicesPage />)
                 },
                 {
                     path: 'appointments',

@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isMobileAcademyOpen, setIsMobileAcademyOpen] = useState(false)
   const [isDesktopAcademyOpen, setIsDesktopAcademyOpen] = useState(false)
   const academyDropdownRef = useRef<HTMLDivElement | null>(null)
+  const tickingRef = useRef(false)
   const location = useLocation()
   const { t } = useTranslation()
 
@@ -46,15 +47,19 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true)
-      } else {
-        setIsScrolled(false)
-      }
+    const updateScrollState = () => {
+      const nextIsScrolled = window.scrollY > 50
+      setIsScrolled((prev) => (prev === nextIsScrolled ? prev : nextIsScrolled))
+      tickingRef.current = false
     }
 
-    window.addEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      if (tickingRef.current) return
+      tickingRef.current = true
+      window.requestAnimationFrame(updateScrollState)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 

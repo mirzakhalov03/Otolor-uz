@@ -124,7 +124,8 @@
         display: flex;
         gap: 32px;
         width: max-content;
-        animation: partnersScroll 35s linear infinite;
+        animation: partnersScroll 45s linear infinite;
+        will-change: transform;
     }
 
     // ========================================
@@ -229,7 +230,7 @@
 
         &__track {
             gap: 24px;
-            animation-duration: 30s;
+            animation-duration: 40s;
         }
 
         &__logo {
@@ -262,7 +263,7 @@
 
         &__track {
             gap: 20px;
-            animation-duration: 25s;
+            animation-duration: 35s;
         }
 
         &__logo {
@@ -295,7 +296,7 @@
 
         &__track {
             gap: 16px;
-            animation-duration: 20s;
+            animation-duration: 30s;
         }
 
         &__logo {
@@ -306,6 +307,15 @@
 
         &__placeholder-text {
             font-size: $font-size-xs;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .partners {
+        &__track {
+            animation: none;
+            transform: none;
         }
     }
 }
