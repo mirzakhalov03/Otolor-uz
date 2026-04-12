@@ -1,9 +1,10 @@
 /**
  * Admin Doctors Management Page
  * Full CRUD for doctors — connected to real backend API
+ * Schedule uses specific dates (next 7 days) instead of recurring weekday names
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Card,
   Table,
@@ -16,7 +17,7 @@ import {
   Form,
   message,
   Tooltip,
-  Select,
+  Checkbox,
   TimePicker,
   Typography,
   Empty,
@@ -41,19 +42,29 @@ import {
 import './DoctorsPage.scss';
 
 const { Search } = Input;
-const { Title } = Typography;
-const { Option } = Select;
+const { Title, Text } = Typography;
 
-const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const DAY_COLORS: Record<string, string> = {
-  Monday: 'blue',
-  Tuesday: 'cyan',
-  Wednesday: 'green',
-  Thursday: 'orange',
-  Friday: 'purple',
-  Saturday: 'magenta',
-  Sunday: 'red',
-};
+/**
+ * Generate the next 7 days starting from today.
+ * Returns objects with date string (YYYY-MM-DD), display label, and day name.
+ */
+function getNext7Days(): { dateStr: string; label: string; dayName: string; isSunday: boolean }[] {
+  const days: { dateStr: string; label: string; dayName: string; isSunday: boolean }[] = [];
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  for (let i = 0; i < 7; i++) {
+    const d = dayjs().add(i, 'day');
+    const dayName = dayNames[d.day()];
+    days.push({
+      dateStr: d.format('YYYY-MM-DD'),
+      label: `${dayName}, ${d.format('MMM DD')}`,
+      dayName,
+      isSunday: d.day() === 0,
+    });
+  }
+
+  return days;
+}
 
 const DoctorsPage: React.FC = () => {
   const [search, setSearch] = useState('');
@@ -61,6 +72,13 @@ const DoctorsPage: React.FC = () => {
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [form] = Form.useForm<any>();
+
+  // Track which dates are enabled (checked) in the modal
+  const [enabledDates, setEnabledDates] = useState<Set<string>>(new Set());
+  // Track time ranges per date
+  const [dateTimeRanges, setDateTimeRanges] = useState<Record<string, [dayjs.Dayjs, dayjs.Dayjs] | null>>({});
+
+  const next7Days = useMemo(() => getNext7Days(), []);
 
   // Queries & mutations
   const { data: doctors, isLoading, refetch } = useAdminDoctors(search || undefined);
@@ -80,32 +98,47 @@ const DoctorsPage: React.FC = () => {
   const openCreateModal = () => {
     setEditingDoctor(null);
     form.resetFields();
-    form.setFieldsValue({
-      name: '',
-      specialization: '',
-      schedule: [{ day: 'Monday', time: null }],
-    });
+
+    // Default: all days enabled except Sundays
+    const defaultEnabled = new Set<string>();
+    const defaultTimes: Record<string, [dayjs.Dayjs, dayjs.Dayjs] | null> = {};
+    for (const day of next7Days) {
+      if (!day.isSunday) {
+        defaultEnabled.add(day.dateStr);
+        defaultTimes[day.dateStr] = [dayjs('09:00', 'HH:mm'), dayjs('17:00', 'HH:mm')];
+      } else {
+        defaultTimes[day.dateStr] = null;
+      }
+    }
+    setEnabledDates(defaultEnabled);
+    setDateTimeRanges(defaultTimes);
     setModalOpen(true);
   };
 
   const openEditModal = (doctor: Doctor) => {
     setEditingDoctor(doctor);
-
-    // Convert weeklySchedule to form-friendly format
-    const schedule: ScheduleEntry[] = Object.entries(doctor.weeklySchedule || {}).map(([day, timeRange]) => {
-      const [start, end] = timeRange.split('-');
-      return {
-        day,
-        time: [dayjs(start, 'HH:mm'), dayjs(end, 'HH:mm')],
-      };
-    });
-
     form.setFieldsValue({
       name: doctor.name,
       specialization: doctor.specialization || '',
-      schedule: schedule.length > 0 ? schedule : [{ day: 'Monday', time: null }],
     });
 
+    // Populate enabled dates and time ranges from existing schedule
+    const enabled = new Set<string>();
+    const times: Record<string, [dayjs.Dayjs, dayjs.Dayjs] | null> = {};
+
+    for (const day of next7Days) {
+      const timeRange = doctor.weeklySchedule?.[day.dateStr];
+      if (timeRange) {
+        enabled.add(day.dateStr);
+        const [start, end] = timeRange.split('-');
+        times[day.dateStr] = [dayjs(start, 'HH:mm'), dayjs(end, 'HH:mm')];
+      } else {
+        times[day.dateStr] = day.isSunday ? null : [dayjs('09:00', 'HH:mm'), dayjs('17:00', 'HH:mm')];
+      }
+    }
+
+    setEnabledDates(enabled);
+    setDateTimeRanges(times);
     setModalOpen(true);
   };
 
@@ -119,22 +152,44 @@ const DoctorsPage: React.FC = () => {
     }
   };
 
+  const toggleDate = (dateStr: string) => {
+    setEnabledDates((prev) => {
+      const next = new Set(prev);
+      if (next.has(dateStr)) {
+        next.delete(dateStr);
+      } else {
+        next.add(dateStr);
+        // Set default time if none
+        if (!dateTimeRanges[dateStr]) {
+          setDateTimeRanges((prev) => ({
+            ...prev,
+            [dateStr]: [dayjs('09:00', 'HH:mm'), dayjs('17:00', 'HH:mm')],
+          }));
+        }
+      }
+      return next;
+    });
+  };
+
+  const updateTimeRange = (dateStr: string, range: [dayjs.Dayjs, dayjs.Dayjs] | null) => {
+    setDateTimeRanges((prev) => ({ ...prev, [dateStr]: range }));
+  };
+
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
 
-      // Build weeklySchedule from form entries
+      // Build weeklySchedule from enabled dates + time ranges
       const weeklySchedule: Record<string, string> = {};
-      for (const entry of values.schedule) {
-        if (entry.day && entry.time && entry.time[0] && entry.time[1]) {
-          const start = entry.time[0].format('HH:mm');
-          const end = entry.time[1].format('HH:mm');
-          weeklySchedule[entry.day] = `${start}-${end}`;
+      for (const dateStr of enabledDates) {
+        const range = dateTimeRanges[dateStr];
+        if (range && range[0] && range[1]) {
+          weeklySchedule[dateStr] = `${range[0].format('HH:mm')}-${range[1].format('HH:mm')}`;
         }
       }
 
       if (Object.keys(weeklySchedule).length === 0) {
-        message.error('Please add at least one working day with time range');
+        message.error('Please enable at least one day with a time range');
         return;
       }
 
@@ -159,7 +214,6 @@ const DoctorsPage: React.FC = () => {
       if (error?.response?.data?.message) {
         message.error(error.response.data.message);
       }
-      // form validation errors are handled by antd
     }
   };
 
@@ -182,26 +236,42 @@ const DoctorsPage: React.FC = () => {
         spec ? <Tag color="blue">{spec}</Tag> : <Tag color="default">—</Tag>,
     },
     {
-      title: 'Weekly Schedule',
+      title: 'Upcoming Availability',
       dataIndex: 'weeklySchedule',
       key: 'weeklySchedule',
-      width: 350,
+      width: 400,
       render: (schedule: Record<string, string>) => {
         if (!schedule || Object.keys(schedule).length === 0) {
           return <span style={{ color: '#999' }}>No schedule set</span>;
         }
+
+        // Sort by date and show only future dates
+        const today = dayjs().format('YYYY-MM-DD');
+        const sortedDates = Object.keys(schedule)
+          .filter((d) => d >= today)
+          .sort();
+
+        if (sortedDates.length === 0) {
+          return <span style={{ color: '#999' }}>No upcoming availability</span>;
+        }
+
         return (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-            {DAYS_OF_WEEK.filter((d) => schedule[d]).map((day) => (
-              <Tag
-                key={day}
-                color={DAY_COLORS[day]}
-                icon={<ClockCircleOutlined />}
-                style={{ marginBottom: 2 }}
-              >
-                {day.slice(0, 3)} {schedule[day]}
-              </Tag>
-            ))}
+            {sortedDates.map((dateStr) => {
+              const d = dayjs(dateStr);
+              const dayName = d.format('ddd');
+              const dateLabel = d.format('MMM DD');
+              return (
+                <Tag
+                  key={dateStr}
+                  color="green"
+                  icon={<ClockCircleOutlined />}
+                  style={{ marginBottom: 2 }}
+                >
+                  {dayName} {dateLabel}: {schedule[dateStr]}
+                </Tag>
+              );
+            })}
           </div>
         );
       },
@@ -325,65 +395,54 @@ const DoctorsPage: React.FC = () => {
             <Input placeholder="e.g. Stomatolog, Ortodont" />
           </Form.Item>
 
-          <Form.Item label="Weekly Schedule" required>
-            <Form.List name="schedule">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                    <Space
-                      key={key}
-                      style={{ display: 'flex', marginBottom: 8, alignItems: 'flex-start' }}
-                      align="baseline"
+          {/* Schedule: Next 7 days with checkboxes + time range pickers */}
+          <div style={{ marginBottom: 24 }}>
+            <Text strong style={{ display: 'block', marginBottom: 12, fontSize: 14 }}>
+              Availability — Next 7 Days
+            </Text>
+            <Text type="secondary" style={{ display: 'block', marginBottom: 16, fontSize: 12 }}>
+              Check the days this doctor will be available. Sundays are off by default.
+            </Text>
+            <div className="schedule-grid">
+              {next7Days.map((day) => {
+                const isEnabled = enabledDates.has(day.dateStr);
+                const timeRange = dateTimeRanges[day.dateStr];
+                return (
+                  <div
+                    key={day.dateStr}
+                    className={`schedule-row ${isEnabled ? 'schedule-row--active' : ''} ${day.isSunday ? 'schedule-row--sunday' : ''}`}
+                  >
+                    <Checkbox
+                      checked={isEnabled}
+                      onChange={() => toggleDate(day.dateStr)}
+                      className="schedule-row__checkbox"
                     >
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'day']}
-                        rules={[{ required: true, message: 'Select day' }]}
-                        style={{ minWidth: 140 }}
-                      >
-                        <Select placeholder="Day">
-                          {DAYS_OF_WEEK.map((day) => (
-                            <Option key={day} value={day}>
-                              {day}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'time']}
-                        rules={[{ required: true, message: 'Set time range' }]}
-                      >
+                      <div className="schedule-row__label">
+                        <span className="schedule-row__day">{day.dayName}</span>
+                        <span className="schedule-row__date">{dayjs(day.dateStr).format('MMM DD, YYYY')}</span>
+                      </div>
+                    </Checkbox>
+                    <div className="schedule-row__time">
+                      {isEnabled && (
                         <TimePicker.RangePicker
                           format="HH:mm"
                           minuteStep={30}
                           placeholder={['Start', 'End']}
-                        />
-                      </Form.Item>
-                      {fields.length > 1 && (
-                        <Button
-                          type="text"
-                          danger
-                          onClick={() => remove(name)}
-                          icon={<DeleteOutlined />}
+                          value={timeRange}
+                          onChange={(val) => updateTimeRange(day.dateStr, val as [dayjs.Dayjs, dayjs.Dayjs] | null)}
+                          size="small"
+                          style={{ width: 200 }}
                         />
                       )}
-                    </Space>
-                  ))}
-                  {fields.length < 7 && (
-                    <Button
-                      type="dashed"
-                      onClick={() => add({ day: undefined, time: null })}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add Working Day
-                    </Button>
-                  )}
-                </>
-              )}
-            </Form.List>
-          </Form.Item>
+                      {!isEnabled && (
+                        <Tag color="default" style={{ fontSize: 12 }}>Day off</Tag>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </Form>
       </Modal>
     </div>

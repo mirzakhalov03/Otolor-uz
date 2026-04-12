@@ -2,6 +2,8 @@
  * Doctors Page Styles
  */
 
+@import '../../../styles/variables';
+
 .doctors-page {
   &__card {
     border-radius: 12px;
@@ -47,6 +49,70 @@
   }
 }
 
+/* Schedule grid for doctor create/edit modal */
+.schedule-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.schedule-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #fafafa;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &--active {
+    background: #f0fdf4;
+  }
+
+  &--sunday {
+    background: #fff7f0;
+
+    &.schedule-row--active {
+      background: #f0fdf4;
+    }
+  }
+
+  &__checkbox {
+    .ant-checkbox-wrapper {
+      align-items: center;
+    }
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-left: 4px;
+  }
+
+  &__day {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1a1a2e;
+  }
+
+  &__date {
+    font-size: 12px;
+    color: #888;
+  }
+
+  &__time {
+    flex-shrink: 0;
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .doctors-page {
@@ -65,5 +131,11 @@
         }
       }
     }
+  }
+
+  .schedule-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }
