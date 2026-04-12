@@ -22,7 +22,7 @@
   &__logo-text {
     font-size: 28px;
     font-weight: 700;
-    color: $primary-green;
+    color: $primary-green-bright;
     display: block;
     letter-spacing: -0.5px;
   }
@@ -34,50 +34,6 @@
     margin-top: 4px;
     text-transform: uppercase;
     letter-spacing: 1px;
-  }
-
-  &__user {
-    display: flex;
-    align-items: center;
-    padding: 16px 20px;
-    margin: 8px 12px 16px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 8px;
-    gap: 12px;
-  }
-
-  &__user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, $primary-green 0%, $primary-green-dark 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-
-  &__user-info {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  &__user-name {
-    color: white !important;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__user-role {
-    color: rgba(255, 255, 255, 0.45) !important;
-    font-size: 12px;
-    text-transform: capitalize;
   }
 
   &__menu {
@@ -107,7 +63,7 @@
     }
     
     .ant-menu-item-selected {
-      background: linear-gradient(90deg, $primary-green 0%, $primary-green-dark 100%) !important;
+      background: linear-gradient(90deg, $primary-green-bright 0%, $primary-green 100%) !important;
       
       a {
         color: white !important;
@@ -117,10 +73,27 @@
         color: white !important;
       }
     }
-    
-    .ant-menu-item-divider {
-      margin: 16px 24px;
-      background: rgba(255, 255, 255, 0.1);
+  }
+
+  // Logout area
+  &__logout {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__logout-btn {
+    color: rgba(255, 255, 255, 0.55) !important;
+    text-align: left;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #ff4d4f !important;
+      background: rgba(255, 77, 79, 0.1) !important;
     }
   }
   
@@ -140,6 +113,10 @@
         padding-left: 24px !important;
       }
     }
+
+    .admin-sidebar__logout-btn {
+      justify-content: center;
+    }
   }
   
   // Trigger button
@@ -155,8 +132,8 @@
 // Responsive
 @media (max-width: 992px) {
   .admin-sidebar {
-    &__user {
-      padding: 12px 16px;
+    &__logout {
+      padding: 8px 12px;
     }
   }
 }

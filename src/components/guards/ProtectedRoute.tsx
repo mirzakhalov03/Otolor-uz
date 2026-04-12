@@ -1,119 +1,28 @@
 /**
  * Protected Route Component
- * Route guard for authenticated routes with role-based access control
+ * Simple route guard — checks if admin is authenticated via token
  */
 
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Spin } from 'antd';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  /**
-   * Required roles to access the route
-   * If not provided, only authentication is required
-   */
-  requiredRoles?: string[];
-  /**
-   * Required permissions to access the route
-   */
-  requiredPermissions?: string[];
-  /**
-   * Redirect path when not authenticated
-   */
-  loginPath?: string;
-  /**
-   * Redirect path when not authorized (wrong role/permission)
-   */
-  unauthorizedPath?: string;
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children,
-  requiredRoles,
-  requiredPermissions,
-  loginPath = '/admins-otolor/login',
-  unauthorizedPath = '/unauthorized',
-}) => {
-  const { isAuthenticated, isInitializing, hasRole, hasPermission } = useAuth();
+/**
+ * Admin protected route — redirects to login if not authenticated
+ */
+export const AdminRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // Show loading spinner while checking auth
-  if (isInitializing) {
-    return (
-      <Spin size="large" percent="auto" fullscreen />
-    );
-  }
-
-  // Not authenticated - redirect to login
   if (!isAuthenticated) {
-    return <Navigate to={loginPath} state={{ from: location }} replace />;
+    return <Navigate to="/admins-otolor/login" state={{ from: location }} replace />;
   }
 
-  // Check role requirements
-  if (requiredRoles && requiredRoles.length > 0) {
-    if (!hasRole(requiredRoles)) {
-      return <Navigate to={unauthorizedPath} replace />;
-    }
-  }
-
-  // Check permission requirements
-  if (requiredPermissions && requiredPermissions.length > 0) {
-    const hasAllPermissions = requiredPermissions.every((permission) =>
-      hasPermission(permission)
-    );
-    if (!hasAllPermissions) {
-      return <Navigate to={unauthorizedPath} replace />;
-    }
-  }
-
-  // Authorized - render children
   return <>{children}</>;
 };
 
-/**
- * Admin-only protected route
- * Convenience wrapper for admin/superadmin/doctor routes
- * Doctors have limited access controlled at sidebar level
- */
-export const AdminRoute: React.FC<Omit<ProtectedRouteProps, 'requiredRoles'>> = ({
-  children,
-  ...props
-}) => {
-  return (
-    <ProtectedRoute requiredRoles={['admin', 'superadmin', 'doctor']} {...props}>
-      {children}
-    </ProtectedRoute>
-  );
-};
-
-/**
- * Admin/Superadmin only routes (excludes doctors)
- */
-export const AdminOnlyRoute: React.FC<Omit<ProtectedRouteProps, 'requiredRoles'>> = ({
-  children,
-  ...props
-}) => {
-  return (
-    <ProtectedRoute requiredRoles={['admin', 'superadmin']} {...props}>
-      {children}
-    </ProtectedRoute>
-  );
-};
-
-/**
- * Superadmin-only protected route
- */
-export const SuperAdminRoute: React.FC<Omit<ProtectedRouteProps, 'requiredRoles'>> = ({
-  children,
-  ...props
-}) => {
-  return (
-    <ProtectedRoute requiredRoles={['superadmin']} {...props}>
-      {children}
-    </ProtectedRoute>
-  );
-};
-
-export default ProtectedRoute;
+export default AdminRoute;

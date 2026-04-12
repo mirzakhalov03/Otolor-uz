@@ -1,197 +1,233 @@
+/**
+ * Admin Doctors Management Page
+ * Full CRUD for doctors — connected to real backend API
+ */
+
 import React, { useState } from 'react';
-import { Space, Button, Tag, Avatar, Popconfirm, message, Tooltip, Drawer } from 'antd';
+import {
+  Card,
+  Table,
+  Button,
+  Space,
+  Input,
+  Tag,
+  Popconfirm,
+  Modal,
+  Form,
+  message,
+  Tooltip,
+  Select,
+  TimePicker,
+  Typography,
+  Empty,
+} from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
+  PlusOutlined,
   EditOutlined,
   DeleteOutlined,
-  EyeOutlined,
-  UserOutlined,
+  SearchOutlined,
+  ReloadOutlined,
+  ClockCircleOutlined,
 } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
-import DataTable from '../../../components/admin/DataTable';
-import { DoctorForm } from '../../../components/admin';
-import { useDoctors, useDeleteDoctor, useCreateDoctor, useUpdateDoctor, useDoctorWithUser } from '../../../mocks/uiApi';
-import type { Doctor, ApiResponse, CreateDoctorRequest, UpdateDoctorRequest } from '../../../mocks/uiTypes';
+import dayjs from 'dayjs';
+import type { Doctor } from '@/pages/appointments/types/appointment.types';
+import {
+  useAdminDoctors,
+  useCreateDoctor,
+  useUpdateDoctor,
+  useDeleteDoctor,
+} from '@/api/query/useAdminQueries';
 import './DoctorsPage.scss';
 
-type DrawerMode = 'create' | 'edit' | 'view' | null;
+const { Search } = Input;
+const { Title } = Typography;
+const { Option } = Select;
+
+const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const DAY_COLORS: Record<string, string> = {
+  Monday: 'blue',
+  Tuesday: 'cyan',
+  Wednesday: 'green',
+  Thursday: 'orange',
+  Friday: 'purple',
+  Saturday: 'magenta',
+  Sunday: 'red',
+};
 
 const DoctorsPage: React.FC = () => {
-  const { t } = useTranslation();
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState('');
-  
-  // Drawer state
-  const [drawerMode, setDrawerMode] = useState<DrawerMode>(null);
-  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [form] = Form.useForm<any>();
 
-  // Fetch doctors with pagination
-  const { data, isLoading, refetch } = useDoctors({
-    page,
-    limit: pageSize,
-    search,
-  });
-
-  // Fetch selected doctor with user info for edit
-  const { data: selectedDoctor, isLoading: isLoadingDoctor } = useDoctorWithUser(
-    selectedDoctorId || '',
-    !!selectedDoctorId && (drawerMode === 'edit' || drawerMode === 'view')
-  );
-
-  // Mutations
-  const deleteMutation = useDeleteDoctor();
+  // Queries & mutations
+  const { data: doctors, isLoading, refetch } = useAdminDoctors(search || undefined);
   const createMutation = useCreateDoctor();
   const updateMutation = useUpdateDoctor();
+  const deleteMutation = useDeleteDoctor();
 
   const handleSearch = (value: string) => {
     setSearch(value);
-    setPage(1);
   };
 
   const handleRefresh = () => {
     setSearch('');
-    setPage(1);
     refetch();
   };
 
-  const handleCreate = () => {
-    setSelectedDoctorId(null);
-    setDrawerMode('create');
+  const openCreateModal = () => {
+    setEditingDoctor(null);
+    form.resetFields();
+    form.setFieldsValue({
+      name: '',
+      specialization: '',
+      schedule: [{ day: 'Monday', time: null }],
+    });
+    setModalOpen(true);
   };
 
-  const handleEdit = (doctor: Doctor) => {
-    setSelectedDoctorId(doctor._id);
-    setDrawerMode('edit');
-  };
+  const openEditModal = (doctor: Doctor) => {
+    setEditingDoctor(doctor);
 
-  const handleView = (doctor: Doctor) => {
-    setSelectedDoctorId(doctor._id);
-    setDrawerMode('view');
-  };
+    // Convert weeklySchedule to form-friendly format
+    const schedule: ScheduleEntry[] = Object.entries(doctor.weeklySchedule || {}).map(([day, timeRange]) => {
+      const [start, end] = timeRange.split('-');
+      return {
+        day,
+        time: [dayjs(start, 'HH:mm'), dayjs(end, 'HH:mm')],
+      };
+    });
 
-  const handleCloseDrawer = () => {
-    setDrawerMode(null);
-    setSelectedDoctorId(null);
+    form.setFieldsValue({
+      name: doctor.name,
+      specialization: doctor.specialization || '',
+      schedule: schedule.length > 0 ? schedule : [{ day: 'Monday', time: null }],
+    });
+
+    setModalOpen(true);
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteMutation.mutateAsync(id);
-      message.success(t('admin.doctors.deleteSuccess', 'Doctor deleted successfully'));
-      refetch();
-    } catch (error) {
-      const apiError = error as ApiResponse;
-      message.error(apiError.message || t('admin.doctors.deleteError', 'Failed to delete doctor'));
+      message.success('Doctor deleted successfully');
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || 'Failed to delete doctor';
+      message.error(msg);
     }
   };
 
-  const handleCreateSubmit = async (values: CreateDoctorRequest | UpdateDoctorRequest) => {
+  const handleSubmit = async () => {
     try {
-      await createMutation.mutateAsync(values as CreateDoctorRequest);
-      message.success(t('admin.doctors.createSuccess', 'Doctor created successfully'));
-      handleCloseDrawer();
-      refetch();
-    } catch (error) {
-      const apiError = error as ApiResponse;
-      message.error(apiError.message || t('admin.doctors.createError', 'Failed to create doctor'));
-      throw error; // Re-throw to keep form in submitting state
-    }
-  };
+      const values = await form.validateFields();
 
-  const handleUpdateSubmit = async (values: CreateDoctorRequest | UpdateDoctorRequest) => {
-    if (!selectedDoctorId) return;
-    
-    try {
-      await updateMutation.mutateAsync({ 
-        id: selectedDoctorId, 
-        data: values as UpdateDoctorRequest 
-      });
-      message.success(t('admin.doctors.updateSuccess', 'Doctor updated successfully'));
-      handleCloseDrawer();
-      refetch();
-    } catch (error) {
-      const apiError = error as ApiResponse;
-      message.error(apiError.message || t('admin.doctors.updateError', 'Failed to update doctor'));
-      throw error;
-    }
-  };
+      // Build weeklySchedule from form entries
+      const weeklySchedule: Record<string, string> = {};
+      for (const entry of values.schedule) {
+        if (entry.day && entry.time && entry.time[0] && entry.time[1]) {
+          const start = entry.time[0].format('HH:mm');
+          const end = entry.time[1].format('HH:mm');
+          weeklySchedule[entry.day] = `${start}-${end}`;
+        }
+      }
 
-  const handlePageChange = (newPage: number, newPageSize: number) => {
-    setPage(newPage);
-    setPageSize(newPageSize);
+      if (Object.keys(weeklySchedule).length === 0) {
+        message.error('Please add at least one working day with time range');
+        return;
+      }
+
+      const payload = {
+        name: values.name,
+        specialization: values.specialization || undefined,
+        weeklySchedule,
+      };
+
+      if (editingDoctor) {
+        await updateMutation.mutateAsync({ id: editingDoctor._id, data: payload });
+        message.success('Doctor updated successfully');
+      } else {
+        await createMutation.mutateAsync(payload as { name: string; weeklySchedule: Record<string, string> });
+        message.success('Doctor created successfully');
+      }
+
+      setModalOpen(false);
+      form.resetFields();
+      setEditingDoctor(null);
+    } catch (error: any) {
+      if (error?.response?.data?.message) {
+        message.error(error.response.data.message);
+      }
+      // form validation errors are handled by antd
+    }
   };
 
   const columns: ColumnsType<Doctor> = [
     {
-      title: t('admin.doctors.columns.doctor', 'Doctor'),
-      dataIndex: 'fullName',
-      key: 'doctor',
-      width: 250,
-      render: (_, record) => {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: 220,
+      render: (name: string) => (
+        <span style={{ fontWeight: 600, color: '#1a1a2e' }}>{name}</span>
+      ),
+    },
+    {
+      title: 'Specialization',
+      dataIndex: 'specialization',
+      key: 'specialization',
+      width: 180,
+      render: (spec: string | undefined) =>
+        spec ? <Tag color="blue">{spec}</Tag> : <Tag color="default">—</Tag>,
+    },
+    {
+      title: 'Weekly Schedule',
+      dataIndex: 'weeklySchedule',
+      key: 'weeklySchedule',
+      width: 350,
+      render: (schedule: Record<string, string>) => {
+        if (!schedule || Object.keys(schedule).length === 0) {
+          return <span style={{ color: '#999' }}>No schedule set</span>;
+        }
         return (
-          <Space>
-            <Avatar
-              src={record.profileImage?.url}
-              icon={!record.profileImage?.url && <UserOutlined />}
-              size={40}
-            />
-            <div>
-              <div className="doctor-name">
-                {record.fullName || `${record.firstName} ${record.lastName}`}
-              </div>
-              <div className="doctor-email">{record.email}</div>
-            </div>
-          </Space>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+            {DAYS_OF_WEEK.filter((d) => schedule[d]).map((day) => (
+              <Tag
+                key={day}
+                color={DAY_COLORS[day]}
+                icon={<ClockCircleOutlined />}
+                style={{ marginBottom: 2 }}
+              >
+                {day.slice(0, 3)} {schedule[day]}
+              </Tag>
+            ))}
+          </div>
         );
       },
     },
     {
-      title: t('admin.doctors.columns.specialization', 'Specialization'),
-      dataIndex: 'specialty',
-      key: 'specialty',
-      width: 180,
-      render: (specialization: string | string[]) => (
-        <Tag color="blue">{Array.isArray(specialization) ? specialization.join(', ') : specialization}</Tag>
-      ),
-    },
-    {
-      title: t('admin.doctors.columns.experience', 'Experience'),
-      dataIndex: 'experienceYears',
-      key: 'experienceYears',
-      width: 120,
-      render: (experience: number) => `${experience} ${t('admin.doctors.years', 'years')}`,
-    },
-    {
-      title: t('admin.doctors.columns.actions', 'Actions'),
+      title: 'Actions',
       key: 'actions',
       fixed: 'right',
-      width: 150,
+      width: 120,
       render: (_, record) => (
         <Space size="small">
-          <Tooltip title={t('common.view', 'View')}>
-            <Button
-              type="text"
-              icon={<EyeOutlined />}
-              onClick={() => handleView(record)}
-              size="small"
-            />
-          </Tooltip>
-          <Tooltip title={t('common.edit', 'Edit')}>
+          <Tooltip title="Edit">
             <Button
               type="text"
               icon={<EditOutlined />}
-              onClick={() => handleEdit(record)}
+              onClick={() => openEditModal(record)}
               size="small"
             />
           </Tooltip>
-          <Tooltip title={t('common.delete', 'Delete')}>
+          <Tooltip title="Delete">
             <Popconfirm
-              title={t('admin.doctors.deleteTitle', 'Delete doctor')}
-              description={t('admin.doctors.deleteDescription', 'Are you sure you want to delete this doctor?')}
+              title="Delete doctor"
+              description="Are you sure? This cannot be undone."
               onConfirm={() => handleDelete(record._id)}
-              okText={t('common.yes', 'Yes')}
-              cancelText={t('common.no', 'No')}
+              okText="Yes"
+              cancelText="No"
               okButtonProps={{ danger: true }}
             >
               <Button
@@ -207,65 +243,149 @@ const DoctorsPage: React.FC = () => {
     },
   ];
 
-  // Get drawer title based on mode
-  const getDrawerTitle = () => {
-    switch (drawerMode) {
-      case 'create':
-        return t('admin.doctors.createDoctor', 'Create Doctor');
-      case 'edit':
-        return t('admin.doctors.editDoctor', 'Edit Doctor');
-      case 'view':
-        return t('admin.doctors.viewDoctor', 'View Doctor');
-      default:
-        return '';
-    }
-  };
-
   return (
     <div className="doctors-page">
-      <DataTable<Doctor>
-        pageTitle={t('admin.doctors.pageTitle', 'Doctors Management')}
-        columns={columns}
-        dataSource={data?.data || []}
-        rowKey="_id"
-        loading={isLoading || deleteMutation.isPending}
-        meta={data?.meta}
-        onSearch={handleSearch}
-        onRefresh={handleRefresh}
-        onCreate={handleCreate}
-        onPageChange={handlePageChange}
-        searchPlaceholder={t('admin.doctors.searchPlaceholder', 'Search by name, email, or specialization...')}
-        createButtonText={t('admin.doctors.addDoctor', 'Add Doctor')}
-      />
+      <Card className="doctors-page__card">
+        {/* Header */}
+        <div className="doctors-page__header">
+          <div className="doctors-page__header-left">
+            <Title level={4} style={{ margin: 0 }}>
+              Doctors Management
+            </Title>
+          </div>
+          <div className="doctors-page__header-right">
+            <Space size="middle">
+              <Search
+                placeholder="Search by name or specialization..."
+                allowClear
+                onSearch={handleSearch}
+                style={{ width: 280 }}
+                prefix={<SearchOutlined />}
+              />
+              <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={isLoading} />
+              <Button type="primary" icon={<PlusOutlined />} onClick={openCreateModal}>
+                Add Doctor
+              </Button>
+            </Space>
+          </div>
+        </div>
 
-      {/* Create/Edit Drawer */}
-      <Drawer
-        title={getDrawerTitle()}
-        open={drawerMode !== null}
-        onClose={handleCloseDrawer}
-        size="large"
+        {/* Table */}
+        <Table<Doctor>
+          columns={columns}
+          dataSource={doctors || []}
+          rowKey="_id"
+          loading={isLoading || deleteMutation.isPending}
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} doctors`,
+            pageSizeOptions: ['10', '20', '50'],
+          }}
+          scroll={{ x: 'max-content' }}
+          locale={{
+            emptyText: <Empty description="No doctors found" image={Empty.PRESENTED_IMAGE_SIMPLE} />,
+          }}
+        />
+      </Card>
+
+      {/* Create / Edit Modal */}
+      <Modal
+        title={editingDoctor ? 'Edit Doctor' : 'Add New Doctor'}
+        open={modalOpen}
+        onCancel={() => {
+          setModalOpen(false);
+          setEditingDoctor(null);
+          form.resetFields();
+        }}
+        onOk={handleSubmit}
+        confirmLoading={createMutation.isPending || updateMutation.isPending}
+        okText={editingDoctor ? 'Update' : 'Create'}
+        width={640}
         destroyOnClose
-        footer={null}
       >
-        {drawerMode === 'create' && (
-          <DoctorForm
-            isEditMode={false}
-            onSubmit={handleCreateSubmit}
-            onCancel={handleCloseDrawer}
-            isSubmitting={createMutation.isPending}
-          />
-        )}
-        {(drawerMode === 'edit' || drawerMode === 'view') && (
-          <DoctorForm
-            initialData={selectedDoctor}
-            isEditMode={drawerMode === 'edit'}
-            isLoading={isLoadingDoctor}
-            onSubmit={handleUpdateSubmit}
-            onCancel={handleCloseDrawer}
-            isSubmitting={updateMutation.isPending}
-          />
-        )}
-      </Drawer>
+        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
+          <Form.Item
+            name="name"
+            label="Doctor Name"
+            rules={[
+              { required: true, message: 'Doctor name is required' },
+              { min: 2, message: 'Name must be at least 2 characters' },
+              { max: 100, message: 'Name cannot exceed 100 characters' },
+            ]}
+          >
+            <Input placeholder="e.g. Dr. Sardor Karimov" />
+          </Form.Item>
+
+          <Form.Item
+            name="specialization"
+            label="Specialization"
+            rules={[{ max: 100, message: 'Specialization cannot exceed 100 characters' }]}
+          >
+            <Input placeholder="e.g. Stomatolog, Ortodont" />
+          </Form.Item>
+
+          <Form.Item label="Weekly Schedule" required>
+            <Form.List name="schedule">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <Space
+                      key={key}
+                      style={{ display: 'flex', marginBottom: 8, alignItems: 'flex-start' }}
+                      align="baseline"
+                    >
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'day']}
+                        rules={[{ required: true, message: 'Select day' }]}
+                        style={{ minWidth: 140 }}
+                      >
+                        <Select placeholder="Day">
+                          {DAYS_OF_WEEK.map((day) => (
+                            <Option key={day} value={day}>
+                              {day}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'time']}
+                        rules={[{ required: true, message: 'Set time range' }]}
+                      >
+                        <TimePicker.RangePicker
+                          format="HH:mm"
+                          minuteStep={30}
+                          placeholder={['Start', 'End']}
+                        />
+                      </Form.Item>
+                      {fields.length > 1 && (
+                        <Button
+                          type="text"
+                          danger
+                          onClick={() => remove(name)}
+                          icon={<DeleteOutlined />}
+                        />
+                      )}
+                    </Space>
+                  ))}
+                  {fields.length < 7 && (
+                    <Button
+                      type="dashed"
+                      onClick={() => add({ day: undefined, time: null })}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Working Day
+                    </Button>
+                  )}
+                </>
+              )}
+            </Form.List>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

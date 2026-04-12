@@ -5,14 +5,8 @@
 // Login page
 export { default as AdminLogin } from './login/AdminLogin';
 
-// Dashboard
-export { default as AdminDashboard } from './dashboard/AdminDashboard';
-
-// Profile
-export { default as ProfilePage } from './profile';
-
 // Doctors page
-export { default as DoctorsPage } from './doctors';
+export { default as DoctorsPage } from './doctors/DoctorsPage';
 
-// Services page
-export { default as ServicesPage } from './services';
+// Appointments page
+export { default as AppointmentsPage } from './appointments/AppointmentsPage';

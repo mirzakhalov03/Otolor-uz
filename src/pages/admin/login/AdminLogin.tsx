@@ -1,65 +1,52 @@
 /**
  * Admin Login Page
- * Authentication page for admin panel access
+ * Hardcoded authentication for admin panel access
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
-import { useAdminLogin } from '../../../mocks/uiApi';
-import type { LoginRequest, ApiResponse } from '../../../mocks/uiTypes';
-import LanguageSelector from '../../../components/languageSelector/LanguageSelector';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import './AdminLogin.scss';
 
 const { Title, Text } = Typography;
 
+interface LoginFormValues {
+  username: string;
+  password: string;
+}
+
 const AdminLogin: React.FC = () => {
   const [form] = Form.useForm();
-  const { t } = useTranslation();
-  const loginMutation = useAdminLogin();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const onFinish = async (values: LoginRequest) => {
-    try {
-      await loginMutation.mutateAsync(values);
-      message.success(t('auth.loginSuccess'));
-    } catch (error) {
-      const apiError = error as ApiResponse;
-      if (apiError?.status === 401) {
-        message.error(t('errors.invalidCredentials', { defaultValue: 'Invalid credentials' }));
-        return;
-      }
+  const onFinish = async (values: LoginFormValues) => {
+    setLoading(true);
+    setError(null);
 
-      if (apiError?.status === 403) {
-        message.error(apiError?.message || t('errors.accountInactive', { defaultValue: 'Your account is inactive' }));
-        return;
-      }
+    // Small delay to feel realistic
+    await new Promise((r) => setTimeout(r, 500));
 
-      message.error(apiError?.message || t('errors.loginFailed'));
-    }
-  };
+    const result = login(values.username, values.password);
 
-  const getErrorDescription = () => {
-    if (!loginMutation.isError) return undefined;
-
-    const apiError = loginMutation.error as ApiResponse;
-
-    if (apiError?.status === 401) {
-      return t('errors.invalidCredentials', { defaultValue: 'Invalid credentials' });
+    if (result.success) {
+      message.success('Welcome back, Admin!');
+      const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/admins-otolor';
+      navigate(from, { replace: true });
+    } else {
+      setError(result.message);
     }
 
-    if (apiError?.status === 403) {
-      return apiError?.message || t('errors.accountInactive', { defaultValue: 'Your account is inactive' });
-    }
-
-    return apiError?.message || t('errors.loginFailed');
+    setLoading(false);
   };
 
   return (
     <div className="admin-login">
-      <div className="admin-login__language-selector">
-        <LanguageSelector type="default" showLabel />
-      </div>
       <div className="admin-login__container">
         <Card className="admin-login__card">
           <div className="admin-login__header">
@@ -67,20 +54,21 @@ const AdminLogin: React.FC = () => {
               <span className="admin-login__logo-text">Otolor</span>
             </div>
             <Title level={3} className="admin-login__title">
-              {t('auth.loginTitle')}
+              Admin Panel
             </Title>
             <Text type="secondary" className="admin-login__subtitle">
-              {t('auth.loginSubtitle')}
+              Sign in to manage your clinic
             </Text>
           </div>
 
-          {loginMutation.isError && (
+          {error && (
             <Alert
-              message={t('errors.loginFailed')}
-              description={getErrorDescription()}
+              message="Login Failed"
+              description={error}
               type="error"
               showIcon
-              className="admin-login__error"
+              closable
+              onClose={() => setError(null)}
               style={{ marginBottom: 24 }}
             />
           )}
@@ -94,27 +82,25 @@ const AdminLogin: React.FC = () => {
             autoComplete="off"
           >
             <Form.Item
-              name="identifier"
-              label={t('auth.usernameOrEmail')}
-              rules={[
-                { required: true, message: t('errors.usernameRequired') },
-              ]}
+              name="username"
+              label="Username"
+              rules={[{ required: true, message: 'Please enter your username' }]}
             >
               <Input
                 prefix={<UserOutlined />}
-                placeholder={t('auth.enterUsernameOrEmail')}
+                placeholder="Enter username"
                 autoComplete="username"
               />
             </Form.Item>
 
             <Form.Item
               name="password"
-              label={t('auth.password')}
-              rules={[{ required: true, message: t('errors.passwordRequired') }]}
+              label="Password"
+              rules={[{ required: true, message: 'Please enter your password' }]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder={t('auth.enterPassword')}
+                placeholder="Enter password"
                 autoComplete="current-password"
               />
             </Form.Item>
@@ -124,17 +110,17 @@ const AdminLogin: React.FC = () => {
                 type="primary"
                 htmlType="submit"
                 block
-                loading={loginMutation.isPending}
+                loading={loading}
                 className="admin-login__button"
               >
-                {loginMutation.isPending ? t('auth.signingIn') : t('auth.signIn')}
+                {loading ? 'Signing in...' : 'Sign In'}
               </Button>
             </Form.Item>
           </Form>
 
           <div className="admin-login__footer">
             <Text type="secondary" style={{ fontSize: 12 }}>
-              © {new Date().getFullYear()} {t('common.appName')}. {t('common.allRightsReserved')}.
+              © {new Date().getFullYear()} Otolor. All rights reserved.
             </Text>
           </div>
         </Card>

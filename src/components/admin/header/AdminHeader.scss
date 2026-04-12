@@ -17,6 +17,7 @@
   &__left {
     display: flex;
     align-items: center;
+    gap: 12px;
   }
 
   &__toggle {
@@ -25,38 +26,28 @@
     height: 48px;
   }
 
+  &__title {
+    font-size: 16px;
+    color: #1a1a2e;
+    
+    @media (max-width: 576px) {
+      display: none;
+    }
+  }
+
   &__right {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  &__notification {
-    font-size: 18px;
-    width: 40px;
-    height: 40px;
-    
-    &:hover {
-      color: $primary-green;
-    }
-  }
-
-  &__user {
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: background 0.2s;
-    
-    &:hover {
-      background: #f5f5f5;
-    }
-  }
-
-  &__username {
+  &__logout-btn {
     font-weight: 500;
     
     @media (max-width: 576px) {
-      display: none;
+      span:not(.anticon) {
+        display: none;
+      }
     }
   }
 }

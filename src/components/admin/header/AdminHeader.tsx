@@ -1,23 +1,17 @@
 /**
  * Admin Header Component
- * Top navigation bar for admin panel
+ * Minimal top bar for admin panel
  */
 
 import React from 'react';
-import { Layout, Typography, Dropdown, Avatar, Space, Button, theme, message } from 'antd';
-import type { MenuProps } from 'antd';
+import { Layout, Typography, Button, theme } from 'antd';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UserOutlined,
   LogoutOutlined,
-  SettingOutlined,
-  BellOutlined,
 } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import { useLogout } from '../../../mocks/uiApi';
-import LanguageSelector from '../../languageSelector/LanguageSelector';
 import './AdminHeader.scss';
 
 const { Header } = Layout;
@@ -29,42 +23,14 @@ interface AdminHeaderProps {
 }
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({ collapsed, onToggle }) => {
-  const { user } = useAuth();
-  const { t } = useTranslation();
-  const logoutMutation = useLogout();
   const { token } = theme.useToken();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await logoutMutation.mutateAsync();
-      message.success(t('auth.logoutSuccess'));
-    } catch {
-      // Error handled in mutation
-    }
+  const handleLogout = () => {
+    logout();
+    navigate('/admins-otolor/login', { replace: true });
   };
-
-  const userMenuItems: MenuProps['items'] = [
-    {
-      key: 'profile',
-      icon: <UserOutlined />,
-      label: t('admin.profile'),
-    },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: t('admin.settings'),
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: 'logout',
-      icon: <LogoutOutlined />,
-      label: t('auth.logout'),
-      danger: true,
-      onClick: handleLogout,
-    },
-  ];
 
   return (
     <Header
@@ -78,38 +44,21 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ collapsed, onToggle }) => {
           onClick={onToggle}
           className="admin-header__toggle"
         />
+        <Text strong className="admin-header__title">
+          Otolor Admin
+        </Text>
       </div>
 
       <div className="admin-header__right">
-        {/* Language Selector */}
-        <LanguageSelector />
-
-        {/* Notifications */}
         <Button
           type="text"
-          icon={<BellOutlined />}
-          className="admin-header__notification"
-        />
-
-        {/* User Dropdown */}
-        <Dropdown
-          menu={{ items: userMenuItems }}
-          trigger={['click']}
-          placement="bottomRight"
+          icon={<LogoutOutlined />}
+          onClick={handleLogout}
+          className="admin-header__logout-btn"
+          danger
         >
-          <Space className="admin-header__user" size="small">
-            <Avatar
-              style={{ backgroundColor: '#2DC263' }}
-              icon={<UserOutlined />}
-              size="small"
-            >
-              {user?.firstName?.[0]}
-            </Avatar>
-            <Text className="admin-header__username">
-              {user?.firstName} {user?.lastName}
-            </Text>
-          </Space>
-        </Dropdown>
+          Logout
+        </Button>
       </div>
     </Header>
   );

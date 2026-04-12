@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react"
-import { useRoutes } from "react-router-dom"
+import { useRoutes, Navigate } from "react-router-dom"
 import Layout from "../components/layout/Layout"
 
 // Admin imports
@@ -10,13 +10,12 @@ const Home = lazy(() => import("../pages/home/Home"))
 const About = lazy(() => import("../pages/about/About"))
 const Appointments = lazy(() => import("../pages/appointments/Appointments"))
 const Services = lazy(() => import("../pages/servicesPage/Services"))
-const Unauthorized = lazy(() => import("../pages/unauthorized/Unauthorized"))
 const Courses = lazy(() => import("@/pages/academy/courses/Courses"))
+
+// Admin pages
 const AdminLogin = lazy(() => import("../pages/admin/login/AdminLogin"))
-const AdminDashboard = lazy(() => import("../pages/admin/dashboard/AdminDashboard"))
-const ProfilePage = lazy(() => import("../pages/admin/profile/ProfilePage"))
-const DoctorsPage = lazy(() => import("../pages/admin/doctors"))
-const ServicesPage = lazy(() => import("../pages/admin/services"))
+const DoctorsPage = lazy(() => import("../pages/admin/doctors/DoctorsPage"))
+const AppointmentsPage = lazy(() => import("../pages/admin/appointments/AppointmentsPage"))
 
 const withSuspense = (node: React.ReactNode) => (
     <Suspense fallback={<div style={{ padding: 24 }}>Loading...</div>}>
@@ -55,12 +54,6 @@ export const RouteController = () => {
             ]
         },
         
-        // Unauthorized page
-        {
-            path: '/unauthorized',
-            element: withSuspense(<Unauthorized />)
-        },
-        
         // Admin login (guest only - redirects if authenticated)
         {
             path: '/admins-otolor/login',
@@ -82,35 +75,15 @@ export const RouteController = () => {
             children: [
                 {
                     index: true,
-                    element: withSuspense(<AdminDashboard />)
-                },
-                {
-                    path: 'profile',
-                    element: withSuspense(<ProfilePage />)
+                    element: <Navigate to="/admins-otolor/doctors" replace />
                 },
                 {
                     path: 'doctors',
                     element: withSuspense(<DoctorsPage />)
                 },
                 {
-                    path: 'services',
-                    element: withSuspense(<ServicesPage />)
-                },
-                {
                     path: 'appointments',
-                    element: <div>Appointments Management (Coming Soon)</div>
-                },
-                {
-                    path: 'blogs',
-                    element: <div>Blogs Management (Coming Soon)</div>
-                },
-                {
-                    path: 'users',
-                    element: <div>Users Management (Coming Soon)</div>
-                },
-                {
-                    path: 'roles',
-                    element: <div>Roles & Permissions (Coming Soon)</div>
+                    element: withSuspense(<AppointmentsPage />)
                 },
             ]
         }

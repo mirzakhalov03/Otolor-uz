@@ -1,53 +1,25 @@
 /**
  * Guest Route Component
- * Prevents authenticated users from accessing login/register pages
+ * Prevents authenticated admins from accessing the login page
  */
 
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Spin } from 'antd';
 
 interface GuestRouteProps {
   children: React.ReactNode;
-  /**
-   * Redirect path when already authenticated
-   */
-  redirectTo?: string;
 }
 
-export const GuestRoute: React.FC<GuestRouteProps> = ({
-  children,
-  redirectTo = '/admins-otolor',
-}) => {
-  const { isAuthenticated, isInitializing } = useAuth();
+export const GuestRoute: React.FC<GuestRouteProps> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // Show loading spinner while checking auth
-  if (isInitializing) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          background: '#f0f2f5',
-        }}
-      >
-        <Spin size="large" tip="Loading..." />
-      </div>
-    );
-  }
-
-  // Already authenticated - redirect
   if (isAuthenticated) {
-    // Get the intended destination from location state
-    const from = (location.state as { from?: Location })?.from?.pathname || redirectTo;
+    const from = (location.state as { from?: Location })?.from?.pathname || '/admins-otolor';
     return <Navigate to={from} replace />;
   }
 
-  // Not authenticated - render children (login form)
   return <>{children}</>;
 };
 

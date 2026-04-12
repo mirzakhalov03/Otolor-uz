@@ -1,21 +1,21 @@
 /**
  * Auth Context Provider
- * Centralized authentication state management
+ * Simple hardcoded token-based authentication for admin panel
  */
 
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import type { User } from '../mocks/uiTypes';
+
+// Hardcoded credentials
+const ADMIN_USERNAME = 'otoloruzadmin';
+const ADMIN_PASSWORD = 'qwerty1234';
+const ACCESS_TOKEN = 'asdfghjklzxcvbnm0987654321';
+const TOKEN_KEY = 'access_token';
 
 interface AuthContextType {
-  user: User | null;
   isAuthenticated: boolean;
-  isInitializing: boolean;
-  isLoading: boolean;
-  isAdmin: boolean;
-  isSuperAdmin: boolean;
-  hasRole: (roles: string[]) => boolean;
-  hasPermission: (permission: string) => boolean;
+  login: (username: string, password: string) => { success: boolean; message: string };
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,33 +24,38 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+/**
+ * Check if a valid token exists in localStorage
+ */
+const checkAuth = (): boolean => {
+  try {
+    return localStorage.getItem(TOKEN_KEY) === ACCESS_TOKEN;
+  } catch {
+    return false;
+  }
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const user = null as User | null;
-  const isAuthenticated = false;
-  const isInitializing = false;
-  const userRole = user?.role?.roleName;
-  const isAdmin = userRole === 'admin' || userRole === 'superadmin';
-  const isSuperAdmin = userRole === 'superadmin';
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(checkAuth);
 
-  const hasRole = (roles: string[]): boolean => {
-    return userRole ? roles.includes(userRole) : false;
-  };
+  const login = useCallback((username: string, password: string) => {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      localStorage.setItem(TOKEN_KEY, ACCESS_TOKEN);
+      setIsAuthenticated(true);
+      return { success: true, message: 'Login successful' };
+    }
+    return { success: false, message: 'Invalid username or password' };
+  }, []);
 
-  const hasPermission = (permission: string): boolean => {
-    if (isSuperAdmin) return true; // Superadmin has all permissions
-    const permissions: string[] = [];
-    return permissions.includes(permission);
-  };
+  const logout = useCallback(() => {
+    localStorage.removeItem(TOKEN_KEY);
+    setIsAuthenticated(false);
+  }, []);
 
   const value: AuthContextType = {
-    user: user ?? null,
     isAuthenticated,
-    isInitializing,
-    isLoading: isInitializing,
-    isAdmin,
-    isSuperAdmin,
-    hasRole,
-    hasPermission,
+    login,
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
