@@ -56,6 +56,14 @@
     letter-spacing: 0.05em;
   }
 
+  .hint-text {
+    margin-top: $spacing-md;
+    font-size: $font-size-sm;
+    color: $gray-400;
+    text-align: center;
+    font-style: italic;
+  }
+
   // Date & Time Container (Side by Side)
   .date-time-container {
     display: grid;
@@ -83,6 +91,11 @@
     gap: $spacing-md;
     min-height: 200px;
     align-content: start;
+
+    &__spinner {
+      animation: spin 1s linear infinite;
+      color: $primary-green;
+    }
 
     .time-slot {
       display: flex;
@@ -126,26 +139,70 @@
     .empty-state {
       grid-column: 1 / -1;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: $spacing-sm;
       min-height: 200px;
       
       p {
         font-size: $font-size-lg;
         font-weight: $font-weight-medium;
+        color: $gray-400;
       }
     }
   }
 
+  // API error banner
+  .api-error {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-lg;
+    background: rgba($error, 0.08);
+    border: 1px solid rgba($error, 0.2);
+    border-radius: $radius-md;
+    margin-bottom: $spacing-lg;
+    color: $error;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    line-height: 1.5;
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+  }
+
   .user-info-form {
-    // display: flex;
-    // flex-direction: column;
-    // gap: $spacing-lg;
+    &__fields {
+      display: flex;
+      gap: $spacing-lg;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      @media (max-width: $breakpoint-md) {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    &__submit {
+      width: 300px;
+      margin: $spacing-lg auto 0;
+    }
 
     .form-field {
       display: flex;
       flex-direction: column;
       gap: $spacing-sm;
+      width: 300px;
+
+      &--error {
+        label {
+          color: $error;
+        }
+      }
 
       label {
         display: flex;
@@ -154,6 +211,7 @@
         font-size: $font-size-base;
         font-weight: $font-weight-medium;
         color: $text-primary;
+        transition: color 0.2s ease;
       }
 
       :global(.ant-input) {
@@ -175,10 +233,17 @@
           cursor: not-allowed;
         }
       }
+
+      .field-error {
+        font-size: $font-size-xs;
+        color: $error;
+        font-weight: $font-weight-medium;
+        margin-top: -2px;
+        animation: fadeIn 0.2s ease;
+      }
     }
 
     .submit-button {
-      margin-top: $spacing-lg;
       height: 48px;
       font-size: $font-size-lg;
       font-weight: $font-weight-semibold;
@@ -279,7 +344,7 @@
     margin-bottom: $spacing-md;
   }
 
-  .queue-number {
+  .order-number {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -289,7 +354,7 @@
     padding: $spacing-sm $spacing-xl;
     margin-bottom: $spacing-md;
 
-    .queue-label {
+    .order-label {
       font-size: 11px;
       color: $gray-500;
       text-transform: uppercase;
@@ -297,7 +362,7 @@
       margin-bottom: 2px;
     }
 
-    .queue-value {
+    .order-value {
       font-size: 36px;
       font-weight: $font-weight-bold;
       color: $primary-green;
@@ -367,4 +432,14 @@
       }
     }
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

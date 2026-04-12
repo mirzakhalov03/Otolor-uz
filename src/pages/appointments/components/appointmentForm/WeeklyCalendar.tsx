@@ -3,12 +3,13 @@ import 'dayjs/locale/uz-latn';
 import './weeklyCalendar.scss';
 
 interface WeeklyCalendarProps {
-    availableDates: string[]; // ISO date strings
+    availableDates: string[]; // API dates in "YYYY-MM-DD" format
     selectedDate: string | null;
     onSelectDate: (date: string) => void;
+    isLoading?: boolean;
 }
 
-const WeeklyCalendar = ({ availableDates, selectedDate, onSelectDate }: WeeklyCalendarProps) => {
+const WeeklyCalendar = ({ availableDates, selectedDate, onSelectDate, isLoading }: WeeklyCalendarProps) => {
     // Generate next 7 days starting from today
     const getNextWeek = (): Dayjs[] => {
         const days: Dayjs[] = [];
@@ -47,6 +48,20 @@ const WeeklyCalendar = ({ availableDates, selectedDate, onSelectDate }: WeeklyCa
         const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'Iyun', 'Iyul', 'Avg', 'Sen', 'Okt', 'Noy', 'Dek'];
         return months[date.month()];
     };
+
+    if (isLoading) {
+        return (
+            <div className="weekly-calendar weekly-calendar--loading">
+                {Array.from({ length: 7 }).map((_, index) => (
+                    <div key={index} className="day-card day-card--skeleton">
+                        <div className="skeleton-line skeleton-line--sm" />
+                        <div className="skeleton-line skeleton-line--lg" />
+                        <div className="skeleton-line skeleton-line--sm" />
+                    </div>
+                ))}
+            </div>
+        );
+    }
 
     return (
         <div className="weekly-calendar">

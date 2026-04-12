@@ -86,7 +86,7 @@ const Appointments = () => {
                     <div className='appointments__card'>
                         <div className="appointments__doctors">
                             <DoctorSelector
-                                selectedDoctorId={selectedDoctor?.id || null}
+                                selectedDoctorId={selectedDoctor?._id || null}
                                 onSelectDoctor={handleDoctorSelect}
                             />
                         </div>

@@ -1,17 +1,19 @@
-import { useState } from 'react';
-import { Input, Button, message, Modal } from 'antd';
-import { Clock, User, Phone, CheckCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Input, Button, Modal } from 'antd';
+import { Clock, User, Phone, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { type Doctor } from '../../types/appointment.types';
+import { type Doctor, type FieldError } from '../../types/appointment.types';
+import { useAvailableDates, useAvailableTimeSlots, useBookAppointment } from '@/api/query/useAppointments';
 import WeeklyCalendar from './WeeklyCalendar';
 import './appointmentsForm.scss';
+import axios from 'axios';
 
 interface AppointmentsFormProps {
   selectedDoctor: Doctor | null;
 }
 
 interface BookingConfirmation {
-  queueNumber: number;
+  orderNumber: string;
   fullName: string;
   doctorName: string;
   date: string;
@@ -25,89 +27,142 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [age, setAge] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [bookingConfirmation, setBookingConfirmation] = useState<BookingConfirmation | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  // Get available times for selected date
-  const getAvailableTimesForDate = (date: string): string[] => {
-    if (!selectedDoctor) return [];
-    const slot = selectedDoctor.timeSlots.find(s => s.date === date);
-    return slot ? slot.times : [];
-  };
+  const doctorId = selectedDoctor?._id || null;
+
+  // Fetch available dates when doctor is selected
+  const {
+    data: availableDates = [],
+    isLoading: isDatesLoading,
+  } = useAvailableDates(doctorId);
+
+  // Fetch available time slots when date is selected
+  const {
+    data: availableTimeSlots = [],
+    isLoading: isTimeSlotsLoading,
+  } = useAvailableTimeSlots(doctorId, selectedDate);
+
+  // Booking mutation
+  const bookMutation = useBookAppointment();
+
+  // Reset date & time when doctor changes
+  useEffect(() => {
+    setSelectedDate(null);
+    setSelectedTime(null);
+    setFieldErrors([]);
+    setApiError(null);
+  }, [doctorId]);
+
+  // Reset time when date changes
+  useEffect(() => {
+    setSelectedTime(null);
+  }, [selectedDate]);
 
   const handleDateSelect = (dateStr: string) => {
     setSelectedDate(dateStr);
-    setSelectedTime(null); // Reset time selection when date changes
+    setFieldErrors([]);
+    setApiError(null);
   };
 
   const handleTimeSelect = (time: string) => {
     if (!selectedDate) return;
     setSelectedTime(time);
+    setFieldErrors([]);
+    setApiError(null);
+  };
+
+  // Get field-specific error message
+  const getFieldError = (fieldName: string): string | null => {
+    const err = fieldErrors.find(e => e.field === fieldName);
+    return err ? err.message : null;
   };
 
   const handleSubmit = async () => {
-    // Validation
+    // Clear previous errors
+    setFieldErrors([]);
+    setApiError(null);
+
+    // Client-side validation
     if (!selectedDoctor || !selectedDate || !selectedTime) {
-      message.error(t('appointments.errorSelectAll', 'Please select a doctor, date, and time'));
+      setApiError(t('appointments.errorSelectAll', 'Please select a doctor, date, and time'));
       return;
     }
 
     if (!fullName.trim()) {
-      message.error(t('appointments.errorFullName', 'Please enter your full name'));
+      setFieldErrors([{ field: 'fullName', message: t('appointments.errorFullName', 'Please enter your full name') }]);
       return;
     }
 
     if (!phoneNumber.trim()) {
-      message.error(t('appointments.errorPhone', 'Please enter your phone number'));
+      setFieldErrors([{ field: 'phoneNumber', message: t('appointments.errorPhone', 'Please enter your phone number') }]);
       return;
     }
 
     if (!age.trim()) {
-      message.error(t('appointments.errorAge', 'Please enter your age'));
+      setFieldErrors([{ field: 'age', message: t('appointments.errorAge', 'Please enter your age') }]);
       return;
     }
 
-    setIsSubmitting(true);
-
-    // Simulate API call
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Generate queue number (in real app, this would come from backend)
-      const queueNumber = Math.floor(Math.random() * 50) + 1;
-
-      // Set booking confirmation data
-      setBookingConfirmation({
-        queueNumber,
+    bookMutation.mutate(
+      {
+        doctorId: selectedDoctor._id,
         fullName: fullName.trim(),
-        doctorName: selectedDoctor.name,
-        date: selectedDate,
-        time: selectedTime,
-      });
+        age: parseInt(age, 10),
+        phoneNumber: phoneNumber.trim(),
+        selectedDate,
+        selectedTime,
+      },
+      {
+        onSuccess: (appointment) => {
+          // Set booking confirmation data with the real orderNumber
+          setBookingConfirmation({
+            orderNumber: appointment.orderNumber,
+            fullName: appointment.fullName,
+            doctorName: appointment.doctorId.name,
+            date: appointment.preferredDate,
+            time: appointment.preferredTime,
+          });
 
-      // Show modal
-      setShowModal(true);
+          // Show modal
+          setShowModal(true);
 
-      // Reset form
-      setSelectedDate(null);
-      setSelectedTime(null);
-      setFullName('');
-      setPhoneNumber('');
-      setAge('');
-    } catch (error) {
-      message.error(t('appointments.error'));
-    } finally {
-      setIsSubmitting(false);
-    }
+          // Reset form
+          setSelectedDate(null);
+          setSelectedTime(null);
+          setFullName('');
+          setPhoneNumber('');
+          setAge('');
+          setFieldErrors([]);
+          setApiError(null);
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error) && error.response?.data) {
+            const responseData = error.response.data;
+
+            // Field-level validation errors
+            if (responseData.errors && Array.isArray(responseData.errors)) {
+              setFieldErrors(responseData.errors);
+            } else if (responseData.message) {
+              setApiError(responseData.message);
+            } else {
+              setApiError(t('appointments.error', 'Something went wrong. Please try again.'));
+            }
+          } else {
+            setApiError(t('appointments.error', 'Something went wrong. Please try again.'));
+          }
+        },
+      }
+    );
   };
 
   const handleModalClose = () => {
     setShowModal(false);
     setBookingConfirmation(null);
   };
-
-  const availableTimes = selectedDate ? getAvailableTimesForDate(selectedDate) : [];
 
   return (
     <div className="appointments-form">
@@ -119,26 +174,35 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
           <div className="calendar-section">
             <h3 className="subsection-title">{t('appointments.dateLabel', 'Date')}</h3>
             <WeeklyCalendar
-              availableDates={selectedDoctor?.availableDates || []}
+              availableDates={availableDates}
               selectedDate={selectedDate}
               onSelectDate={handleDateSelect}
+              isLoading={isDatesLoading && !!doctorId}
             />
+            {!doctorId && (
+              <p className="hint-text">{t('appointments.selectDoctorFirst', 'Select a doctor to see available dates')}</p>
+            )}
           </div>
 
           {/* Right: Time Slots */}
           <div className="time-section">
             <h3 className="subsection-title">{t('appointments.availableTimes', 'Available Times')}</h3>
             <div className="time-slots">
-              {!selectedDoctor ? (
+              {!doctorId ? (
                 <div className="empty-state">
-                  <p className="text-gray-400">{t('appointments.selectDoctorFirst', 'Select a doctor')}</p>
+                  <p>{t('appointments.selectDoctorFirst', 'Select a doctor')}</p>
                 </div>
               ) : !selectedDate ? (
                 <div className="empty-state">
-                  <p className="text-gray-400">{t('appointments.selectDateFirst', 'Select a date')}</p>
+                  <p>{t('appointments.selectDateFirst', 'Select a date')}</p>
                 </div>
-              ) : availableTimes.length > 0 ? (
-                availableTimes.map((time) => (
+              ) : isTimeSlotsLoading ? (
+                <div className="empty-state">
+                  <Loader2 className="time-slots__spinner" size={24} />
+                  <p>{t('appointments.loadingTimes', 'Loading times...')}</p>
+                </div>
+              ) : availableTimeSlots.length > 0 ? (
+                availableTimeSlots.map((time) => (
                   <button
                     key={time}
                     className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
@@ -150,7 +214,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
                 ))
               ) : (
                 <div className="empty-state">
-                  <p className="text-gray-400">{t('appointments.noTimesAvailable', 'No times available for this date')}</p>
+                  <p>{t('appointments.noTimesAvailable', 'No times available for this date')}</p>
                 </div>
               )}
             </div>
@@ -161,12 +225,21 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
       {/* Step 3: User Information */}
       <div className="form-section">
         <h2 className="section-title">{t('appointments.step3Title', '3. Enter Your Information')}</h2>
+
+        {/* API-level error message */}
+        {apiError && (
+          <div className="api-error">
+            <AlertCircle size={18} />
+            <span>{apiError}</span>
+          </div>
+        )}
+
         <div className="user-info-form">
-          <div className='flex gap-4 flex-col md:flex-row justify-center'>
-            <div className="form-field w-[300px]">
+          <div className="user-info-form__fields">
+            <div className={`form-field ${getFieldError('fullName') ? 'form-field--error' : ''}`}>
               <label htmlFor="fullName">
                 <User size={16} />
-                <span>{t('appointments.fullName')}</span>
+                <span>{t('appointments.fullName', 'Full Name')}</span>
               </label>
               <Input
                 id="fullName"
@@ -174,13 +247,17 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 size="large"
+                status={getFieldError('fullName') ? 'error' : undefined}
               />
+              {getFieldError('fullName') && (
+                <span className="field-error">{getFieldError('fullName')}</span>
+              )}
             </div>
 
-            <div className="form-field w-[300px]">
+            <div className={`form-field ${getFieldError('phoneNumber') ? 'form-field--error' : ''}`}>
               <label htmlFor="phoneNumber">
                 <Phone size={16} />
-                <span>{t('appointments.phoneNumber')}</span>
+                <span>{t('appointments.phoneNumber', 'Phone Number')}</span>
               </label>
               <Input
                 id="phoneNumber"
@@ -188,10 +265,14 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 size="large"
+                status={getFieldError('phoneNumber') ? 'error' : undefined}
               />
+              {getFieldError('phoneNumber') && (
+                <span className="field-error">{getFieldError('phoneNumber')}</span>
+              )}
             </div>
 
-            <div className="form-field w-[300px]">
+            <div className={`form-field ${getFieldError('age') ? 'form-field--error' : ''}`}>
               <label htmlFor="age">
                 <User size={16} />
                 <span>{t('appointments.age', 'Age')}</span>
@@ -203,20 +284,24 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 size="large"
+                status={getFieldError('age') ? 'error' : undefined}
               />
+              {getFieldError('age') && (
+                <span className="field-error">{getFieldError('age')}</span>
+              )}
             </div>
           </div>
 
-          <div className='w-[300px] mx-auto mt-4'>
+          <div className="user-info-form__submit">
             <Button
               type="primary"
               size="large"
               onClick={handleSubmit}
-              loading={isSubmitting}
+              loading={bookMutation.isPending}
               className="submit-button"
               block
             >
-              {t('appointments.submitAppointment')}
+              {t('appointments.submitAppointment', 'Book Appointment')}
             </Button>
           </div>
         </div>
@@ -245,9 +330,9 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
               {t('appointments.modal.title', 'Booking Confirmed!')}
             </h2>
             
-            <div className="queue-number">
-              <span className="queue-label">{t('appointments.modal.queueNumber', 'Your Queue Number')}</span>
-              <span className="queue-value">#{bookingConfirmation.queueNumber}</span>
+            <div className="order-number">
+              <span className="order-label">{t('appointments.modal.orderNumber', 'Your Order Number')}</span>
+              <span className="order-value">{bookingConfirmation.orderNumber}</span>
             </div>
             
             <div className="patient-info">

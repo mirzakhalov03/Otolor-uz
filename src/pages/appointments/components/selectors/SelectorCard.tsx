@@ -9,18 +9,29 @@ interface SelectorCardProps {
 }
 
 const SelectorCard = ({ doctor, isSelected, onSelect }: SelectorCardProps) => {
-    const formatAvailability = () => {
-        const daysOfWeek = ['Yak', 'Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan'];
-        const uniqueDays = new Set<number>();
+    // Get initials from doctor name (e.g. "Dr. Sardor Karimov" → "SK")
+    const getInitials = (name: string): string => {
+        const words = name.replace(/^Dr\.?\s*/i, '').trim().split(/\s+/);
+        if (words.length >= 2) {
+            return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+        }
+        return words[0]?.substring(0, 2).toUpperCase() || '?';
+    };
 
-        doctor.timeSlots.forEach(slot => {
-            const date = new Date(slot.date);
-            uniqueDays.add(date.getDay());
-        });
-
-        return Array.from(uniqueDays)
-            .sort()
-            .map(day => daysOfWeek[day])
+    // Format working days from weeklySchedule keys
+    const formatWorkingDays = (): string => {
+        if (!doctor.weeklySchedule) return '';
+        const dayAbbreviations: Record<string, string> = {
+            Monday: 'Dush',
+            Tuesday: 'Sesh',
+            Wednesday: 'Chor',
+            Thursday: 'Pay',
+            Friday: 'Jum',
+            Saturday: 'Shan',
+            Sunday: 'Yak',
+        };
+        return Object.keys(doctor.weeklySchedule)
+            .map(day => dayAbbreviations[day] || day)
             .join(', ');
     };
 
@@ -32,25 +43,23 @@ const SelectorCard = ({ doctor, isSelected, onSelect }: SelectorCardProps) => {
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && onSelect()}
         >
-            <div className="flex items-center p-2 gap-4 relative">
-                {isSelected && (
-                    <div className="absolute top-2 right-2">
-                        <CheckCircle className="text-green-600" size={24} />
-                    </div>
-                )}
-                <div className="w-[130px] h-[130px] rounded-lg bg-gray-200 shrink-0">
-                    <img
-                        src={doctor.image}
-                        alt={doctor.name}
-                        className='w-full h-full object-cover rounded-lg'
-                    />
+            {isSelected && (
+                <div className="selector-card__check">
+                    <CheckCircle size={22} />
                 </div>
-                <div className="flex flex-col gap-1">
-                    <h3 className="text-lg font-semibold text-gray-800">{doctor.name}</h3>
-                    <p className="text-sm text-gray-600">{doctor.specialty}</p>
-                    <div className="mt-2">
-                        <p className="text-xs text-gray-500 mb-1">Mavjud kunlar:</p>
-                        <p className="text-sm font-medium text-green-600">{formatAvailability()}</p>
+            )}
+            <div className="selector-card__inner">
+                <div className="selector-card__avatar">
+                    <span>{getInitials(doctor.name)}</span>
+                </div>
+                <div className="selector-card__info">
+                    <h3 className="selector-card__name">{doctor.name}</h3>
+                    {doctor.specialization && (
+                        <p className="selector-card__specialty">{doctor.specialization}</p>
+                    )}
+                    <div className="selector-card__schedule">
+                        <p className="selector-card__schedule-label">Mavjud kunlar:</p>
+                        <p className="selector-card__schedule-days">{formatWorkingDays()}</p>
                     </div>
                 </div>
             </div>
