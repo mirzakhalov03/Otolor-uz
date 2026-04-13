@@ -27,14 +27,12 @@ const Layout = () => {
 
     return (
         <>
-            <div className="relative z-10 min-h-screen bg-[#F5F5F0]">
-                <Navbar />
-                <AnimatePresence mode="wait">
-                    <PageTransition key={location.pathname}>
-                        <Outlet />
-                    </PageTransition>
-                </AnimatePresence>
-            </div>
+            <Navbar />
+            <AnimatePresence mode="wait">
+                <PageTransition key={location.pathname}>
+                    <Outlet />
+                </PageTransition>
+            </AnimatePresence>
             <Footer />
         </>
     );

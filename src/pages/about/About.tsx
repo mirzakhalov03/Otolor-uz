@@ -28,7 +28,7 @@ const About = () => {
   ];
   
   return (
-    <div className="about-page pt-[100px]">
+    <div className="about-page pt-25">
       <section className="about-page__intro section-spacing">
         <div className="container about-page__intro-grid">
           <div className="about-page__intro-copy">
@@ -39,7 +39,7 @@ const About = () => {
 
           <div className="about-page__video-card">
             <iframe
-              src="https://www.youtube.com/embed?listType=search&list=Adenoid%20nima%20otolor"
+              src="https://www.youtube.com/embed/YbkYgJkxDDg?si=2NT0SgRpGTbuCz5U"
               title="Otolor video"
               loading="lazy"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
