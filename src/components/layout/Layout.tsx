@@ -3,7 +3,6 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../navbar/Navbar';
 import { Footer } from '../footer';
-import './Layout.scss';
 
 const PageTransition = ({ children }: { children: React.ReactNode }) => {
     const reduceMotion = useReducedMotion();
@@ -28,7 +27,7 @@ const Layout = () => {
 
     return (
         <>
-            <div className="main-content">
+            <div className="relative z-10 min-h-screen bg-[#F5F5F0]">
                 <Navbar />
                 <AnimatePresence mode="wait">
                     <PageTransition key={location.pathname}>

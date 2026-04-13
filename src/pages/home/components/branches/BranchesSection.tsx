@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
 import './BranchesSection.scss';
 
 interface Branch {
@@ -77,7 +78,7 @@ const BranchesSection = () => {
     ];
 
     return (
-        <section className="branches-section">
+        <section ref={sectionRef} className="branches-section relative w-full overflow-hidden bg-[linear-gradient(135deg,#f5f5f0_0%,#f0f0ea_50%,#f5f5f0_100%)] px-0 pb-16 pt-10 md:pb-20 md:pt-14 lg:pb-28">
             {/* Animated Grid Background */}
             <div className="branches-section__bg-pattern">
                 <div className="branches-section__grid-lines" />
@@ -97,31 +98,31 @@ const BranchesSection = () => {
             </div>
 
             {/* Header */}
-            <div className="branches-section__header">
-                <div className="branches-section__header-content">
-                    <span className="branches-section__tag">
+            <div className="branches-section__header relative z-2 mx-auto mb-10 max-w-150 px-4 text-center md:mb-14 lg:mb-16">
+                <div className="branches-section__header-content motion-safe:animate-[fadeInUp_0.8s_ease_forwards]">
+                    <span className="branches-section__tag mb-5 inline-flex items-center gap-2 rounded-full border border-[rgba(26,77,46,0.15)] bg-[rgba(26,77,46,0.08)] px-5 py-2.5 text-sm font-semibold tracking-[1.5px] uppercase text-[#1a4d2e]">
                         <MapIcon />
                         {t('branches.tag', 'Find Us')}
                     </span>
-                    <h2 className="branches-section__title">
+                    <h2 className="branches-section__title mb-4 text-[32px] leading-tight font-bold md:text-[40px] lg:text-[48px]">
                         {t('branches.title', 'Clinics Near You')}
                     </h2>
-                    <p className="branches-section__subtitle">
+                    <p className="branches-section__subtitle mx-auto max-w-120 text-base leading-relaxed text-[#6b7280] md:text-lg">
                         {t('branches.subtitle', 'Visit any of our convenient locations across the city')}
                     </p>
                 </div>
             </div>
 
             {/* Cards Container */}
-            <div className="branches-section__container">
-                <div className="branches-section__cards">
+            <div className="branches-section__container relative z-2 mx-auto max-w-350 px-4">
+                <div className="branches-section__cards grid gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-5 xl:gap-6">
                     {branches.map((branch, index) => (
                         <div
                             key={branch.id}
                             className={`branch-card ${branch.isMain ? 'branch-card--main' : ''} ${
                                 hoveredCard === branch.id ? 'branch-card--active' : ''
                             }`}
-                            style={{ '--card-index': index } as React.CSSProperties}
+                            style={{ '--card-index': index } as CSSProperties}
                             onMouseEnter={() => setHoveredCard(branch.id)}
                             onMouseLeave={() => setHoveredCard(null)}
                         >
@@ -187,11 +188,11 @@ const BranchesSection = () => {
             </div>
 
             {/* Bottom CTA */}
-            <div className="branches-section__cta">
-                <p className="branches-section__cta-text">
+            <div className="branches-section__cta relative z-2 mt-10 flex flex-col items-center gap-4 md:mt-14 lg:mt-16">
+                <p className="branches-section__cta-text text-base text-[#6b7280]">
                     {t('branches.ctaText', "Can't find a branch near you?")}
                 </p>
-                <a href="tel:+998712345678" className="branches-section__cta-button">
+                <a href="tel:+998712345678" className="branches-section__cta-button inline-flex items-center gap-2.5 rounded-full border-2 border-[#1a4d2e] px-7 py-3.5 text-base font-semibold text-[#1a4d2e] transition hover:-translate-y-0.5 hover:bg-[#1a4d2e] hover:text-white">
                     <PhoneIcon />
                     {t('branches.callUs', 'Call Us')}
                 </a>

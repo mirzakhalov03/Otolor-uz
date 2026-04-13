@@ -8,7 +8,6 @@
 .mid-section {
     position: relative;
     width: 100%;
-    padding: 100px 0;
     background: linear-gradient(180deg, $page-bg 0%, $beige-50 30%, $beige-100 70%, $page-bg 100%);
     overflow: hidden;
 
@@ -282,7 +281,6 @@
 
         // Cover mode - for hospital (crops to fill)
         &--cover {
-            background: linear-gradient(135deg, $beige-100 0%, $beige-200 100%);
             
             img {
                 width: 100%;
@@ -294,7 +292,6 @@
 
         // Contain mode - for academy logo (shows full image)
         &--contain {
-            background: linear-gradient(135deg, $green-50 0%, $beige-50 100%);
             display: flex;
             align-items: center;
             justify-content: center;

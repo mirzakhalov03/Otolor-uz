@@ -35,3 +35,19 @@ body {
   justify-content: space-between;
 }
 
+@keyframes partnersScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:animate-\[partnersScroll_45s_linear_infinite\] {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
