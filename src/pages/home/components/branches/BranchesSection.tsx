@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './BranchesSection.scss';
 
 interface Branch {
@@ -19,6 +19,23 @@ interface Branch {
 const BranchesSection = () => {
     const { t } = useTranslation();
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+    const sectionRef = useRef<HTMLElement | null>(null);
+
+    // Pause all 6 infinite CSS animations when section is off-screen
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                el.classList.toggle('branches-section--visible', entry.isIntersecting);
+            },
+            { threshold: 0.05 }
+        );
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     const branches: Branch[] = [
         {

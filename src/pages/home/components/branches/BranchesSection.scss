@@ -36,7 +36,9 @@
                 linear-gradient(rgba($primary-green, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba($primary-green, 0.05) 1px, transparent 1px);
             background-size: 60px 60px;
+            // Animation paused by default — activated by .branches-section--visible
             animation: gridPulse 8s ease-in-out infinite;
+            animation-play-state: paused;
         }
         
         &::after {
@@ -67,6 +69,8 @@
                 transparent
             );
             animation: gridSweep 15s linear infinite;
+            animation-play-state: paused;
+            will-change: transform;
         }
         
         &::before {
@@ -110,20 +114,26 @@
             top: 15%;
             left: 8%;
             animation: floatMarker1 12s ease-in-out infinite;
+            animation-play-state: paused;
+            will-change: transform;
         }
         
         &--2 {
             top: 25%;
             right: 12%;
             animation: floatMarker2 10s ease-in-out infinite;
+            animation-play-state: paused;
             animation-delay: -3s;
+            will-change: transform;
         }
         
         &--3 {
             bottom: 20%;
             left: 15%;
             animation: floatMarker3 14s ease-in-out infinite;
+            animation-play-state: paused;
             animation-delay: -5s;
+            will-change: transform;
         }
     }
 
@@ -301,16 +311,13 @@
         position: absolute;
         inset: -2px;
         border-radius: 22px;
-        background: linear-gradient(
-            135deg,
-            rgba($primary-green, 0.15) 0%,
-            rgba($primary-green-bright, 0.1) 50%,
-            rgba($primary-green, 0.15) 100%
-        );
+        // Replaced filter:blur(10px) with box-shadow — same visual, zero GPU blur cost
+        box-shadow:
+            0 0 20px rgba($primary-green, 0.12),
+            0 0 40px rgba($primary-green, 0.06);
         opacity: 0;
         transition: opacity 0.4s $ease-premium;
         z-index: -1;
-        filter: blur(10px);
     }
 
     // ========================================
@@ -544,6 +551,7 @@
         
         .branch-card__border-animation {
             opacity: 1;
+            // borderRotate only runs on hover so it's fine to animate then
             animation: borderRotate 4s linear infinite;
         }
         
@@ -585,6 +593,29 @@
                 rgba($primary-green, 0.08) 100%
             );
         }
+    }
+}
+
+// ========================================
+// VISIBLE STATE — Unpause all animations (via IntersectionObserver in TSX)
+// ========================================
+
+.branches-section--visible {
+    .branches-section__bg-pattern::before {
+        animation-play-state: running;
+    }
+
+    .branches-section__grid-lines {
+        &::before,
+        &::after {
+            animation-play-state: running;
+        }
+    }
+
+    .floating-marker--1,
+    .floating-marker--2,
+    .floating-marker--3 {
+        animation-play-state: running;
     }
 }
 
