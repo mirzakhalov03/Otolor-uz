@@ -26,6 +26,7 @@ export interface Doctor {
   id: string;
   name: string;
   specialization?: string;
+  avatarUrl?: string;
   weeklySchedule: Record<string, string>; // e.g. { Monday: "09:00-16:00" }
   createdAt: string;
   updatedAt: string;

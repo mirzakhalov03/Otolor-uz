@@ -24,6 +24,7 @@ export const getDoctor = async (id: string): Promise<Doctor> => {
 export const createDoctor = async (payload: {
   name: string;
   specialization?: string;
+  avatarUrl?: string;
   weeklySchedule: Record<string, string>;
 }): Promise<Doctor> => {
   const { data } = await api.post<ApiResponse<Doctor>>('/doctors', payload);
@@ -38,6 +39,7 @@ export const updateDoctor = async (
   payload: {
     name?: string;
     specialization?: string;
+    avatarUrl?: string;
     weeklySchedule?: Record<string, string>;
   }
 ): Promise<Doctor> => {

@@ -10,6 +10,8 @@ import type { MenuProps } from 'antd';
 import {
   TeamOutlined,
   CalendarOutlined,
+  AppstoreOutlined,
+  TagsOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '../../../context/AuthContext';
@@ -33,6 +35,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
   const getSelectedKey = (): string => {
     const path = location.pathname;
     if (path.includes('/admins-otolor/appointments')) return 'appointments';
+    if (path.includes('/admins-otolor/categories')) return 'categories';
+    if (path.includes('/admins-otolor/services')) return 'services';
     if (path.includes('/admins-otolor/doctors')) return 'doctors';
     // Default to doctors
     return 'doctors';
@@ -53,6 +57,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
       key: 'appointments',
       icon: <CalendarOutlined />,
       label: <NavLink to="/admins-otolor/appointments">Appointments</NavLink>,
+    },
+    {
+      key: 'categories',
+      icon: <AppstoreOutlined />,
+      label: <NavLink to="/admins-otolor/categories">Categories</NavLink>,
+    },
+    {
+      key: 'services',
+      icon: <TagsOutlined />,
+      label: <NavLink to="/admins-otolor/services">Services</NavLink>,
     },
   ];
 

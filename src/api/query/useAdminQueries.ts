@@ -6,6 +6,19 @@ import {
   deleteAppointment,
 } from '@/api/services/adminService';
 import type { AdminAppointmentParams } from '@/api/services/adminService';
+import { getCategories, createCategory } from '@/api/services/categoryService';
+import {
+  getServices,
+  getServiceById,
+  createService,
+  updateService,
+  deleteService,
+} from '@/api/services/serviceService';
+import type {
+  CreateCategoryPayload,
+  CreateServicePayload,
+  UpdateServicePayload,
+} from '@/api/types/catalog.types';
 
 // ========================================
 // DOCTOR HOOKS (Admin)
@@ -38,7 +51,7 @@ export const useAdminDoctor = (id: string | null) => {
 export const useCreateDoctor = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: { name: string; specialization?: string; weeklySchedule: Record<string, string> }) =>
+    mutationFn: (payload: { name: string; specialization?: string; avatarUrl?: string; weeklySchedule: Record<string, string> }) =>
       createDoctor(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'doctors'] });
@@ -52,7 +65,7 @@ export const useCreateDoctor = () => {
 export const useUpdateDoctor = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: { name?: string; specialization?: string; weeklySchedule?: Record<string, string> } }) =>
+    mutationFn: ({ id, data }: { id: string; data: { name?: string; specialization?: string; avatarUrl?: string; weeklySchedule?: Record<string, string> } }) =>
       updateDoctor(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'doctors'] });
@@ -110,6 +123,77 @@ export const useDeleteAppointment = () => {
     mutationFn: (id: string) => deleteAppointment(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'appointments'] });
+    },
+  });
+};
+
+// ========================================
+// CATEGORY HOOKS (Admin)
+// ========================================
+
+export const useAdminCategories = () => {
+  return useQuery({
+    queryKey: ['admin', 'categories'],
+    queryFn: () => getCategories(),
+  });
+};
+
+export const useCreateCategory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateCategoryPayload) => createCategory(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'categories'] });
+    },
+  });
+};
+
+// ========================================
+// SERVICE HOOKS (Admin)
+// ========================================
+
+export const useAdminServices = (categoryId?: string) => {
+  return useQuery({
+    queryKey: ['admin', 'services', categoryId],
+    queryFn: () => getServices(categoryId),
+  });
+};
+
+export const useAdminService = (id: string | null) => {
+  return useQuery({
+    queryKey: ['admin', 'services', id],
+    queryFn: () => getServiceById(id!),
+    enabled: !!id,
+  });
+};
+
+export const useCreateService = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateServicePayload) => createService(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'services'] });
+    },
+  });
+};
+
+export const useUpdateService = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateServicePayload }) =>
+      updateService(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'services'] });
+    },
+  });
+};
+
+export const useDeleteService = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteService(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'services'] });
     },
   });
 };

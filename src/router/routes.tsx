@@ -16,6 +16,8 @@ const Courses = lazy(() => import("@/pages/academy/courses/Courses"))
 const AdminLogin = lazy(() => import("../pages/admin/login/AdminLogin"))
 const DoctorsPage = lazy(() => import("../pages/admin/doctors/DoctorsPage"))
 const AppointmentsPage = lazy(() => import("../pages/admin/appointments/AppointmentsPage"))
+const CategoriesPage = lazy(() => import("../pages/admin/categories/CategoriesPage"))
+const ServicesPage = lazy(() => import("../pages/admin/services/ServicesPage"))
 
 const withSuspense = (node: React.ReactNode) => (
     <Suspense fallback={<div style={{ padding: 24 }}>Loading...</div>}>
@@ -84,6 +86,14 @@ export const RouteController = () => {
                 {
                     path: 'appointments',
                     element: withSuspense(<AppointmentsPage />)
+                },
+                {
+                    path: 'categories',
+                    element: withSuspense(<CategoriesPage />)
+                },
+                {
+                    path: 'services',
+                    element: withSuspense(<ServicesPage />)
                 },
             ]
         }

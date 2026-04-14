@@ -12,6 +12,7 @@ import {
   Space,
   Input,
   Tag,
+  Avatar,
   Popconfirm,
   Modal,
   Form,
@@ -21,8 +22,10 @@ import {
   TimePicker,
   Typography,
   Empty,
+  Upload,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { UploadFile, UploadProps } from 'antd';
 import {
   PlusOutlined,
   EditOutlined,
@@ -30,9 +33,11 @@ import {
   SearchOutlined,
   ReloadOutlined,
   ClockCircleOutlined,
+  UploadOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { Doctor } from '@/pages/appointments/types/appointment.types';
+import { uploadImage } from '@/api/services/uploadService';
 import {
   useAdminDoctors,
   useCreateDoctor,
@@ -43,6 +48,14 @@ import './DoctorsPage.scss';
 
 const { Search } = Input;
 const { Title, Text } = Typography;
+
+const getErrorMessage = (error: unknown, fallback: string): string => {
+  if (typeof error === 'object' && error !== null && 'response' in error) {
+    const response = (error as { response?: { data?: { message?: string } } }).response;
+    if (response?.data?.message) return response.data.message;
+  }
+  return fallback;
+};
 
 /**
  * Generate the next 7 days starting from today.
@@ -72,6 +85,9 @@ const DoctorsPage: React.FC = () => {
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [form] = Form.useForm<any>();
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
+  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
+  const [avatarUploading, setAvatarUploading] = useState(false);
 
   // Track which dates are enabled (checked) in the modal
   const [enabledDates, setEnabledDates] = useState<Set<string>>(new Set());
@@ -98,6 +114,8 @@ const DoctorsPage: React.FC = () => {
   const openCreateModal = () => {
     setEditingDoctor(null);
     form.resetFields();
+    setAvatarUrl(undefined);
+    setSelectedAvatarFile(null);
 
     // Default: all days enabled except Sundays
     const defaultEnabled = new Set<string>();
@@ -121,6 +139,8 @@ const DoctorsPage: React.FC = () => {
       name: doctor.name,
       specialization: doctor.specialization || '',
     });
+    setAvatarUrl(doctor.avatarUrl);
+    setSelectedAvatarFile(null);
 
     // Populate enabled dates and time ranges from existing schedule
     const enabled = new Set<string>();
@@ -146,9 +166,8 @@ const DoctorsPage: React.FC = () => {
     try {
       await deleteMutation.mutateAsync(id);
       message.success('Doctor deleted successfully');
-    } catch (error: any) {
-      const msg = error?.response?.data?.message || 'Failed to delete doctor';
-      message.error(msg);
+    } catch (error: unknown) {
+      message.error(getErrorMessage(error, 'Failed to delete doctor'));
     }
   };
 
@@ -178,6 +197,12 @@ const DoctorsPage: React.FC = () => {
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
+      let uploadedAvatarUrl = avatarUrl;
+
+      if (selectedAvatarFile) {
+        setAvatarUploading(true);
+        uploadedAvatarUrl = await uploadImage(selectedAvatarFile);
+      }
 
       // Build weeklySchedule from enabled dates + time ranges
       const weeklySchedule: Record<string, string> = {};
@@ -196,6 +221,7 @@ const DoctorsPage: React.FC = () => {
       const payload = {
         name: values.name,
         specialization: values.specialization || undefined,
+        avatarUrl: uploadedAvatarUrl,
         weeklySchedule,
       };
 
@@ -210,21 +236,65 @@ const DoctorsPage: React.FC = () => {
       setModalOpen(false);
       form.resetFields();
       setEditingDoctor(null);
-    } catch (error: any) {
-      if (error?.response?.data?.message) {
-        message.error(error.response.data.message);
-      }
+      setAvatarUrl(undefined);
+      setSelectedAvatarFile(null);
+    } catch (error: unknown) {
+      message.error(getErrorMessage(error, 'Failed to save doctor'));
+    } finally {
+      setAvatarUploading(false);
     }
   };
+
+  const uploadProps: UploadProps = {
+    maxCount: 1,
+    beforeUpload: (file) => {
+      const isImage = ['image/jpeg', 'image/png', 'image/webp'].includes(file.type);
+      if (!isImage) {
+        message.error('Only JPG, PNG, and WEBP images are allowed');
+        return Upload.LIST_IGNORE;
+      }
+
+      const isLt5Mb = file.size / 1024 / 1024 < 5;
+      if (!isLt5Mb) {
+        message.error('Image must be smaller than 5MB');
+        return Upload.LIST_IGNORE;
+      }
+
+      setSelectedAvatarFile(file as File);
+      return false;
+    },
+    onRemove: () => {
+      setSelectedAvatarFile(null);
+      return true;
+    },
+  };
+
+  const selectedAvatarFileList: UploadFile[] = selectedAvatarFile
+    ? [
+        {
+          uid: '-1',
+          name: selectedAvatarFile.name,
+          status: 'done',
+        },
+      ]
+    : [];
 
   const columns: ColumnsType<Doctor> = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      width: 220,
-      render: (name: string) => (
-        <span style={{ fontWeight: 600, color: '#1a1a2e' }}>{name}</span>
+      width: 300,
+      render: (name: string, record) => (
+        <Space size="middle">
+          <Avatar
+            size={44}
+            src={record.avatarUrl && record.avatarUrl.trim() ? record.avatarUrl : undefined}
+          >
+            {name?.charAt(0).toUpperCase()}
+          </Avatar>
+          <span style={{ fontWeight: 600, color: '#1a1a2e' }}>{name}</span>
+        </Space>
       ),
     },
     {
@@ -367,14 +437,32 @@ const DoctorsPage: React.FC = () => {
           setModalOpen(false);
           setEditingDoctor(null);
           form.resetFields();
+          setAvatarUrl(undefined);
+          setSelectedAvatarFile(null);
         }}
         onOk={handleSubmit}
-        confirmLoading={createMutation.isPending || updateMutation.isPending}
+        confirmLoading={createMutation.isPending || updateMutation.isPending || avatarUploading}
         okText={editingDoctor ? 'Update' : 'Create'}
         width={640}
         destroyOnClose
       >
         <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
+          <Form.Item label="Doctor Avatar">
+            <Space direction="vertical" size={8} style={{ width: '100%' }}>
+              <Space size="middle">
+                <Avatar size={56} src={avatarUrl}>
+                  {(form.getFieldValue('name') || 'D').charAt(0).toUpperCase()}
+                </Avatar>
+                <Upload {...uploadProps} fileList={selectedAvatarFileList}>
+                  <Button icon={<UploadOutlined />}>Select Image</Button>
+                </Upload>
+              </Space>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                Upload JPEG, PNG, or WEBP image (max 5MB). Image is uploaded to S3 on save.
+              </Text>
+            </Space>
+          </Form.Item>
+
           <Form.Item
             name="name"
             label="Doctor Name"

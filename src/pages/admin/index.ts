@@ -10,3 +10,9 @@ export { default as DoctorsPage } from './doctors/DoctorsPage';
 
 // Appointments page
 export { default as AppointmentsPage } from './appointments/AppointmentsPage';
+
+// Categories page
+export { default as CategoriesPage } from './categories/CategoriesPage';
+
+// Services page
+export { default as ServicesPage } from './services/ServicesPage';
