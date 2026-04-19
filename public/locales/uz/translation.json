@@ -320,12 +320,8 @@
     "bannerTitle": "Amaliy onlayn kurslar bilan zamonaviy LOR amaliyotini egallang",
     "bannerDescription": "Yuqori tajribali mutaxassislardan tuzilgan modullar, jonli sessiyalar va klinik darajadagi materiallar orqali natijaga yo'naltirilgan bilim oling.",
     "stats": {
-      "stat1Value": "1 300+",
-      "stat1Label": "Faol o'quvchilar",
-      "stat2Value": "95%",
-      "stat2Label": "Yakunlash darajasi",
-      "stat3Value": "4.9/5",
-      "stat3Label": "O'rtacha baho"
+      "stat1Value": "1 000+",
+      "stat1Label": "Faol o'quvchilar"
     },
     "primaryButton": "Dasturlarni ko'rish",
     "secondaryButton": "Demo ko'rish",
