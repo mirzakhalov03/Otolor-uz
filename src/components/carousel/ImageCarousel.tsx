@@ -81,10 +81,6 @@ const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height
                             />
                             {showDoctorInfo && (
                                 <div className="carousel-doctor-info">
-                                    <div className="carousel-status-badge">
-                                        <span className="carousel-status-dot" />
-                                        AVAILABLE TODAY
-                                    </div>
                                     <div className="carousel-doctor-name">{image.name}</div>
                                     <div className="carousel-doctor-title">{image.title}</div>
                                 </div>
