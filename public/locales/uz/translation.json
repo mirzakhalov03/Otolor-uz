@@ -110,6 +110,8 @@
     "blog": "Blog",
     "microtia": "Mikrotiya",
     "moscadaver": "MosCadaver",
+    "otolor-cadaver": "Otolor Cadaver",
+    "apnolog": "Apnolog",
     "courses": "Kurslar",
     "books": "Kitoblar",
     "ordinatura": "Ordinatura"
@@ -117,13 +119,8 @@
   "hero": {
     "headlineAccent": "Otolor",
     "headlineRest": "Hayotdan bahra oling",
-    "title": "OTOLOR",
-    "subtitle": "Kattalar va bolalar uchun ilg'or LOR yordami",
-    "description": "Aniq tashxis. To‘g‘ri davolash. Tez natija.",
-    "descriptionLine2": "Zamonaviy LOR markazi — sog‘lig‘ingiz uchun professional yechim.",
     "bookAppointment": "Navbat olish",
     "ourServices": "Xizmatlarimiz",
-    "learnMore": "Batafsil",
     "stat1Value": "20+ Yil",
     "stat1Label": "Klinik tajriba",
     "stat2Value": "20,000+",
@@ -131,21 +128,8 @@
     "stat3Value": "Ilg'or",
     "stat3Label": "Germaniya texnologiyasi"
   },
-  "features": {
-    "tag": "Nega bizni tanlash kerak",
-    "title": "Har bir tafsilotda mukammallik",
-    "subtitle": "Biz tibbiy tajribani ilg'or texnologiyalar bilan birlashtiramiz va aniq hamda g'amxo'rlik bilan parvarishlash standartini ta'minlaymiz.",
-    "feature1Title": "Zamonaviy uskunalar",
-    "feature1Description": "Yevropa, AQSh, Yaponiyaning yetakchi ishlab chiqaruvchilaridan uskunalar va faqat sertifikatlangan materiallar",
-    "feature2Title": "Yuqori malakali shifokorlar",
-    "feature2Description": "Bizning barcha shifokorlarimiz o'z sohasining mutaxassislari va muntazam malaka oshiradilar",
-    "feature3Title": "Xavfsiz davolash",
-    "feature3Description": "Bemorlar xavfsizligi va qulayligi biz uchun eng muhim mezonlardir"
-  },
   "partners": {
-    "tag": "Bizning hamkorlar",
-    "title": "Yetakchi kompaniyalar ishonchi",
-    "subtitle": "Ajoyib tibbiy yordam ko'rsatish uchun yetakchi tibbiyot tashkilotlari bilan hamkorlik qilamiz."
+    "tag": "Bizning hamkorlar"
   },
   "midSection": {
     "tag": "Otolor asosi",
@@ -156,10 +140,6 @@
       "item1": "Zamonaviy diagnostika uskunalari",
       "item2": "Zamonaviy jarrohlik bo'limlari",
       "item3": "Qulay bemor xonalari"
-    },
-    "team": {
-      "tag": "Bizning jamoa",
-      "title": "Otolor Jamoasi"
     },
     "academy": {
       "title": "Otolor Akademiyasi",

@@ -110,59 +110,36 @@
     "blog": "Blog",
     "microtia": "Microtia",
     "moscadaver": "MosCadaver",
+    "otolor-cadaver": "Otolor Cadaver",
+    "apnolog": "Apnolog",
     "courses": "Courses",
     "books": "Books",
     "ordinatura": "Ordinatura"
   },
   "hero": {
-    "tag": "PREMIUM ENT CARE",
     "headlineAccent": "Otolor",
-    "headlineRest": "Advanced ENT care",
-    "title": "OTOLOR",
-    "subtitle": "Advanced ENT care for adults and children",
-    "description": "Healing starts here.",
-    "descriptionLine2": "Effective treatment depends on proper diagnosis.",
-    "descriptionLine3": "Our specialists identify and treat the most complex medical problems.",
+    "headlineRest": "Enjoy life",
     "bookAppointment": "Book Your Consultation",
     "ourServices": "Our Services",
-    "learnMore": "Learn More",
-    "stat1Value": "15+ Years",
+    "stat1Value": "20+ Years",
     "stat1Label": "Clinical Excellence",
-    "stat2Value": "12,000+",
-    "stat2Label": "Happy Patients",
+    "stat2Value": "20,000+",
+    "stat2Label": "Patient Trust",
     "stat3Value": "Advanced",
     "stat3Label": "German Tech"
   },
-  "features": {
-    "tag": "Why Choose Us",
-    "title": "Excellence in Every Detail",
-    "subtitle": "We combine medical expertise with advanced technology to provide a standard of care that is as precise as it is compassionate.",
-    "feature1Title": "Modern Equipment",
-    "feature1Description": "Equipment from leading manufacturers from Europe, USA, Japan and only certified consumables",
-    "feature2Title": "Highly Qualified Doctors",
-    "feature2Description": "All our doctors are specialists in their field and regularly improve their qualifications",
-    "feature3Title": "Safe Treatment",
-    "feature3Description": "Patient safety and comfort are the most important criteria for us"
-  },
   "partners": {
-    "tag": "Our Partners",
-    "title": "Trusted by Industry Leaders",
-    "subtitle": "We collaborate with leading healthcare organizations to deliver exceptional care."
+    "tag": "Our Partners"
   },
   "midSection": {
-    "tag": "Our Foundation",
-    "title": "The Three Pillars of Otolor",
-    "subtitle": "Excellence in healthcare, expertise in our team, and advancement through education",
+    "tag": "Otolor Foundation",
+    "title": "Our Areas of Practice",
     "hospital": {
       "title": "Otolor Hospital",
       "description": "Advanced medical facility providing comprehensive ENT care",
       "item1": "State-of-the-art diagnostic equipment",
       "item2": "Modern surgical facilities",
       "item3": "Comfortable patient rooms"
-    },
-    "team": {
-      "tag": "Our Team",
-      "title": "Otolor Team"
     },
     "academy": {
       "title": "Otolor Academy",
@@ -171,27 +148,6 @@
       "item2": "Medical training workshops",
       "item3": "Research and innovation"
     }
-  },
-  "homeAbout": {
-    "tag": "About Our Clinic",
-    "title": "About Us",
-    "description1": "We are a team of highly qualified specialists providing quality medical services. Our clinic is equipped with modern equipment and uses advanced treatment methods.",
-    "description2": "With many years of experience in the field of otolaryngology, we are proud to help people regain health and improve quality of life. Our doctors constantly improve their skills and follow the latest achievements in medicine.",
-    "stat1Number": "15+",
-    "stat1Label": "Years of Experience",
-    "stat2Number": "10000+",
-    "stat2Label": "Happy Patients",
-    "stat3Number": "50+",
-    "stat3Label": "Specialists"
-  },
-  "homeServices": {
-    "tag": "Our Services",
-    "title": "Comprehensive ENT Care",
-    "service1Title": "ENT Doctor for Children and Adults",
-    "service2Title": "Rhinosurgeon",
-    "service3Title": "Speech Therapist",
-    "learnMore": "Learn More",
-    "seeAll": "See All Services"
   },
   "aboutPage": {
     "heroTitle": "Otolor – Your Health Is Our Top Priority",
@@ -241,33 +197,34 @@
     "emptyStateDesc": "Select one of the categories above to view services"
   },
   "branches": {
-    "tag": "Find Us",
+    "tag": "Our Branches",
     "title": "Clinics Near You",
-    "subtitle": "Visit any of our convenient locations across the city",
-    "workingHours": "Mon-Sat: 08:00 - 20:00",
+    "subtitle": "Visit our conveniently located branches across the city",
+    "workingHours": "Mon-Sat: 08:00 - 14:00",
     "mainBranch": "Main",
+    "fullWorkingdays": "24/7 working hours",
     "getDirections": "Get Directions",
     "ctaText": "Can't find a branch near you?",
     "callUs": "Call Us",
     "branch1": {
-      "name": "Otolor Hospital (Main)",
-      "address": "Kashgar massif, 24A"
+      "name": "Otolor Centromed (Main)",
+      "address": "Yunusabad, Oqtepa Street, 49A"
     },
     "branch2": {
-      "name": "Otolor Medez",
-      "address": "Amir Temur Avenue, 1196"
+      "name": "Otolor Medas",
+      "address": "Amir Temur Shoh Street, 119B"
     },
     "branch3": {
       "name": "Otolor M-Clinic",
-      "address": "Taltana Street, 1"
+      "address": "Mirzo Ulugbek, Tantana Street, 1"
     },
     "branch4": {
-      "name": "Otolor Chilanzar",
-      "address": "Chilanzar district, Block 7"
+      "name": "Otolor Algoritm",
+      "address": "Al Xorazmiy neighborhood, 50"
     },
     "branch5": {
-      "name": "Otolor Sergeli",
-      "address": "Sergeli district, 12A"
+      "name": "Otolor Apnoe Center",
+      "address": "Qashqar neighborhood, 24A"
     }
   },
   "footer": {
@@ -284,8 +241,8 @@
     "branch2Name": "Otolor hospital (Medez klinika) - Amir Temur Avenue",
     "branch2Address": "1196",
     "branch3Name": "Otolor hospital (M clinic) — Taltana Street. 1",
-    "mainAddress": "Tashkent, Mustaқil Street, 24A",
-    "workingHours": "Mon-Fri: 08:00 AM to 06:00 PM",
+    "mainAddress": "Tashkent, Yunusabad, Oqtepa Street, 49A",
+    "workingHours": "24/7 working hours",
     "copyright": "© All rights reserved. {{year}}",
     "address": "Address",
     "phone": "Phone",
