@@ -10,23 +10,28 @@ const Footer = () => {
         information: [
             { label: t('nav.home'), href: '/' },
             { label: t('footer.ourServices'), href: '/services' },
-            { label: t('footer.patients'), href: '/patients' },
-            { label: t('footer.promotions'), href: '/promotions' },
             { label: t('nav.about'), href: '/about' },
-            { label: t('nav.blog'), href: '/blog' }
         ],
         branches: [
             {
-                name: t('footer.branch1Name'),
-                address: t('footer.branch1Address')
+                name: t('branches.branch1.name'),
+                address: t('branches.branch1.address')
             },
             {
-                name: t('footer.branch2Name'),
-                address: t('footer.branch2Address')
+                name: t('branches.branch2.name'),
+                address: t('branches.branch2.address')
             },
             {
-                name: t('footer.branch3Name'),
-                address: ''
+                name: t('branches.branch3.name'),
+                address: t('branches.branch3.address')
+            },
+            {
+                name: t('branches.branch4.name'),
+                address: t('branches.branch4.address')
+            },
+            {
+                name: t('branches.branch5.name'),
+                address: t('branches.branch5.address')
             }
         ]
     };
@@ -54,28 +59,28 @@ const Footer = () => {
                         </div>
                         <div className="mt-2.5 flex gap-3.75">
                             <a
-                                href="#"
+                                href="https://www.instagram.com/otolorhospital"
                                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-300 hover:-translate-y-0.75 hover:bg-white/20 md:h-10 md:w-10"
                                 aria-label="Instagram"
                             >
                                 <Instagram size={20} />
                             </a>
                             <a
-                                href="#"
+                                href="https://www.facebook.com/otoloruzb"
                                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-300 hover:-translate-y-0.75 hover:bg-white/20 md:h-10 md:w-10"
                                 aria-label="Facebook"
                             >
                                 <Facebook size={20} />
                             </a>
                             <a
-                                href="#"
+                                href="https://youtube.com/@otoloruzb?si=0pxm16WGtGW2LQY-"
                                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-300 hover:-translate-y-0.75 hover:bg-white/20 md:h-10 md:w-10"
                                 aria-label="YouTube"
                             >
                                 <Youtube size={20} />
                             </a>
                             <a
-                                href="#"
+                                href="https://t.me/otolorclub"
                                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-300 hover:-translate-y-0.75 hover:bg-white/20 md:h-10 md:w-10"
                                 aria-label="Telegram"
                             >
@@ -108,7 +113,7 @@ const Footer = () => {
                             {footerLinks.branches.map((branch, index) => (
                                 <li
                                     key={index}
-                                    className="border-b border-white/10 pb-5 last:border-b-0 last:pb-0"
+                                    className="border-b border-white/10 pb-1 last:border-b-0 last:pb-0"
                                 >
                                     <p className="m-0 mb-1.25 text-[13px] leading-normal text-white">{branch.name}</p>
                                     {branch.address && (

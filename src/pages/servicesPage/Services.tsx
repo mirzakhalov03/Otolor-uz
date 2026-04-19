@@ -1,38 +1,47 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { type IService } from './types/service.types';
 import Spinner from '../../components/spinner/Spinner';
-import { useService } from '@/mocks/uiApi';
+import { getCategories } from '@/api/services/categoryService';
+import { getServices } from '@/api/services/serviceService';
 import heroBg from '../../assets/images/otolor-hero-bg.png';
 
 const Services = () => {
     const { t } = useTranslation();
-    const { data, isLoading } = useService();
-
-    const apiServices: IService[] = useMemo(() => {
-        return (data as any)?.data?.services || [];
-    }, [data]);
-
-    const categories = useMemo(() => {
-        const cats = Array.from(new Set(apiServices.map(s => s.category))).filter(Boolean);
-        return cats.map(c => ({
-            id: c,
-            title: c,
-            description: '' 
-        }));
-    }, [apiServices]);
-
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const activeCategory = selectedCategory ?? categories[0]?.id ?? null;
+
+    const {
+        data: categories = [],
+        isLoading: isCategoriesLoading,
+    } = useQuery({
+        queryKey: ['public', 'categories'],
+        queryFn: getCategories,
+    });
+
+    const activeCategory = selectedCategory ?? categories[0]?._id ?? null;
+
+    const {
+        data: services = [],
+        isLoading: isServicesLoading,
+    } = useQuery({
+        queryKey: ['public', 'services', activeCategory],
+        queryFn: () => getServices(activeCategory || undefined),
+        enabled: !!activeCategory,
+    });
+
+    useEffect(() => {
+        if (!selectedCategory && categories.length > 0) {
+            setSelectedCategory(categories[0]._id);
+        }
+    }, [categories, selectedCategory]);
 
     const filteredServices = useMemo(() => {
-        return activeCategory
-            ? apiServices.filter(service => service.category === activeCategory)
-            : [];
-    }, [apiServices, activeCategory]);
+        if (!activeCategory) return [];
+        return services;
+    }, [services, activeCategory]);
 
-    if (isLoading) {
+    if (isCategoriesLoading) {
         return (
             <div
                 className='w-full min-h-[80vh] overflow-hidden rounded-b-[100px] bg-cover bg-center bg-no-repeat pb-16'
@@ -65,24 +74,23 @@ const Services = () => {
                         <div className='grid grid-cols-1 gap-4 md:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] md:gap-6'>
                             {categories.map((category) => (
                                 <div
-                                    key={category.id}
+                                    key={category._id}
                                     className={`relative flex cursor-pointer flex-col items-center rounded-2xl border-[3px] p-3 text-center shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                                        activeCategory === category.id
+                                        activeCategory === category._id
                                             ? 'border-[#1D6652] bg-linear-to-br from-[#0F3620]/5 to-white shadow-[0_8px_24px_rgba(29,102,82,0.2)]'
                                             : 'border-transparent bg-white hover:border-[#1D6652]/30'
                                     }`}
-                                    onClick={() => setSelectedCategory(category.id)}
+                                    onClick={() => setSelectedCategory(category._id)}
                                     role='button'
                                     tabIndex={0}
-                                    onKeyDown={(e) => e.key === 'Enter' && setSelectedCategory(category.id)}
+                                    onKeyDown={(e) => e.key === 'Enter' && setSelectedCategory(category._id)}
                                 >
-                                    {activeCategory === category.id && (
+                                    {activeCategory === category._id && (
                                         <div className='absolute right-3 top-3 text-[#0F3620]'>
                                             <CheckCircle size={24} />
                                         </div>
                                     )}
-                                    <h3 className='mb-2 text-xl font-bold text-gray-800'>{category.title}</h3>
-                                    <p className='text-sm leading-normal text-gray-600'>{category.description}</p>
+                                    <h3 className='text-xl font-bold text-gray-800'>{category.name}</h3>
                                 </div>
                             ))}
                         </div>
@@ -92,27 +100,37 @@ const Services = () => {
                     {activeCategory && (
                         <div className='w-full'>
                             <h2 className='mb-4 text-center text-xl font-semibold text-[#0F3620] md:mb-6 md:text-2xl'>
-                                {categories.find(c => c.id === activeCategory)?.title} {t('servicesPage.servicesTitle')}
+                                {categories.find(c => c._id === activeCategory)?.name} {t('servicesPage.servicesTitle')}
                             </h2>
                             <div className='overflow-hidden rounded-2xl bg-white shadow-lg'>
-                                <div className='grid grid-cols-[60px_1fr_120px] bg-linear-to-br from-[#1D6652] to-[#164C3E] text-sm font-semibold text-white md:grid-cols-[80px_1fr_200px] md:text-base'>
-                                    <div className='flex items-center p-4 text-sm md:p-5 md:text-base'>{t('servicesPage.tableNumber')}</div>
+                                <div className='grid grid-cols-[1fr_120px] bg-linear-to-br from-[#1D6652] to-[#164C3E] text-sm font-semibold text-white md:grid-cols-[1fr_200px] md:text-base'>
                                     <div className='flex items-center p-4 text-sm md:p-5 md:text-base'>{t('servicesPage.tableName')}</div>
                                     <div className='flex items-center p-4 text-sm md:p-5 md:text-base'>{t('servicesPage.tablePrice')}</div>
                                 </div>
                                 <div className='max-h-150 overflow-y-auto'>
-                                    {filteredServices.map((service, index) => (
+                                    {isServicesLoading && (
+                                        <div className='flex items-center justify-center p-8'>
+                                            <Spinner size='md' />
+                                        </div>
+                                    )}
+
+                                    {!isServicesLoading && filteredServices.map((service) => (
                                         <div
                                             key={service._id}
-                                            className='grid grid-cols-[60px_1fr_120px] border-b border-gray-200 transition-colors duration-200 last:border-b-0 hover:bg-[#1D6652]/3 md:grid-cols-[80px_1fr_200px]'
+                                            className='grid grid-cols-[1fr_120px] border-b border-gray-200 transition-colors duration-200 last:border-b-0 hover:bg-[#1D6652]/3 md:grid-cols-[1fr_200px]'
                                         >
-                                            <div className='flex items-center justify-center p-3 text-base font-semibold text-gray-600 md:p-4'>{index + 1}</div>
-                                            <div className='flex items-center p-3 text-sm font-medium text-gray-800 md:p-4 md:text-base'>{service.serviceName}</div>
+                                            <div className='flex items-center p-3 text-sm font-medium text-gray-800 md:p-4 md:text-base'>{service.title}</div>
                                             <div className='flex items-center justify-end p-3 text-base font-bold text-[#1D6652] md:p-4 md:text-lg'>
-                                                {service.price?.toLocaleString()} {t('servicesPage.currency')}
+                                                {typeof service.price === 'number' ? service.price.toLocaleString() : '—'} {t('servicesPage.currency')}
                                             </div>
                                         </div>
                                     ))}
+
+                                    {!isServicesLoading && filteredServices.length === 0 && (
+                                        <div className='px-6 py-10 text-center text-gray-600'>
+                                            {t('servicesPage.emptyStateDesc')}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

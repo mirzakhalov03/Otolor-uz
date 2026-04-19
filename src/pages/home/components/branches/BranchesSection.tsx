@@ -8,7 +8,8 @@ interface Branch {
     name: string;
     address: string;
     phone: string;
-    workingHours: string;
+    workingHours?: string;
+    fullWorkingdays?: string;
     mapUrl?: string;
     isMain?: boolean;
 }
@@ -43,37 +44,37 @@ const BranchesSection = () => {
             id: 1,
             name: t('branches.branch1.name', 'Otolor Hospital (Main)'),
             address: t('branches.branch1.address', 'Kashgar massif, 24A'),
-            phone: '+998 71 123 45 67',
-            workingHours: t('branches.workingHours', 'Mon-Sat: 08:00 - 20:00'),
+            phone: '+998 78 113 38 83',
+            fullWorkingdays: t(`branches.fullWorkingdays`, '24/7 ish vaqti'),
             isMain: true,
         },
         {
             id: 2,
-            name: t('branches.branch2.name', 'Otolor Medez'),
-            address: t('branches.branch2.address', 'Amir Temur Avenue, 1196'),
-            phone: '+998 71 234 56 78',
-            workingHours: t('branches.workingHours', 'Mon-Sat: 08:00 - 20:00'),
+            name: t('branches.branch2.name', 'Otolor Medas'),
+            address: t('branches.branch2.address', 'Amir Temur Avenue, 119B'),
+            phone: '+998 78 113 38 83',
+            fullWorkingdays: t(`branches.fullWorkingdays`, '24/7 ish vaqti'),
         },
         {
             id: 3,
             name: t('branches.branch3.name', 'Otolor M-Clinic'),
             address: t('branches.branch3.address', 'Taltana Street, 1'),
-            phone: '+998 71 345 67 89',
-            workingHours: t('branches.workingHours', 'Mon-Sat: 08:00 - 20:00'),
+            phone: '+998 78 113 38 83',
+            workingHours: t('branches.workingHours', 'Mon-Sat: 08:00 - 14:00'),
         },
         {
             id: 4,
-            name: t('branches.branch4.name', 'Otolor Chilanzar'),
-            address: t('branches.branch4.address', 'Chilanzar district, Block 7'),
-            phone: '+998 71 456 78 90',
-            workingHours: t('branches.workingHours', 'Mon-Sat: 08:00 - 20:00'),
+            name: t('branches.branch4.name', 'Otolor Algoritm'),
+            address: t('branches.branch4.address', 'Al Xorazmiy dahasi, 50'),
+            phone: '+998 78 113 38 83',
+            fullWorkingdays: t(`branches.fullWorkingdays`, '24/7 ish vaqti'),
         },
         {
             id: 5,
-            name: t('branches.branch5.name', 'Otolor Sergeli'),
-            address: t('branches.branch5.address', 'Sergeli district, 12A'),
-            phone: '+998 71 567 89 01',
-            workingHours: t('branches.workingHours', 'Mon-Sat: 08:00 - 20:00'),
+            name: t('branches.branch5.name', 'Otolor Apnoe Center'),
+            address: t('branches.branch5.address', 'Qashqar dahasi, 24A'),
+            phone: '+998 78 113 38 83',
+            fullWorkingdays: t(`branches.fullWorkingdays`, '24/7 ish vaqti'),
         },
     ];
 
@@ -161,10 +162,6 @@ const BranchesSection = () => {
                                         <PhoneIcon />
                                         <span>{branch.phone}</span>
                                     </div>
-                                    <div className="branch-card__detail">
-                                        <ClockIcon />
-                                        <span>{branch.workingHours}</span>
-                                    </div>
                                 </div>
 
                                 {/* Action Button */}
@@ -223,12 +220,6 @@ const AddressIcon = () => (
 const PhoneIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 012.43 8.326 13.019 13.019 0 012 5V3.5z" clipRule="evenodd" />
-    </svg>
-);
-
-const ClockIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
     </svg>
 );
 

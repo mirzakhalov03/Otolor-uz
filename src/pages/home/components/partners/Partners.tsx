@@ -1,5 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import partnersBg from '../../../../assets/images/otolor-hero-bg.png';
+import moscadaver from '../../../../assets/images/partners/moscadaver.png';
+import sokinUyqu from '../../../../assets/images/partners/sokinuyqu.jpg';
+import mclinic from '../../../../assets/images/partners/mclinic.png';
+import corelMed from '../../../../assets/images/partners/coralmed.jpg';
+import bolalarMilliyTib from '../../../../assets/images/partners/bolalarmilliytib.png';
+import interaccoustics from '../../../../assets/images/partners/interaccoustics.webp';
+import chammed from '../../../../assets/images/partners/chammed.jpg';
 
 interface Partner {
     name: string;
@@ -7,18 +14,15 @@ interface Partner {
 }
 
 const partners: Partner[] = [
-    { name: 'MosCadever' },
-    { name: 'SokinUyqu' },
-    { name: 'Mclinic' },
-    { name: 'Davoris' },
-    { name: 'CorelMed' },
-    { name: 'Bolalar Milliy Tib' },
-    { name: 'Men eshityapman' },
-    { name: 'Microtia' },
-    { name: 'Nuraton' },
-    { name: 'Interaccoustics' },
-    { name: 'Chammed' },
-    { name: 'Archamed' },
+    { name: 'MosCadever', logo: moscadaver },
+    { name: 'SokinUyqu', logo: sokinUyqu },
+    { name: 'Mclinic', logo: mclinic },
+    { name: 'DAVORIS' },
+    { name: 'CorelMed', logo: corelMed },
+    { name: 'Bolalar Milliy Tib', logo: bolalarMilliyTib },
+    { name: 'MICROTIA'},
+    { name: 'Interaccoustics', logo: interaccoustics },
+    { name: 'Chammed', logo: chammed },
 ];
 
 /**
@@ -44,15 +48,13 @@ const Partners = () => {
                 </div>
 
                 <div className="relative w-full overflow-hidden py-5">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-linear-to-r from-white to-transparent md:w-25 xl:w-37.5" />
-                    <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-linear-to-l from-white to-transparent md:w-25 xl:w-37.5" />
                     
                     <div className="flex w-max gap-4 motion-safe:animate-[partnersScroll_45s_linear_infinite] md:gap-6 xl:gap-8">
                         {duplicatedPartners.map((partner, index) => (
                             <div key={`${partner.name}-${index}`} className="flex shrink-0 items-center justify-center">
-                                <div className="flex h-12.5 w-25 items-center justify-center rounded-2xl border border-[rgba(229,231,235,0.5)] bg-[rgba(255,255,255,0.6)] px-3 py-2 shadow-[0_4px_16px_rgba(0,0,0,0.04)] backdrop-blur-[10px] md:h-17.5 md:w-35 md:px-4 md:py-3 xl:h-22.5 xl:w-45 xl:px-6 xl:py-5">
+                                <div className="flex h-12.5 w-25 items-center justify-center rounded-2xl bg-[rgb(255,255,255)] px-0 py-0 shadow-[0_4px_16px_rgba(0,0,0,0.04)] md:h-17.5 md:w-35 xl:h-22.5 xl:w-45">
                                     {partner.logo ? (
-                                        <img className='max-h-full max-w-full object-contain grayscale opacity-60' src={partner.logo} alt={partner.name} />
+                                        <img className='max-h-full max-w-full object-cover  opacity-60' src={partner.logo} alt={partner.name} />
                                     ) : (
                                         <span className="whitespace-nowrap text-xs font-medium tracking-[-0.01em] text-[#6b7280] md:text-base xl:text-lg">
                                             {partner.name}

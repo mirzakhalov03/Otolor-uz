@@ -115,7 +115,6 @@
     "ordinatura": "Ordinatura"
   },
   "hero": {
-    "tag": "PREMIUM LOR XIZMATI",
     "headlineAccent": "Otolor",
     "headlineRest": "Hayotdan bahra oling",
     "title": "OTOLOR",
@@ -125,10 +124,10 @@
     "bookAppointment": "Navbat olish",
     "ourServices": "Xizmatlarimiz",
     "learnMore": "Batafsil",
-    "stat1Value": "15+ Yil",
+    "stat1Value": "20+ Yil",
     "stat1Label": "Klinik tajriba",
-    "stat2Value": "12,000+",
-    "stat2Label": "Baxtli bemorlar",
+    "stat2Value": "20,000+",
+    "stat2Label": "Bemorlar ishonchi",
     "stat3Value": "Ilg'or",
     "stat3Label": "Germaniya texnologiyasi"
   },
@@ -149,9 +148,8 @@
     "subtitle": "Ajoyib tibbiy yordam ko'rsatish uchun yetakchi tibbiyot tashkilotlari bilan hamkorlik qilamiz."
   },
   "midSection": {
-    "tag": "Bizning asos",
-    "title": "Otolor ning Uch Ustuni",
-    "subtitle": "Sog'liqni saqlashda mukammallik, jamoamizning tajribasi va ta'lim orqali rivojlanish",
+    "tag": "Otolor asosi",
+    "title": "Bizning faoliyat yo'nalishlarimiz",
     "hospital": {
       "title": "Otolor Shifoxonasi",
       "description": "Keng qamrovli LOR xizmatlarini taqdim etuvchi zamonaviy tibbiyot muassasasi",
@@ -170,27 +168,6 @@
       "item2": "Tibbiy o'quv seminarlari",
       "item3": "Tadqiqot va innovatsiyalar"
     }
-  },
-  "homeAbout": {
-    "tag": "Klinikamiz haqida",
-    "title": "Biz haqimizda",
-    "description1": "Biz — yuqori malakali mutaxassislar jamoasi bo'lib, sifatli tibbiy xizmatlarni taqdim etamiz. Klinikamiz zamonaviy uskunalar bilan jihozlangan va ilg'or davolash usullaridan foydalanadi.",
-    "description2": "Ko'p yillik otolaringologiya tajribasiga ega bo'lib, biz odamlarga sog'lig'ini tiklash va hayot sifatini yaxshilashga yordam berishdan faxrlanamiz. Shifokorlarimiz doimiy ravishda malakasini oshiradi va tibbiyotdagi eng yangi yutuqlarni kuzatib boradi.",
-    "stat1Number": "15+",
-    "stat1Label": "Yillik tajriba",
-    "stat2Number": "10000+",
-    "stat2Label": "Baxtli bemorlar",
-    "stat3Number": "50+",
-    "stat3Label": "Mutaxassislar"
-  },
-  "homeServices": {
-    "tag": "Bizning xizmatlarimiz",
-    "title": "To'liq LOR xizmati",
-    "service1Title": "Kattalar va bolalar uchun LOR shifokor",
-    "service2Title": "Rinoxirurg",
-    "service3Title": "Logoped",
-    "learnMore": "Batafsil",
-    "seeAll": "Barcha xizmatlarni ko'rish"
   },
   "aboutPage": {
     "heroTitle": "Otolor – Salomatligingiz Bizning Ustuvor Vazifamiz",
@@ -240,51 +217,43 @@
     "emptyStateDesc": "Xizmatlarni ko'rish uchun yuqoridagi kategoriyalardan birini tanlang"
   },
   "branches": {
-    "tag": "Bizni toping",
+    "tag": "Bizning filiallarimiz",
     "title": "Sizga yaqin klinikalar",
     "subtitle": "Shahar bo'ylab qulay joylashgan filiallarimizdan tashrif buyuring",
-    "workingHours": "Du-Sha: 08:00 - 20:00",
+    "workingHours": "Du-Sha: 08:00 - 14:00",
     "mainBranch": "Asosiy",
+    "fullWorkingdays": "24/7 ish vaqti",
     "getDirections": "Yo'nalishni olish",
     "ctaText": "Sizga yaqin filial topa olmayapsizmi?",
     "callUs": "Bizga qo'ng'iroq qiling",
     "branch1": {
-      "name": "Otolor Hospital (Asosiy)",
-      "address": "Qashqar massivi, 24A"
+      "name": "Otolor Centromed (Asosiy)",
+      "address": "Yunusobod, Oqtepa ko'chasi, 49A"
     },
     "branch2": {
-      "name": "Otolor Medez",
-      "address": "Amir Temur shoh ko'chasi, 1196"
+      "name": "Otolor Medas",
+      "address": "Amir Temur shoh ko'chasi, 119B"
     },
     "branch3": {
       "name": "Otolor M-Clinic",
-      "address": "Taltana ko'chasi, 1"
+      "address": "Mirzo Ulug'bek, Tantana ko'chasi, 1"
     },
     "branch4": {
-      "name": "Otolor Chilanzar",
-      "address": "Chilonzor tumani, 7-mavze"
+      "name": "Otolor Algoritm",
+      "address": "Al Xorazmiy dahasi, 50"
     },
     "branch5": {
-      "name": "Otolor Sergeli",
-      "address": "Sergeli tumani, 12A"
+      "name": "Otolor Apnoe Center",
+      "address": "Qashqar dahasi, 24A"
     }
   },
   "footer": {
     "description": "Otolar - Quloq-Bogoq-Tomoq kasalliklari bo'yicha malakali shifokorlar.",
-    "quickLinks": "Tezkor havolalar",
-    "contactInfo": "Aloqa ma'lumotlari",
     "information": "Ma'lumot",
     "ourServices": "Bizning xizmatlar",
-    "patients": "Bemorlarga",
-    "promotions": "Aksiyalar",
     "branches": "Filiallar",
-    "branch1Name": "Otolor hospital (EMG) Ochilov Mirza-ulya Tuylabash",
-    "branch1Address": "Otolor hospital (CB) - Qashqar massivi, 24A",
-    "branch2Name": "Otolor hospital (Medez klinika) - Amir Temur ko'chasi",
-    "branch2Address": "1196",
-    "branch3Name": "Otolor hospital (M clinic) — Taltana ko'chasi. 1",
-    "mainAddress": "Toshkent sh., Mustaқil ko'chasi, 24A",
-    "workingHours": "Dush-Juma: 08:00 dan 18:00 gacha",
+    "mainAddress": "Toshkent sh., Yunusobod, Oqtepa ko'chasi, 49A",
+    "workingHours": "24/7 ish vaqti",
     "copyright": "© Barcha huquqlar himoyalangan. {{year}} yil",
     "address": "Manzil",
     "phone": "Telefon",

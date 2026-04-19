@@ -14,7 +14,7 @@ const Hero = () => {
   const stats = [
     {
       icon: <Clock3 size={24} strokeWidth={1.75} />,
-      value: t('hero.stat1Value', '15+ Years'),
+      value: t('hero.stat1Value', '20+ Years'),
       label: t('hero.stat1Label', 'Clinical Excellence')
     },
     {

@@ -26,12 +26,13 @@ const Navbar = () => {
   const academyDropdownItems = [
     { name: t('nav.courses'), to: "/courses", disabled: false },
     { name: t('nav.books'), to: "/books", disabled: true },
-    { name: t('nav.moscadaver'), to: "/moscadaver", disabled: true },
-    { name: t('nav.microtia'), to: "/microtia", disabled: true },
+    { name: t('nav.otolor-cadaver'), to: "https://otolor-cadaver.uz", disabled: true, external: true },
+    { name: t('nav.microtia'), to: "https://microtia.uz", disabled: true, external: true },
+    { name: t('nav.apnolog'), to: "https://apnolog.uz", disabled: true, external: true },
   ]
 
   const isAcademyActive = academyDropdownItems.some((item) => {
-    if (item.disabled) {
+    if (item.disabled || item.external) {
       return false
     }
 
@@ -121,14 +122,27 @@ const Navbar = () => {
                         <Lock size={14} className="nav-dropdown__lock" />
                       </span>
                     ) : (
-                      <NavLink
-                        key={item.name}
-                        to={item.to}
-                        className="nav-dropdown__item"
-                        onClick={() => setIsDesktopAcademyOpen(false)}
-                      >
-                        {item.name}
-                      </NavLink>
+                      item.external ? (
+                        <a
+                          key={item.name}
+                          href={item.to}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="nav-dropdown__item"
+                          onClick={() => setIsDesktopAcademyOpen(false)}
+                        >
+                          {item.name}
+                        </a>
+                      ) : (
+                        <NavLink
+                          key={item.name}
+                          to={item.to}
+                          className="nav-dropdown__item"
+                          onClick={() => setIsDesktopAcademyOpen(false)}
+                        >
+                          {item.name}
+                        </NavLink>
+                      )
                     )
                   ))}
                 </div>
@@ -197,17 +211,33 @@ const Navbar = () => {
                         <Lock size={14} className="navbar-mobile__dropdown-lock" />
                       </span>
                     ) : (
-                      <NavLink
-                        key={item.name}
-                        to={item.to}
-                        className="navbar-mobile__dropdown-item"
-                        onClick={() => {
-                          setIsMobileAcademyOpen(false)
-                          closeMobileMenu()
-                        }}
-                      >
-                        {item.name}
-                      </NavLink>
+                      item.external ? (
+                        <a
+                          key={item.name}
+                          href={item.to}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="navbar-mobile__dropdown-item"
+                          onClick={() => {
+                            setIsMobileAcademyOpen(false)
+                            closeMobileMenu()
+                          }}
+                        >
+                          {item.name}
+                        </a>
+                      ) : (
+                        <NavLink
+                          key={item.name}
+                          to={item.to}
+                          className="navbar-mobile__dropdown-item"
+                          onClick={() => {
+                            setIsMobileAcademyOpen(false)
+                            closeMobileMenu()
+                          }}
+                        >
+                          {item.name}
+                        </NavLink>
+                      )
                     )
                   ))}
                 </div>
