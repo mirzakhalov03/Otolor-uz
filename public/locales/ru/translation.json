@@ -57,6 +57,7 @@
     "doctors": "Врачи",
     "services": "Услуги",
     "appointments": "Записи",
+    "categories": "Категории",
     "blogs": "Блоги",
     "users": "Пользователи",
     "roles": "Роли и разрешения",
@@ -89,6 +90,7 @@
     "about": "О нас",
     "services": "Услуги",
     "doctors": "Врачи",
+    "management": "Управление",
     "appointments": "Записи",
     "contact": "Контакты",
     "makeAppointment": "Записаться",
@@ -375,6 +377,213 @@
       "messagePlaceholder": "Напишите ваш вопрос или запрос",
       "submitButton": "Отправить сообщение",
       "successMessage": "Ваше сообщение успешно отправлено."
+    }
+  },
+  "adminLogin": {
+    "title": "Панель администратора",
+    "subtitle": "Войдите, чтобы управлять клиникой",
+    "loginFailedTitle": "Ошибка входа",
+    "toasts": {
+      "welcomeBack": "С возвращением, администратор!"
+    },
+    "validation": {
+      "enterUsername": "Введите имя пользователя",
+      "enterPassword": "Введите пароль"
+    }
+  },
+  "adminAppointments": {
+    "title": "Управление записями",
+    "totalCount": "Всего записей: {{count}}",
+    "searchPlaceholder": "Поиск по имени, телефону или номеру",
+    "empty": "Записи не найдены",
+    "table": {
+      "orderNumber": "Номер",
+      "patient": "Пациент",
+      "age": "Возраст",
+      "phone": "Телефон",
+      "doctor": "Врач",
+      "date": "Дата",
+      "time": "Время",
+      "status": "Статус"
+    },
+    "status": {
+      "pending": "Ожидает",
+      "seen": "Принят",
+      "missed": "Пропущен"
+    },
+    "filters": {
+      "status": "Статус",
+      "doctor": "Врач",
+      "date": "По дате"
+    },
+    "actions": {
+      "markAsSeen": "Отметить как принят",
+      "markAsMissed": "Отметить как пропущен",
+      "deleteTitle": "Удалить запись",
+      "deleteDescription": "Вы уверены, что хотите удалить эту запись?"
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} из {{total}} записей"
+    },
+    "toasts": {
+      "statusUpdated": "Статус записи изменен на: {{status}}",
+      "updateStatusFailed": "Не удалось обновить статус",
+      "deleteSuccess": "Запись успешно удалена",
+      "deleteFailed": "Не удалось удалить запись"
+    }
+  },
+  "adminCategories": {
+    "title": "Управление категориями",
+    "addButton": "Добавить категорию",
+    "searchPlaceholder": "Поиск по названию или slug",
+    "empty": "Категории не найдены",
+    "table": {
+      "name": "Название",
+      "slug": "Slug",
+      "created": "Создано"
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} из {{total}} категорий"
+    },
+    "modal": {
+      "title": "Добавить новую категорию",
+      "create": "Создать"
+    },
+    "form": {
+      "nameLabel": "Название категории",
+      "namePlaceholder": "например: Хирургия",
+      "slugLabel": "Slug",
+      "slugPlaceholder": "например: surgery",
+      "validation": {
+        "nameRequired": "Название категории обязательно",
+        "nameMin": "Название должно быть не менее 2 символов",
+        "nameMax": "Название не должно превышать 120 символов",
+        "slugMin": "Slug должен быть не менее 2 символов",
+        "slugMax": "Slug не должен превышать 150 символов",
+        "slugPattern": "Используйте только строчные буквы, цифры и дефисы"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Категория успешно создана",
+      "createFailed": "Не удалось создать категорию"
+    }
+  },
+  "adminServices": {
+    "title": "Управление услугами",
+    "addButton": "Добавить услугу",
+    "filterByCategory": "Фильтр по категории",
+    "searchPlaceholder": "Поиск по названию, описанию или категории",
+    "empty": "Услуги не найдены",
+    "currency": "сум",
+    "table": {
+      "title": "Название",
+      "category": "Категория",
+      "description": "Описание",
+      "price": "Цена",
+      "created": "Создано"
+    },
+    "actions": {
+      "deleteTitle": "Удалить услугу",
+      "deleteDescription": "Вы уверены? Это действие нельзя отменить."
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} из {{total}} услуг"
+    },
+    "modal": {
+      "addTitle": "Добавить новую услугу",
+      "editTitle": "Редактировать услугу",
+      "create": "Создать",
+      "update": "Обновить"
+    },
+    "form": {
+      "titleLabel": "Название услуги",
+      "titlePlaceholder": "например: Отбеливание зубов",
+      "categoryLabel": "Категория",
+      "categoryPlaceholder": "Выберите категорию",
+      "descriptionLabel": "Описание",
+      "descriptionPlaceholder": "Необязательное описание",
+      "priceLabel": "Цена (сум)",
+      "pricePlaceholder": "Необязательная цена",
+      "validation": {
+        "titleRequired": "Название услуги обязательно",
+        "titleMin": "Название должно быть не менее 2 символов",
+        "titleMax": "Название не должно превышать 150 символов",
+        "categoryRequired": "Категория обязательна",
+        "descriptionMax": "Описание не должно превышать 2000 символов",
+        "priceMin": "Цена не может быть отрицательной"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Услуга успешно создана",
+      "updateSuccess": "Услуга успешно обновлена",
+      "deleteSuccess": "Услуга успешно удалена",
+      "deleteFailed": "Не удалось удалить услугу",
+      "saveFailed": "Не удалось сохранить услугу"
+    }
+  },
+  "adminDoctors": {
+    "title": "Управление врачами",
+    "addButton": "Добавить врача",
+    "searchPlaceholder": "Поиск по имени или специализации",
+    "empty": "Врачи не найдены",
+    "days": {
+      "0": "Воскресенье",
+      "1": "Понедельник",
+      "2": "Вторник",
+      "3": "Среда",
+      "4": "Четверг",
+      "5": "Пятница",
+      "6": "Суббота"
+    },
+    "table": {
+      "name": "Имя",
+      "specialization": "Специализация",
+      "upcomingAvailability": "Ближайшая доступность",
+      "noSchedule": "График не задан",
+      "noUpcoming": "Нет ближайшей доступности"
+    },
+    "actions": {
+      "deleteTitle": "Удалить врача",
+      "deleteDescription": "Вы уверены? Это действие нельзя отменить."
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} из {{total}} врачей"
+    },
+    "modal": {
+      "addTitle": "Добавить нового врача",
+      "editTitle": "Редактировать врача",
+      "create": "Создать",
+      "update": "Обновить"
+    },
+    "form": {
+      "avatarLabel": "Фото врача",
+      "selectImage": "Выбрать изображение",
+      "avatarHelp": "Загрузите изображение JPEG, PNG или WEBP (до 5 МБ). Файл отправляется в S3 при сохранении.",
+      "nameLabel": "Имя врача",
+      "namePlaceholder": "например: Dr. Sardor Karimov",
+      "specializationLabel": "Специализация",
+      "specializationPlaceholder": "например: Стоматолог, Ортодонт",
+      "availabilityTitle": "Доступность - ближайшие 7 дней",
+      "availabilityHint": "Отметьте дни, когда врач принимает. По умолчанию воскресенье выходной.",
+      "timeStart": "Начало",
+      "timeEnd": "Конец",
+      "dayOff": "Выходной",
+      "validation": {
+        "nameRequired": "Имя врача обязательно",
+        "nameMin": "Имя должно быть не менее 2 символов",
+        "nameMax": "Имя не должно превышать 100 символов",
+        "specializationMax": "Специализация не должна превышать 100 символов"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Врач успешно создан",
+      "updateSuccess": "Врач успешно обновлен",
+      "deleteSuccess": "Врач успешно удален",
+      "deleteFailed": "Не удалось удалить врача",
+      "saveFailed": "Не удалось сохранить врача",
+      "enableOneDay": "Укажите хотя бы один день с временным интервалом",
+      "imageTypeError": "Разрешены только изображения JPG, PNG и WEBP",
+      "imageSizeError": "Размер изображения должен быть меньше 5 МБ"
     }
   },
   "appointments": {

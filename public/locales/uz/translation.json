@@ -62,6 +62,7 @@
     "doctors": "Shifokorlar",
     "services": "Xizmatlar",
     "appointments": "Uchrashuvlar",
+    "categories": "Kategoriyalar",
     "blogs": "Bloglar",
     "users": "Foydalanuvchilar",
     "roles": "Rollar va Ruxsatlar",
@@ -102,6 +103,7 @@
     "home": "Bosh sahifa",
     "about": "Biz haqimizda",
     "services": "Xizmatlar",
+    "management": "Boshqaruv",
     "doctors": "Shifokorlar",
     "appointments": "Uchrashuvlar",
     "contact": "Aloqa",
@@ -376,6 +378,213 @@
       "messagePlaceholder": "Savol yoki so'rovingizni yozing",
       "submitButton": "Xabar yuborish",
       "successMessage": "Xabaringiz muvaffaqiyatli yuborildi."
+    }
+  },
+  "adminLogin": {
+    "title": "Admin paneli",
+    "subtitle": "Klinikani boshqarish uchun tizimga kiring",
+    "loginFailedTitle": "Kirish amalga oshmadi",
+    "toasts": {
+      "welcomeBack": "Xush kelibsiz, admin!"
+    },
+    "validation": {
+      "enterUsername": "Foydalanuvchi nomini kiriting",
+      "enterPassword": "Parolni kiriting"
+    }
+  },
+  "adminAppointments": {
+    "title": "Uchrashuvlarni boshqarish",
+    "totalCount": "Jami {{count}} ta uchrashuv",
+    "searchPlaceholder": "Ism, telefon yoki buyurtma raqami bo'yicha qidirish",
+    "empty": "Uchrashuvlar topilmadi",
+    "table": {
+      "orderNumber": "Buyurtma raqami",
+      "patient": "Bemor",
+      "age": "Yosh",
+      "phone": "Telefon",
+      "doctor": "Shifokor",
+      "date": "Sana",
+      "time": "Vaqt",
+      "status": "Holat"
+    },
+    "status": {
+      "pending": "Kutilmoqda",
+      "seen": "Ko'rildi",
+      "missed": "O'tkazib yuborildi"
+    },
+    "filters": {
+      "status": "Holat",
+      "doctor": "Shifokor",
+      "date": "Sana bo'yicha"
+    },
+    "actions": {
+      "markAsSeen": "Ko'rildi deb belgilash",
+      "markAsMissed": "O'tkazib yuborildi deb belgilash",
+      "deleteTitle": "Uchrashuvni o'chirish",
+      "deleteDescription": "Ushbu uchrashuvni rostdan ham o'chirmoqchimisiz?"
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} / {{total}} ta uchrashuv"
+    },
+    "toasts": {
+      "statusUpdated": "Uchrashuv holati: {{status}}",
+      "updateStatusFailed": "Holatni yangilashda xatolik yuz berdi",
+      "deleteSuccess": "Uchrashuv muvaffaqiyatli o'chirildi",
+      "deleteFailed": "Uchrashuvni o'chirishda xatolik yuz berdi"
+    }
+  },
+  "adminCategories": {
+    "title": "Kategoriyalarni boshqarish",
+    "addButton": "Kategoriya qo'shish",
+    "searchPlaceholder": "Nomi yoki slug bo'yicha qidirish",
+    "empty": "Kategoriyalar topilmadi",
+    "table": {
+      "name": "Nomi",
+      "slug": "Slug",
+      "created": "Yaratilgan"
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} / {{total}} ta kategoriya"
+    },
+    "modal": {
+      "title": "Yangi kategoriya qo'shish",
+      "create": "Yaratish"
+    },
+    "form": {
+      "nameLabel": "Kategoriya nomi",
+      "namePlaceholder": "masalan: Jarrohlik",
+      "slugLabel": "Slug",
+      "slugPlaceholder": "masalan: jarrohlik",
+      "validation": {
+        "nameRequired": "Kategoriya nomi majburiy",
+        "nameMin": "Nom kamida 2 ta belgidan iborat bo'lishi kerak",
+        "nameMax": "Nom 120 belgidan oshmasligi kerak",
+        "slugMin": "Slug kamida 2 ta belgidan iborat bo'lishi kerak",
+        "slugMax": "Slug 150 belgidan oshmasligi kerak",
+        "slugPattern": "Faqat kichik harflar, raqamlar va defisdan foydalaning"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Kategoriya muvaffaqiyatli yaratildi",
+      "createFailed": "Kategoriyani yaratishda xatolik yuz berdi"
+    }
+  },
+  "adminServices": {
+    "title": "Xizmatlarni boshqarish",
+    "addButton": "Xizmat qo'shish",
+    "filterByCategory": "Kategoriya bo'yicha filtr",
+    "searchPlaceholder": "Nomi, tavsifi yoki kategoriya bo'yicha qidirish",
+    "empty": "Xizmatlar topilmadi",
+    "currency": "so'm",
+    "table": {
+      "title": "Nomi",
+      "category": "Kategoriya",
+      "description": "Tavsif",
+      "price": "Narx",
+      "created": "Yaratilgan"
+    },
+    "actions": {
+      "deleteTitle": "Xizmatni o'chirish",
+      "deleteDescription": "Ishonchingiz komilmi? Bu amalni ortga qaytarib bo'lmaydi."
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} / {{total}} ta xizmat"
+    },
+    "modal": {
+      "addTitle": "Yangi xizmat qo'shish",
+      "editTitle": "Xizmatni tahrirlash",
+      "create": "Yaratish",
+      "update": "Yangilash"
+    },
+    "form": {
+      "titleLabel": "Xizmat nomi",
+      "titlePlaceholder": "masalan: Oqartirish xizmati",
+      "categoryLabel": "Kategoriya",
+      "categoryPlaceholder": "Kategoriyani tanlang",
+      "descriptionLabel": "Tavsif",
+      "descriptionPlaceholder": "Ixtiyoriy tavsif",
+      "priceLabel": "Narx (so'm)",
+      "pricePlaceholder": "Ixtiyoriy narx",
+      "validation": {
+        "titleRequired": "Xizmat nomi majburiy",
+        "titleMin": "Nom kamida 2 ta belgidan iborat bo'lishi kerak",
+        "titleMax": "Nom 150 belgidan oshmasligi kerak",
+        "categoryRequired": "Kategoriya majburiy",
+        "descriptionMax": "Tavsif 2000 belgidan oshmasligi kerak",
+        "priceMin": "Narx manfiy bo'lmasligi kerak"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Xizmat muvaffaqiyatli yaratildi",
+      "updateSuccess": "Xizmat muvaffaqiyatli yangilandi",
+      "deleteSuccess": "Xizmat muvaffaqiyatli o'chirildi",
+      "deleteFailed": "Xizmatni o'chirishda xatolik yuz berdi",
+      "saveFailed": "Xizmatni saqlashda xatolik yuz berdi"
+    }
+  },
+  "adminDoctors": {
+    "title": "Shifokorlarni boshqarish",
+    "addButton": "Shifokor qo'shish",
+    "searchPlaceholder": "Ism yoki mutaxassislik bo'yicha qidirish",
+    "empty": "Shifokorlar topilmadi",
+    "days": {
+      "0": "Yakshanba",
+      "1": "Dushanba",
+      "2": "Seshanba",
+      "3": "Chorshanba",
+      "4": "Payshanba",
+      "5": "Juma",
+      "6": "Shanba"
+    },
+    "table": {
+      "name": "Ism",
+      "specialization": "Mutaxassislik",
+      "upcomingAvailability": "Yaqin kunlardagi band bo'lmagan vaqt",
+      "noSchedule": "Jadval kiritilmagan",
+      "noUpcoming": "Yaqin vaqtlar mavjud emas"
+    },
+    "actions": {
+      "deleteTitle": "Shifokorni o'chirish",
+      "deleteDescription": "Ishonchingiz komilmi? Bu amalni ortga qaytarib bo'lmaydi."
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} / {{total}} ta shifokor"
+    },
+    "modal": {
+      "addTitle": "Yangi shifokor qo'shish",
+      "editTitle": "Shifokorni tahrirlash",
+      "create": "Yaratish",
+      "update": "Yangilash"
+    },
+    "form": {
+      "avatarLabel": "Shifokor rasmi",
+      "selectImage": "Rasmni tanlash",
+      "avatarHelp": "JPEG, PNG yoki WEBP rasm yuklang (5 MB gacha). Rasm saqlashda S3 ga yuboriladi.",
+      "nameLabel": "Shifokor ismi",
+      "namePlaceholder": "masalan: Dr. Sardor Karimov",
+      "specializationLabel": "Mutaxassislik",
+      "specializationPlaceholder": "masalan: Stomatolog, Ortodont",
+      "availabilityTitle": "Qabul vaqti - keyingi 7 kun",
+      "availabilityHint": "Shifokor qabul qiladigan kunlarni belgilang. Yakshanba sukut bo'yicha dam olish kuni.",
+      "timeStart": "Boshlanish",
+      "timeEnd": "Tugash",
+      "dayOff": "Dam olish",
+      "validation": {
+        "nameRequired": "Shifokor ismi majburiy",
+        "nameMin": "Ism kamida 2 ta belgidan iborat bo'lishi kerak",
+        "nameMax": "Ism 100 belgidan oshmasligi kerak",
+        "specializationMax": "Mutaxassislik 100 belgidan oshmasligi kerak"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Shifokor muvaffaqiyatli yaratildi",
+      "updateSuccess": "Shifokor muvaffaqiyatli yangilandi",
+      "deleteSuccess": "Shifokor muvaffaqiyatli o'chirildi",
+      "deleteFailed": "Shifokorni o'chirishda xatolik yuz berdi",
+      "saveFailed": "Shifokorni saqlashda xatolik yuz berdi",
+      "enableOneDay": "Kamida bitta kun va vaqt oralig'ini belgilang",
+      "imageTypeError": "Faqat JPG, PNG va WEBP rasmlarga ruxsat beriladi",
+      "imageSizeError": "Rasm hajmi 5 MB dan kichik bo'lishi kerak"
     }
   },
   "appointments": {

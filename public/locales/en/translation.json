@@ -62,6 +62,7 @@
     "doctors": "Doctors",
     "services": "Services",
     "appointments": "Appointments",
+    "categories": "Categories",
     "blogs": "Blogs",
     "users": "Users",
     "roles": "Roles & Permissions",
@@ -102,6 +103,7 @@
     "home": "Home",
     "about": "About",
     "services": "Services",
+    "management": "Management",
     "doctors": "Doctors",
     "appointments": "Appointments",
     "contact": "Contact",
@@ -389,6 +391,213 @@
       "messagePlaceholder": "Write your question or request",
       "submitButton": "Send Message",
       "successMessage": "Your message has been sent successfully."
+    }
+  },
+  "adminLogin": {
+    "title": "Admin Panel",
+    "subtitle": "Sign in to manage your clinic",
+    "loginFailedTitle": "Login Failed",
+    "toasts": {
+      "welcomeBack": "Welcome back, Admin!"
+    },
+    "validation": {
+      "enterUsername": "Please enter your username",
+      "enterPassword": "Please enter your password"
+    }
+  },
+  "adminAppointments": {
+    "title": "Appointments Management",
+    "totalCount": "{{count}} total appointments",
+    "searchPlaceholder": "Search by name, phone, or order #",
+    "empty": "No appointments found",
+    "table": {
+      "orderNumber": "Order #",
+      "patient": "Patient",
+      "age": "Age",
+      "phone": "Phone",
+      "doctor": "Doctor",
+      "date": "Date",
+      "time": "Time",
+      "status": "Status"
+    },
+    "status": {
+      "pending": "Pending",
+      "seen": "Seen",
+      "missed": "Missed"
+    },
+    "filters": {
+      "status": "Status",
+      "doctor": "Doctor",
+      "date": "Filter by date"
+    },
+    "actions": {
+      "markAsSeen": "Mark as Seen",
+      "markAsMissed": "Mark as Missed",
+      "deleteTitle": "Delete appointment",
+      "deleteDescription": "Are you sure you want to delete this appointment?"
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} of {{total}} appointments"
+    },
+    "toasts": {
+      "statusUpdated": "Appointment marked as {{status}}",
+      "updateStatusFailed": "Failed to update status",
+      "deleteSuccess": "Appointment deleted successfully",
+      "deleteFailed": "Failed to delete appointment"
+    }
+  },
+  "adminCategories": {
+    "title": "Categories Management",
+    "addButton": "Add Category",
+    "searchPlaceholder": "Search by name or slug...",
+    "empty": "No categories found",
+    "table": {
+      "name": "Name",
+      "slug": "Slug",
+      "created": "Created"
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} of {{total}} categories"
+    },
+    "modal": {
+      "title": "Add New Category",
+      "create": "Create"
+    },
+    "form": {
+      "nameLabel": "Category Name",
+      "namePlaceholder": "e.g. Surgery",
+      "slugLabel": "Slug",
+      "slugPlaceholder": "e.g. surgery",
+      "validation": {
+        "nameRequired": "Category name is required",
+        "nameMin": "Name must be at least 2 characters",
+        "nameMax": "Name cannot exceed 120 characters",
+        "slugMin": "Slug must be at least 2 characters",
+        "slugMax": "Slug cannot exceed 150 characters",
+        "slugPattern": "Use lowercase letters, numbers, and hyphens only"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Category created successfully",
+      "createFailed": "Failed to create category"
+    }
+  },
+  "adminServices": {
+    "title": "Services Management",
+    "addButton": "Add Service",
+    "filterByCategory": "Filter by category",
+    "searchPlaceholder": "Search title, description, category...",
+    "empty": "No services found",
+    "currency": "UZS",
+    "table": {
+      "title": "Title",
+      "category": "Category",
+      "description": "Description",
+      "price": "Price",
+      "created": "Created"
+    },
+    "actions": {
+      "deleteTitle": "Delete service",
+      "deleteDescription": "Are you sure? This cannot be undone."
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} of {{total}} services"
+    },
+    "modal": {
+      "addTitle": "Add New Service",
+      "editTitle": "Edit Service",
+      "create": "Create",
+      "update": "Update"
+    },
+    "form": {
+      "titleLabel": "Service Title",
+      "titlePlaceholder": "e.g. Teeth Whitening",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Optional description",
+      "priceLabel": "Price (UZS)",
+      "pricePlaceholder": "Optional price",
+      "validation": {
+        "titleRequired": "Service title is required",
+        "titleMin": "Title must be at least 2 characters",
+        "titleMax": "Title cannot exceed 150 characters",
+        "categoryRequired": "Category is required",
+        "descriptionMax": "Description cannot exceed 2000 characters",
+        "priceMin": "Price must be non-negative"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Service created successfully",
+      "updateSuccess": "Service updated successfully",
+      "deleteSuccess": "Service deleted successfully",
+      "deleteFailed": "Failed to delete service",
+      "saveFailed": "Failed to save service"
+    }
+  },
+  "adminDoctors": {
+    "title": "Doctors Management",
+    "addButton": "Add Doctor",
+    "searchPlaceholder": "Search by name or specialization...",
+    "empty": "No doctors found",
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "table": {
+      "name": "Name",
+      "specialization": "Specialization",
+      "upcomingAvailability": "Upcoming Availability",
+      "noSchedule": "No schedule set",
+      "noUpcoming": "No upcoming availability"
+    },
+    "actions": {
+      "deleteTitle": "Delete doctor",
+      "deleteDescription": "Are you sure? This cannot be undone."
+    },
+    "pagination": {
+      "showTotal": "{{from}}-{{to}} of {{total}} doctors"
+    },
+    "modal": {
+      "addTitle": "Add New Doctor",
+      "editTitle": "Edit Doctor",
+      "create": "Create",
+      "update": "Update"
+    },
+    "form": {
+      "avatarLabel": "Doctor Avatar",
+      "selectImage": "Select Image",
+      "avatarHelp": "Upload JPEG, PNG, or WEBP image (max 5MB). Image is uploaded to S3 on save.",
+      "nameLabel": "Doctor Name",
+      "namePlaceholder": "e.g. Dr. Sardor Karimov",
+      "specializationLabel": "Specialization",
+      "specializationPlaceholder": "e.g. Dentist, Orthodontist",
+      "availabilityTitle": "Availability - Next 7 Days",
+      "availabilityHint": "Check the days this doctor will be available. Sundays are off by default.",
+      "timeStart": "Start",
+      "timeEnd": "End",
+      "dayOff": "Day off",
+      "validation": {
+        "nameRequired": "Doctor name is required",
+        "nameMin": "Name must be at least 2 characters",
+        "nameMax": "Name cannot exceed 100 characters",
+        "specializationMax": "Specialization cannot exceed 100 characters"
+      }
+    },
+    "toasts": {
+      "createSuccess": "Doctor created successfully",
+      "updateSuccess": "Doctor updated successfully",
+      "deleteSuccess": "Doctor deleted successfully",
+      "deleteFailed": "Failed to delete doctor",
+      "saveFailed": "Failed to save doctor",
+      "enableOneDay": "Please enable at least one day with a time range",
+      "imageTypeError": "Only JPG, PNG, and WEBP images are allowed",
+      "imageSizeError": "Image must be smaller than 5MB"
     }
   },
   "appointments": {

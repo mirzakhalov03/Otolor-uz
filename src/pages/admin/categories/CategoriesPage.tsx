@@ -11,16 +11,19 @@ import {
   Typography,
   Empty,
   Tag,
+  Grid,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { PlusOutlined, SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { Category } from '@/api/types/catalog.types';
 import { useAdminCategories, useCreateCategory } from '@/api/query/useAdminQueries';
+import { useTranslation } from 'react-i18next';
 import './CategoriesPage.scss';
 
 const { Search } = Input;
 const { Title } = Typography;
+const { useBreakpoint } = Grid;
 
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (
@@ -35,6 +38,9 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
 };
 
 const CategoriesPage: React.FC = () => {
+  const { t } = useTranslation();
+  const screens = useBreakpoint();
+  const isMobile = !screens.md;
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -63,36 +69,52 @@ const CategoriesPage: React.FC = () => {
         name: values.name,
         slug: values.slug || undefined,
       });
-      message.success('Category created successfully');
+      message.success(t('adminCategories.toasts.createSuccess'));
       setModalOpen(false);
       form.resetFields();
     } catch (error) {
-      const msg = getErrorMessage(error, 'Failed to create category');
+      const msg = getErrorMessage(error, t('adminCategories.toasts.createFailed'));
       message.error(msg);
     }
   };
 
   const columns: ColumnsType<Category> = [
     {
-      title: 'Name',
+      title: t('adminCategories.table.name'),
       dataIndex: 'name',
       key: 'name',
       width: 280,
       render: (name: string) => <span className="category-name">{name}</span>,
     },
     {
-      title: 'Slug',
+      title: t('adminCategories.table.slug'),
       dataIndex: 'slug',
       key: 'slug',
       width: 240,
       render: (slug?: string) => (slug ? <Tag color="geekblue">{slug}</Tag> : <Tag>—</Tag>),
     },
     {
-      title: 'Created',
+      title: t('adminCategories.table.created'),
       dataIndex: 'createdAt',
       key: 'createdAt',
       width: 200,
       render: (value: string) => dayjs(value).format('MMM DD, YYYY HH:mm'),
+    },
+  ];
+
+  const mobileColumns: ColumnsType<Category> = [
+    {
+      title: t('adminCategories.table.name'),
+      key: 'categoryMobile',
+      render: (_, record) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontWeight: 700, color: '#1a1a2e' }}>{record.name}</div>
+          <div>
+            {record.slug ? <Tag color="geekblue">{record.slug}</Tag> : <Tag>—</Tag>}
+          </div>
+          <div style={{ fontSize: 12, color: '#8c8c8c' }}>{dayjs(record.createdAt).format('MMM DD, YYYY HH:mm')}</div>
+        </div>
+      ),
     },
   ];
 
@@ -102,13 +124,13 @@ const CategoriesPage: React.FC = () => {
         <div className="categories-page__header">
           <div className="categories-page__header-left">
             <Title level={4} style={{ margin: 0 }}>
-              Categories Management
+              {t('adminCategories.title')}
             </Title>
           </div>
           <div className="categories-page__header-right">
             <Space size="middle">
               <Search
-                placeholder="Search by name or slug..."
+                placeholder={t('adminCategories.searchPlaceholder')}
                 allowClear
                 onSearch={setSearch}
                 onChange={(e) => setSearch(e.target.value)}
@@ -118,31 +140,36 @@ const CategoriesPage: React.FC = () => {
               />
               <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={isLoading} />
               <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalOpen(true)}>
-                Add Category
+                {t('adminCategories.addButton')}
               </Button>
             </Space>
           </div>
         </div>
 
         <Table<Category>
-          columns={columns}
+          columns={isMobile ? mobileColumns : columns}
           dataSource={filteredData}
           rowKey="_id"
           loading={isLoading || createMutation.isPending}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} categories`,
+            showTotal: (total, range) =>
+              t('adminCategories.pagination.showTotal', {
+                from: range[0],
+                to: range[1],
+                total,
+              }),
             pageSizeOptions: ['10', '20', '50'],
           }}
           locale={{
-            emptyText: <Empty description="No categories found" image={Empty.PRESENTED_IMAGE_SIMPLE} />,
+            emptyText: <Empty description={t('adminCategories.empty')} image={Empty.PRESENTED_IMAGE_SIMPLE} />,
           }}
         />
       </Card>
 
       <Modal
-        title="Add New Category"
+        title={t('adminCategories.modal.title')}
         open={modalOpen}
         onCancel={() => {
           setModalOpen(false);
@@ -150,35 +177,35 @@ const CategoriesPage: React.FC = () => {
         }}
         onOk={handleSubmit}
         confirmLoading={createMutation.isPending}
-        okText="Create"
+        okText={t('adminCategories.modal.create')}
         destroyOnClose
       >
         <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
           <Form.Item
             name="name"
-            label="Category Name"
+            label={t('adminCategories.form.nameLabel')}
             rules={[
-              { required: true, message: 'Category name is required' },
-              { min: 2, message: 'Name must be at least 2 characters' },
-              { max: 120, message: 'Name cannot exceed 120 characters' },
+              { required: true, message: t('adminCategories.form.validation.nameRequired') },
+              { min: 2, message: t('adminCategories.form.validation.nameMin') },
+              { max: 120, message: t('adminCategories.form.validation.nameMax') },
             ]}
           >
-            <Input placeholder="e.g. Surgery" />
+            <Input placeholder={t('adminCategories.form.namePlaceholder')} />
           </Form.Item>
 
           <Form.Item
             name="slug"
-            label="Slug"
+            label={t('adminCategories.form.slugLabel')}
             rules={[
-              { min: 2, message: 'Slug must be at least 2 characters' },
-              { max: 150, message: 'Slug cannot exceed 150 characters' },
+              { min: 2, message: t('adminCategories.form.validation.slugMin') },
+              { max: 150, message: t('adminCategories.form.validation.slugMax') },
               {
                 pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-                message: 'Use lowercase letters, numbers, and hyphens only',
+                message: t('adminCategories.form.validation.slugPattern'),
               },
             ]}
           >
-            <Input placeholder="e.g. surgery" />
+            <Input placeholder={t('adminCategories.form.slugPlaceholder')} />
           </Form.Item>
         </Form>
       </Modal>

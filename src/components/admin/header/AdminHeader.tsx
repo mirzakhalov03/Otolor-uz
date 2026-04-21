@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './AdminHeader.scss';
 
 const { Header } = Layout;
@@ -25,6 +26,7 @@ interface AdminHeaderProps {
 const AdminHeader: React.FC<AdminHeaderProps> = ({ collapsed, onToggle }) => {
   const { token } = theme.useToken();
   const { logout } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -44,8 +46,11 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ collapsed, onToggle }) => {
           onClick={onToggle}
           className="admin-header__toggle"
         />
+        <div className="admin-header__brand-mobile" aria-hidden="true">
+          OT
+        </div>
         <Text strong className="admin-header__title">
-          Otolor Admin
+          {t('admin.panel')}
         </Text>
       </div>
 
@@ -57,7 +62,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ collapsed, onToggle }) => {
           className="admin-header__logout-btn"
           danger
         >
-          Logout
+          {t('auth.logout')}
         </Button>
       </div>
     </Header>

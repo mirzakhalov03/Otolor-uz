@@ -14,7 +14,7 @@ const TOKEN_KEY = 'access_token';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => { success: boolean; message: string };
+  login: (username: string, password: string) => { success: boolean; messageKey: string };
   logout: () => void;
 }
 
@@ -42,9 +42,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       localStorage.setItem(TOKEN_KEY, ACCESS_TOKEN);
       setIsAuthenticated(true);
-      return { success: true, message: 'Login successful' };
+      return { success: true, messageKey: 'auth.loginSuccess' };
     }
-    return { success: false, message: 'Invalid username or password' };
+    return { success: false, messageKey: 'auth.invalidCredentials' };
   }, []);
 
   const logout = useCallback(() => {

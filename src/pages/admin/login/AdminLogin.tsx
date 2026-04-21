@@ -6,8 +6,10 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from '@/components/languageSelector/LanguageSelector';
 import './AdminLogin.scss';
 
 const { Title, Text } = Typography;
@@ -22,6 +24,7 @@ const AdminLogin: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -35,11 +38,11 @@ const AdminLogin: React.FC = () => {
     const result = login(values.username, values.password);
 
     if (result.success) {
-      message.success('Welcome back, Admin!');
+      message.success(t('adminLogin.toasts.welcomeBack'));
       const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/admins-otolor';
       navigate(from, { replace: true });
     } else {
-      setError(result.message);
+      setError(t(result.messageKey));
     }
 
     setLoading(false);
@@ -47,6 +50,9 @@ const AdminLogin: React.FC = () => {
 
   return (
     <div className="admin-login">
+      <div className="admin-login__language-selector">
+        <LanguageSelector type="text" showLabel />
+      </div>
       <div className="admin-login__container">
         <Card className="admin-login__card">
           <div className="admin-login__header">
@@ -54,16 +60,16 @@ const AdminLogin: React.FC = () => {
               <span className="admin-login__logo-text">Otolor</span>
             </div>
             <Title level={3} className="admin-login__title">
-              Admin Panel
+              {t('adminLogin.title')}
             </Title>
             <Text type="secondary" className="admin-login__subtitle">
-              Sign in to manage your clinic
+              {t('adminLogin.subtitle')}
             </Text>
           </div>
 
           {error && (
             <Alert
-              message="Login Failed"
+              message={t('adminLogin.loginFailedTitle')}
               description={error}
               type="error"
               showIcon
@@ -83,24 +89,24 @@ const AdminLogin: React.FC = () => {
           >
             <Form.Item
               name="username"
-              label="Username"
-              rules={[{ required: true, message: 'Please enter your username' }]}
+              label={t('auth.username')}
+              rules={[{ required: true, message: t('adminLogin.validation.enterUsername') }]}
             >
               <Input
                 prefix={<UserOutlined />}
-                placeholder="Enter username"
+                placeholder={t('auth.enterUsername')}
                 autoComplete="username"
               />
             </Form.Item>
 
             <Form.Item
               name="password"
-              label="Password"
-              rules={[{ required: true, message: 'Please enter your password' }]}
+              label={t('auth.password')}
+              rules={[{ required: true, message: t('adminLogin.validation.enterPassword') }]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder="Enter password"
+                placeholder={t('auth.enterPassword')}
                 autoComplete="current-password"
               />
             </Form.Item>
@@ -113,15 +119,18 @@ const AdminLogin: React.FC = () => {
                 loading={loading}
                 className="admin-login__button"
               >
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? t('auth.signingIn') : t('auth.signIn')}
               </Button>
             </Form.Item>
           </Form>
 
           <div className="admin-login__footer">
             <Text type="secondary" style={{ fontSize: 12 }}>
-              © {new Date().getFullYear()} Otolor. All rights reserved.
+              © {new Date().getFullYear()} Otolor. {t('common.allRightsReserved')}
             </Text>
+            <br />
+            <br />
+            <Link to="/" className='p-2 border rounded-lg'>Bosh sahifaga qaytish</Link>
           </div>
         </Card>
       </div>

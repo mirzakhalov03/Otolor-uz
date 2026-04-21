@@ -15,6 +15,7 @@ import {
   Select,
   InputNumber,
   Tag,
+  Grid,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
@@ -33,10 +34,12 @@ import {
   useUpdateService,
   useDeleteService,
 } from '@/api/query/useAdminQueries';
+import { useTranslation } from 'react-i18next';
 import './ServicesPage.scss';
 
 const { Search } = Input;
 const { Title, Text } = Typography;
+const { useBreakpoint } = Grid;
 
 interface ServiceFormValues {
   title: string;
@@ -58,6 +61,9 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
 };
 
 const ServicesPage: React.FC = () => {
+  const { t } = useTranslation();
+  const screens = useBreakpoint();
+  const isMobile = !screens.md;
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string | undefined>(undefined);
   const [modalOpen, setModalOpen] = useState(false);
@@ -119,9 +125,9 @@ const ServicesPage: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await deleteMutation.mutateAsync(id);
-      message.success('Service deleted successfully');
+      message.success(t('adminServices.toasts.deleteSuccess'));
     } catch (error) {
-      message.error(getErrorMessage(error, 'Failed to delete service'));
+      message.error(getErrorMessage(error, t('adminServices.toasts.deleteFailed')));
     }
   };
 
@@ -137,63 +143,63 @@ const ServicesPage: React.FC = () => {
 
       if (editingService) {
         await updateMutation.mutateAsync({ id: editingService._id, data: payload });
-        message.success('Service updated successfully');
+        message.success(t('adminServices.toasts.updateSuccess'));
       } else {
         await createMutation.mutateAsync(payload);
-        message.success('Service created successfully');
+        message.success(t('adminServices.toasts.createSuccess'));
       }
 
       setModalOpen(false);
       setEditingService(null);
       form.resetFields();
     } catch (error) {
-      message.error(getErrorMessage(error, 'Failed to save service'));
+      message.error(getErrorMessage(error, t('adminServices.toasts.saveFailed')));
     }
   };
 
   const columns: ColumnsType<Service> = [
     {
-      title: 'Title',
+      title: t('adminServices.table.title'),
       dataIndex: 'title',
       key: 'title',
       width: 220,
       render: (title: string) => <span className="service-title">{title}</span>,
     },
     {
-      title: 'Category',
+      title: t('adminServices.table.category'),
       key: 'category',
       width: 180,
       render: (_, record) => <Tag color="blue">{record.category?.name || '—'}</Tag>,
     },
     {
-      title: 'Description',
+      title: t('adminServices.table.description'),
       dataIndex: 'description',
       key: 'description',
       ellipsis: true,
       render: (value?: string) => value || <Text type="secondary">—</Text>,
     },
     {
-      title: 'Price',
+      title: t('adminServices.table.price'),
       dataIndex: 'price',
       key: 'price',
       width: 140,
-      render: (price?: number) => (typeof price === 'number' ? `${price.toLocaleString()} UZS` : '—'),
+      render: (price?: number) => (typeof price === 'number' ? `${price.toLocaleString()} ${t('adminServices.currency')}` : '—'),
     },
     {
-      title: 'Created',
+      title: t('adminServices.table.created'),
       dataIndex: 'createdAt',
       key: 'createdAt',
       width: 180,
       render: (value: string) => dayjs(value).format('MMM DD, YYYY'),
     },
     {
-      title: 'Actions',
+      title: t('common.actions'),
       key: 'actions',
       fixed: 'right',
       width: 120,
       render: (_, record) => (
         <Space size="small">
-          <Tooltip title="Edit">
+          <Tooltip title={t('common.edit')}>
             <Button
               type="text"
               icon={<EditOutlined />}
@@ -201,13 +207,13 @@ const ServicesPage: React.FC = () => {
               size="small"
             />
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip title={t('common.delete')}>
             <Popconfirm
-              title="Delete service"
-              description="Are you sure? This cannot be undone."
+              title={t('adminServices.actions.deleteTitle')}
+              description={t('adminServices.actions.deleteDescription')}
               onConfirm={() => handleDelete(record._id)}
-              okText="Yes"
-              cancelText="No"
+              okText={t('common.yes')}
+              cancelText={t('common.no')}
               okButtonProps={{ danger: true }}
             >
               <Button type="text" danger icon={<DeleteOutlined />} size="small" />
@@ -218,20 +224,56 @@ const ServicesPage: React.FC = () => {
     },
   ];
 
+  const mobileColumns: ColumnsType<Service> = [
+    {
+      title: t('adminServices.table.title'),
+      key: 'serviceMobile',
+      render: (_, record) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontWeight: 700, color: '#1a1a2e' }}>{record.title}</div>
+          <div>
+            <Tag color="blue">{record.category?.name || '—'}</Tag>
+          </div>
+          <div style={{ fontSize: 12, color: '#666' }}>
+            {typeof record.price === 'number' ? `${record.price.toLocaleString()} ${t('adminServices.currency')}` : '—'}
+          </div>
+          <Space size="small">
+            <Button
+              type="text"
+              icon={<EditOutlined />}
+              onClick={() => openEditModal(record)}
+              size="small"
+            />
+            <Popconfirm
+              title={t('adminServices.actions.deleteTitle')}
+              description={t('adminServices.actions.deleteDescription')}
+              onConfirm={() => handleDelete(record._id)}
+              okText={t('common.yes')}
+              cancelText={t('common.no')}
+              okButtonProps={{ danger: true }}
+            >
+              <Button type="text" danger icon={<DeleteOutlined />} size="small" />
+            </Popconfirm>
+          </Space>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="services-page">
       <Card className="services-page__card">
         <div className="services-page__header">
           <div className="services-page__header-left">
             <Title level={4} style={{ margin: 0 }}>
-              Services Management
+              {t('adminServices.title')}
             </Title>
           </div>
           <div className="services-page__header-right">
             <Space size="middle" wrap>
               <Select
                 allowClear
-                placeholder="Filter by category"
+                placeholder={t('adminServices.filterByCategory')}
                 style={{ width: 220 }}
                 value={categoryFilter}
                 onChange={(value) => setCategoryFilter(value)}
@@ -239,7 +281,7 @@ const ServicesPage: React.FC = () => {
                 loading={categoriesLoading}
               />
               <Search
-                placeholder="Search title, description, category..."
+                placeholder={t('adminServices.searchPlaceholder')}
                 allowClear
                 onSearch={setSearch}
                 onChange={(e) => setSearch(e.target.value)}
@@ -249,32 +291,37 @@ const ServicesPage: React.FC = () => {
               />
               <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={isLoading} />
               <Button type="primary" icon={<PlusOutlined />} onClick={openCreateModal}>
-                Add Service
+                {t('adminServices.addButton')}
               </Button>
             </Space>
           </div>
         </div>
 
         <Table<Service>
-          columns={columns}
+          columns={isMobile ? mobileColumns : columns}
           dataSource={filteredData}
           rowKey="_id"
           loading={isLoading || createMutation.isPending || updateMutation.isPending || deleteMutation.isPending}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} services`,
+            showTotal: (total, range) =>
+              t('adminServices.pagination.showTotal', {
+                from: range[0],
+                to: range[1],
+                total,
+              }),
             pageSizeOptions: ['10', '20', '50'],
           }}
-          scroll={{ x: 1100 }}
+          scroll={isMobile ? undefined : { x: 1100 }}
           locale={{
-            emptyText: <Empty description="No services found" image={Empty.PRESENTED_IMAGE_SIMPLE} />,
+            emptyText: <Empty description={t('adminServices.empty')} image={Empty.PRESENTED_IMAGE_SIMPLE} />,
           }}
         />
       </Card>
 
       <Modal
-        title={editingService ? 'Edit Service' : 'Add New Service'}
+        title={editingService ? t('adminServices.modal.editTitle') : t('adminServices.modal.addTitle')}
         open={modalOpen}
         onCancel={() => {
           setModalOpen(false);
@@ -283,30 +330,30 @@ const ServicesPage: React.FC = () => {
         }}
         onOk={handleSubmit}
         confirmLoading={createMutation.isPending || updateMutation.isPending}
-        okText={editingService ? 'Update' : 'Create'}
+        okText={editingService ? t('adminServices.modal.update') : t('adminServices.modal.create')}
         width={640}
         destroyOnClose
       >
         <Form<ServiceFormValues> form={form} layout="vertical" style={{ marginTop: 16 }}>
           <Form.Item
             name="title"
-            label="Service Title"
+            label={t('adminServices.form.titleLabel')}
             rules={[
-              { required: true, message: 'Service title is required' },
-              { min: 2, message: 'Title must be at least 2 characters' },
-              { max: 150, message: 'Title cannot exceed 150 characters' },
+              { required: true, message: t('adminServices.form.validation.titleRequired') },
+              { min: 2, message: t('adminServices.form.validation.titleMin') },
+              { max: 150, message: t('adminServices.form.validation.titleMax') },
             ]}
           >
-            <Input placeholder="e.g. Teeth Whitening" />
+            <Input placeholder={t('adminServices.form.titlePlaceholder')} />
           </Form.Item>
 
           <Form.Item
             name="category"
-            label="Category"
-            rules={[{ required: true, message: 'Category is required' }]}
+            label={t('adminServices.form.categoryLabel')}
+            rules={[{ required: true, message: t('adminServices.form.validation.categoryRequired') }]}
           >
             <Select
-              placeholder="Select category"
+              placeholder={t('adminServices.form.categoryPlaceholder')}
               options={categoryOptions}
               loading={categoriesLoading}
             />
@@ -314,18 +361,18 @@ const ServicesPage: React.FC = () => {
 
           <Form.Item
             name="description"
-            label="Description"
-            rules={[{ max: 2000, message: 'Description cannot exceed 2000 characters' }]}
+            label={t('adminServices.form.descriptionLabel')}
+            rules={[{ max: 2000, message: t('adminServices.form.validation.descriptionMax') }]}
           >
-            <Input.TextArea rows={4} placeholder="Optional description" />
+            <Input.TextArea rows={4} placeholder={t('adminServices.form.descriptionPlaceholder')} />
           </Form.Item>
 
           <Form.Item
             name="price"
-            label="Price (UZS)"
-            rules={[{ type: 'number', min: 0, message: 'Price must be non-negative' }]}
+            label={t('adminServices.form.priceLabel')}
+            rules={[{ type: 'number', min: 0, message: t('adminServices.form.validation.priceMin') }]}
           >
-            <InputNumber min={0} precision={0} style={{ width: '100%' }} placeholder="Optional price" />
+            <InputNumber min={0} precision={0} style={{ width: '100%' }} placeholder={t('adminServices.form.pricePlaceholder')} />
           </Form.Item>
         </Form>
       </Modal>

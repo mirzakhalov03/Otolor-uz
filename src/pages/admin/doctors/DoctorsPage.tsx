@@ -23,6 +23,7 @@ import {
   Typography,
   Empty,
   Upload,
+  Grid,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UploadFile, UploadProps } from 'antd';
@@ -44,10 +45,12 @@ import {
   useUpdateDoctor,
   useDeleteDoctor,
 } from '@/api/query/useAdminQueries';
+import { useTranslation } from 'react-i18next';
 import './DoctorsPage.scss';
 
 const { Search } = Input;
 const { Title, Text } = Typography;
+const { useBreakpoint } = Grid;
 
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -59,19 +62,16 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
 
 /**
  * Generate the next 7 days starting from today.
- * Returns objects with date string (YYYY-MM-DD), display label, and day name.
+ * Returns objects with date string (YYYY-MM-DD) and day index.
  */
-function getNext7Days(): { dateStr: string; label: string; dayName: string; isSunday: boolean }[] {
-  const days: { dateStr: string; label: string; dayName: string; isSunday: boolean }[] = [];
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+function getNext7Days(): { dateStr: string; dayIndex: number; isSunday: boolean }[] {
+  const days: { dateStr: string; dayIndex: number; isSunday: boolean }[] = [];
 
   for (let i = 0; i < 7; i++) {
     const d = dayjs().add(i, 'day');
-    const dayName = dayNames[d.day()];
     days.push({
       dateStr: d.format('YYYY-MM-DD'),
-      label: `${dayName}, ${d.format('MMM DD')}`,
-      dayName,
+      dayIndex: d.day(),
       isSunday: d.day() === 0,
     });
   }
@@ -80,6 +80,9 @@ function getNext7Days(): { dateStr: string; label: string; dayName: string; isSu
 }
 
 const DoctorsPage: React.FC = () => {
+  const { t } = useTranslation();
+  const screens = useBreakpoint();
+  const isMobile = !screens.md;
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
@@ -165,9 +168,9 @@ const DoctorsPage: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await deleteMutation.mutateAsync(id);
-      message.success('Doctor deleted successfully');
+      message.success(t('adminDoctors.toasts.deleteSuccess'));
     } catch (error: unknown) {
-      message.error(getErrorMessage(error, 'Failed to delete doctor'));
+      message.error(getErrorMessage(error, t('adminDoctors.toasts.deleteFailed')));
     }
   };
 
@@ -214,7 +217,7 @@ const DoctorsPage: React.FC = () => {
       }
 
       if (Object.keys(weeklySchedule).length === 0) {
-        message.error('Please enable at least one day with a time range');
+        message.error(t('adminDoctors.toasts.enableOneDay'));
         return;
       }
 
@@ -227,10 +230,10 @@ const DoctorsPage: React.FC = () => {
 
       if (editingDoctor) {
         await updateMutation.mutateAsync({ id: editingDoctor._id, data: payload });
-        message.success('Doctor updated successfully');
+        message.success(t('adminDoctors.toasts.updateSuccess'));
       } else {
         await createMutation.mutateAsync(payload as { name: string; weeklySchedule: Record<string, string> });
-        message.success('Doctor created successfully');
+        message.success(t('adminDoctors.toasts.createSuccess'));
       }
 
       setModalOpen(false);
@@ -239,7 +242,7 @@ const DoctorsPage: React.FC = () => {
       setAvatarUrl(undefined);
       setSelectedAvatarFile(null);
     } catch (error: unknown) {
-      message.error(getErrorMessage(error, 'Failed to save doctor'));
+      message.error(getErrorMessage(error, t('adminDoctors.toasts.saveFailed')));
     } finally {
       setAvatarUploading(false);
     }
@@ -250,13 +253,13 @@ const DoctorsPage: React.FC = () => {
     beforeUpload: (file) => {
       const isImage = ['image/jpeg', 'image/png', 'image/webp'].includes(file.type);
       if (!isImage) {
-        message.error('Only JPG, PNG, and WEBP images are allowed');
+        message.error(t('adminDoctors.toasts.imageTypeError'));
         return Upload.LIST_IGNORE;
       }
 
       const isLt5Mb = file.size / 1024 / 1024 < 5;
       if (!isLt5Mb) {
-        message.error('Image must be smaller than 5MB');
+        message.error(t('adminDoctors.toasts.imageSizeError'));
         return Upload.LIST_IGNORE;
       }
 
@@ -281,7 +284,7 @@ const DoctorsPage: React.FC = () => {
 
   const columns: ColumnsType<Doctor> = [
     {
-      title: 'Name',
+      title: t('adminDoctors.table.name'),
       dataIndex: 'name',
       key: 'name',
       width: 300,
@@ -298,7 +301,7 @@ const DoctorsPage: React.FC = () => {
       ),
     },
     {
-      title: 'Specialization',
+      title: t('adminDoctors.table.specialization'),
       dataIndex: 'specialization',
       key: 'specialization',
       width: 180,
@@ -306,13 +309,13 @@ const DoctorsPage: React.FC = () => {
         spec ? <Tag color="blue">{spec}</Tag> : <Tag color="default">—</Tag>,
     },
     {
-      title: 'Upcoming Availability',
+      title: t('adminDoctors.table.upcomingAvailability'),
       dataIndex: 'weeklySchedule',
       key: 'weeklySchedule',
       width: 400,
       render: (schedule: Record<string, string>) => {
         if (!schedule || Object.keys(schedule).length === 0) {
-          return <span style={{ color: '#999' }}>No schedule set</span>;
+          return <span style={{ color: '#999' }}>{t('adminDoctors.table.noSchedule')}</span>;
         }
 
         // Sort by date and show only future dates
@@ -322,14 +325,14 @@ const DoctorsPage: React.FC = () => {
           .sort();
 
         if (sortedDates.length === 0) {
-          return <span style={{ color: '#999' }}>No upcoming availability</span>;
+          return <span style={{ color: '#999' }}>{t('adminDoctors.table.noUpcoming')}</span>;
         }
 
         return (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {sortedDates.map((dateStr) => {
               const d = dayjs(dateStr);
-              const dayName = d.format('ddd');
+              const dayName = t(`adminDoctors.days.${d.day()}`);
               const dateLabel = d.format('MMM DD');
               return (
                 <Tag
@@ -347,13 +350,13 @@ const DoctorsPage: React.FC = () => {
       },
     },
     {
-      title: 'Actions',
+      title: t('common.actions'),
       key: 'actions',
       fixed: 'right',
       width: 120,
       render: (_, record) => (
         <Space size="small">
-          <Tooltip title="Edit">
+          <Tooltip title={t('common.edit')}>
             <Button
               type="text"
               icon={<EditOutlined />}
@@ -361,13 +364,13 @@ const DoctorsPage: React.FC = () => {
               size="small"
             />
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip title={t('common.delete')}>
             <Popconfirm
-              title="Delete doctor"
-              description="Are you sure? This cannot be undone."
+              title={t('adminDoctors.actions.deleteTitle')}
+              description={t('adminDoctors.actions.deleteDescription')}
               onConfirm={() => handleDelete(record._id)}
-              okText="Yes"
-              cancelText="No"
+              okText={t('common.yes')}
+              cancelText={t('common.no')}
               okButtonProps={{ danger: true }}
             >
               <Button
@@ -383,6 +386,52 @@ const DoctorsPage: React.FC = () => {
     },
   ];
 
+  const mobileColumns: ColumnsType<Doctor> = [
+    {
+      title: t('adminDoctors.table.name'),
+      key: 'doctorMobile',
+      render: (_, record) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <Space size="middle">
+            <Avatar
+              size={44}
+              src={record.avatarUrl && record.avatarUrl.trim() ? record.avatarUrl : undefined}
+            >
+              {record.name?.charAt(0).toUpperCase()}
+            </Avatar>
+            <div>
+              <div style={{ fontWeight: 700, color: '#1a1a2e' }}>{record.name}</div>
+              {record.specialization ? (
+                <Tag color="blue" style={{ marginTop: 4 }}>{record.specialization}</Tag>
+              ) : (
+                <Text type="secondary" style={{ fontSize: 12 }}>—</Text>
+              )}
+            </div>
+          </Space>
+
+          <Space size="small">
+            <Button
+              type="text"
+              icon={<EditOutlined />}
+              onClick={() => openEditModal(record)}
+              size="small"
+            />
+            <Popconfirm
+              title={t('adminDoctors.actions.deleteTitle')}
+              description={t('adminDoctors.actions.deleteDescription')}
+              onConfirm={() => handleDelete(record._id)}
+              okText={t('common.yes')}
+              cancelText={t('common.no')}
+              okButtonProps={{ danger: true }}
+            >
+              <Button type="text" danger icon={<DeleteOutlined />} size="small" />
+            </Popconfirm>
+          </Space>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="doctors-page">
       <Card className="doctors-page__card">
@@ -390,13 +439,13 @@ const DoctorsPage: React.FC = () => {
         <div className="doctors-page__header">
           <div className="doctors-page__header-left">
             <Title level={4} style={{ margin: 0 }}>
-              Doctors Management
+              {t('adminDoctors.title')}
             </Title>
           </div>
           <div className="doctors-page__header-right">
             <Space size="middle">
               <Search
-                placeholder="Search by name or specialization..."
+                placeholder={t('adminDoctors.searchPlaceholder')}
                 allowClear
                 onSearch={handleSearch}
                 style={{ width: 280 }}
@@ -404,7 +453,7 @@ const DoctorsPage: React.FC = () => {
               />
               <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={isLoading} />
               <Button type="primary" icon={<PlusOutlined />} onClick={openCreateModal}>
-                Add Doctor
+                {t('adminDoctors.addButton')}
               </Button>
             </Space>
           </div>
@@ -412,26 +461,31 @@ const DoctorsPage: React.FC = () => {
 
         {/* Table */}
         <Table<Doctor>
-          columns={columns}
+          columns={isMobile ? mobileColumns : columns}
           dataSource={doctors || []}
           rowKey="_id"
           loading={isLoading || deleteMutation.isPending}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} doctors`,
+            showTotal: (total, range) =>
+              t('adminDoctors.pagination.showTotal', {
+                from: range[0],
+                to: range[1],
+                total,
+              }),
             pageSizeOptions: ['10', '20', '50'],
           }}
-          scroll={{ x: 'max-content' }}
+          scroll={isMobile ? undefined : { x: 'max-content' }}
           locale={{
-            emptyText: <Empty description="No doctors found" image={Empty.PRESENTED_IMAGE_SIMPLE} />,
+            emptyText: <Empty description={t('adminDoctors.empty')} image={Empty.PRESENTED_IMAGE_SIMPLE} />,
           }}
         />
       </Card>
 
       {/* Create / Edit Modal */}
       <Modal
-        title={editingDoctor ? 'Edit Doctor' : 'Add New Doctor'}
+        title={editingDoctor ? t('adminDoctors.modal.editTitle') : t('adminDoctors.modal.addTitle')}
         open={modalOpen}
         onCancel={() => {
           setModalOpen(false);
@@ -442,54 +496,54 @@ const DoctorsPage: React.FC = () => {
         }}
         onOk={handleSubmit}
         confirmLoading={createMutation.isPending || updateMutation.isPending || avatarUploading}
-        okText={editingDoctor ? 'Update' : 'Create'}
+        okText={editingDoctor ? t('adminDoctors.modal.update') : t('adminDoctors.modal.create')}
         width={640}
         destroyOnClose
       >
         <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
-          <Form.Item label="Doctor Avatar">
+          <Form.Item label={t('adminDoctors.form.avatarLabel')}>
             <Space direction="vertical" size={8} style={{ width: '100%' }}>
               <Space size="middle">
                 <Avatar size={56} src={avatarUrl}>
                   {(form.getFieldValue('name') || 'D').charAt(0).toUpperCase()}
                 </Avatar>
                 <Upload {...uploadProps} fileList={selectedAvatarFileList}>
-                  <Button icon={<UploadOutlined />}>Select Image</Button>
+                  <Button icon={<UploadOutlined />}>{t('adminDoctors.form.selectImage')}</Button>
                 </Upload>
               </Space>
               <Text type="secondary" style={{ fontSize: 12 }}>
-                Upload JPEG, PNG, or WEBP image (max 5MB). Image is uploaded to S3 on save.
+                {t('adminDoctors.form.avatarHelp')}
               </Text>
             </Space>
           </Form.Item>
 
           <Form.Item
             name="name"
-            label="Doctor Name"
+            label={t('adminDoctors.form.nameLabel')}
             rules={[
-              { required: true, message: 'Doctor name is required' },
-              { min: 2, message: 'Name must be at least 2 characters' },
-              { max: 100, message: 'Name cannot exceed 100 characters' },
+              { required: true, message: t('adminDoctors.form.validation.nameRequired') },
+              { min: 2, message: t('adminDoctors.form.validation.nameMin') },
+              { max: 100, message: t('adminDoctors.form.validation.nameMax') },
             ]}
           >
-            <Input placeholder="e.g. Dr. Sardor Karimov" />
+            <Input placeholder={t('adminDoctors.form.namePlaceholder')} />
           </Form.Item>
 
           <Form.Item
             name="specialization"
-            label="Specialization"
-            rules={[{ max: 100, message: 'Specialization cannot exceed 100 characters' }]}
+            label={t('adminDoctors.form.specializationLabel')}
+            rules={[{ max: 100, message: t('adminDoctors.form.validation.specializationMax') }]}
           >
-            <Input placeholder="e.g. Stomatolog, Ortodont" />
+            <Input placeholder={t('adminDoctors.form.specializationPlaceholder')} />
           </Form.Item>
 
           {/* Schedule: Next 7 days with checkboxes + time range pickers */}
           <div style={{ marginBottom: 24 }}>
             <Text strong style={{ display: 'block', marginBottom: 12, fontSize: 14 }}>
-              Availability — Next 7 Days
+              {t('adminDoctors.form.availabilityTitle')}
             </Text>
             <Text type="secondary" style={{ display: 'block', marginBottom: 16, fontSize: 12 }}>
-              Check the days this doctor will be available. Sundays are off by default.
+              {t('adminDoctors.form.availabilityHint')}
             </Text>
             <div className="schedule-grid">
               {next7Days.map((day) => {
@@ -506,7 +560,7 @@ const DoctorsPage: React.FC = () => {
                       className="schedule-row__checkbox"
                     >
                       <div className="schedule-row__label">
-                        <span className="schedule-row__day">{day.dayName}</span>
+                        <span className="schedule-row__day">{t(`adminDoctors.days.${day.dayIndex}`)}</span>
                         <span className="schedule-row__date">{dayjs(day.dateStr).format('MMM DD, YYYY')}</span>
                       </div>
                     </Checkbox>
@@ -515,7 +569,7 @@ const DoctorsPage: React.FC = () => {
                         <TimePicker.RangePicker
                           format="HH:mm"
                           minuteStep={30}
-                          placeholder={['Start', 'End']}
+                          placeholder={[t('adminDoctors.form.timeStart'), t('adminDoctors.form.timeEnd')]}
                           value={timeRange}
                           onChange={(val) => updateTimeRange(day.dateStr, val as [dayjs.Dayjs, dayjs.Dayjs] | null)}
                           size="small"
@@ -523,7 +577,7 @@ const DoctorsPage: React.FC = () => {
                         />
                       )}
                       {!isEnabled && (
-                        <Tag color="default" style={{ fontSize: 12 }}>Day off</Tag>
+                        <Tag color="default" style={{ fontSize: 12 }}>{t('adminDoctors.form.dayOff')}</Tag>
                       )}
                     </div>
                   </div>

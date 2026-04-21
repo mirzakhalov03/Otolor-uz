@@ -116,9 +116,14 @@
 // Responsive
 @media (max-width: 768px) {
   .doctors-page {
+    &__card {
+      border-radius: 10px;
+    }
+
     &__header {
       flex-direction: column;
       align-items: stretch;
+      padding: 14px 14px;
 
       &-right {
         .ant-space {
@@ -131,11 +136,43 @@
         }
       }
     }
+
+    .ant-table-wrapper {
+      padding: 0 8px 12px;
+    }
+
+    .ant-table-container {
+      overflow-x: auto;
+      border-radius: 10px;
+    }
+
+    .ant-table {
+      min-width: 760px;
+
+      .ant-table-thead > tr > th,
+      .ant-table-tbody > tr > td {
+        padding: 10px 8px !important;
+        white-space: nowrap;
+      }
+    }
+
+    .ant-pagination {
+      justify-content: center;
+      margin-bottom: 0;
+    }
   }
 
   .schedule-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+
+    &__time {
+      width: 100%;
+
+      .ant-picker {
+        width: 100% !important;
+      }
+    }
   }
 }

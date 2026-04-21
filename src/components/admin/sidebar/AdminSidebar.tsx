@@ -15,6 +15,7 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '../../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './AdminSidebar.scss';
 
 const { Sider } = Layout;
@@ -31,6 +32,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { t } = useTranslation();
 
   const getSelectedKey = (): string => {
     const path = location.pathname;
@@ -51,22 +53,22 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
     {
       key: 'doctors',
       icon: <TeamOutlined />,
-      label: <NavLink to="/admins-otolor/doctors">Doctors</NavLink>,
+      label: <NavLink to="/admins-otolor/doctors">{t('admin.doctors')}</NavLink>,
     },
     {
       key: 'appointments',
       icon: <CalendarOutlined />,
-      label: <NavLink to="/admins-otolor/appointments">Appointments</NavLink>,
+      label: <NavLink to="/admins-otolor/appointments">{t('admin.appointments')}</NavLink>,
     },
     {
       key: 'categories',
       icon: <AppstoreOutlined />,
-      label: <NavLink to="/admins-otolor/categories">Categories</NavLink>,
+      label: <NavLink to="/admins-otolor/categories">{t('admin.categories')}</NavLink>,
     },
     {
       key: 'services',
       icon: <TagsOutlined />,
-      label: <NavLink to="/admins-otolor/services">Services</NavLink>,
+      label: <NavLink to="/admins-otolor/services">{t('admin.services')}</NavLink>,
     },
   ];
 
@@ -86,7 +88,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
           {collapsed ? 'O' : 'Otolor'}
         </span>
         {!collapsed && (
-          <Text className="admin-sidebar__logo-subtitle">Admin Panel</Text>
+          <Text className="admin-sidebar__logo-subtitle">{t('admin.panel')}</Text>
         )}
       </div>
 
@@ -108,7 +110,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
           block
           className="admin-sidebar__logout-btn"
         >
-          {!collapsed && 'Logout'}
+          {!collapsed && t('auth.logout')}
         </Button>
       </div>
     </Sider>

@@ -11,6 +11,7 @@ const Footer = () => {
             { label: t('nav.home'), href: '/' },
             { label: t('footer.ourServices'), href: '/services' },
             { label: t('nav.about'), href: '/about' },
+            { label: t('nav.management'), href: '/admins-otolor' },
         ],
         branches: [
             {
