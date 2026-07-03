@@ -1,20 +1,20 @@
 /**
  * Auth Context Provider
- * Simple hardcoded token-based authentication for admin panel
+ * Real JWT auth against POST /api/auth/login. Token stored in localStorage['access_token'].
  */
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { loginRequest } from '@/api/services/authService';
+import { setUnauthorizedHandler } from '@/api/authEvents';
+import { ApiError } from '@/api/errors';
 
-// Hardcoded credentials
-const ADMIN_USERNAME = 'otoloruzadmin';
-const ADMIN_PASSWORD = 'qwerty1234';
-const ACCESS_TOKEN = 'asdfghjklzxcvbnm0987654321';
 const TOKEN_KEY = 'access_token';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => { success: boolean; messageKey: string };
+  login: (username: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
 }
 
@@ -24,27 +24,29 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-/**
- * Check if a valid token exists in localStorage
- */
-const checkAuth = (): boolean => {
+/** A token existing is treated as "logged in". A stale token is caught by the 401 interceptor. */
+const hasToken = (): boolean => {
   try {
-    return localStorage.getItem(TOKEN_KEY) === ACCESS_TOKEN;
+    return !!localStorage.getItem(TOKEN_KEY);
   } catch {
     return false;
   }
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(checkAuth);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(hasToken);
+  const navigate = useNavigate();
 
-  const login = useCallback((username: string, password: string) => {
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      localStorage.setItem(TOKEN_KEY, ACCESS_TOKEN);
+  const login = useCallback(async (username: string, password: string) => {
+    try {
+      const { token } = await loginRequest(username, password);
+      localStorage.setItem(TOKEN_KEY, token);
       setIsAuthenticated(true);
-      return { success: true, messageKey: 'auth.loginSuccess' };
+      return { success: true };
+    } catch (error) {
+      const message = error instanceof ApiError ? error.message : undefined;
+      return { success: false, message };
     }
-    return { success: false, messageKey: 'auth.invalidCredentials' };
   }, []);
 
   const logout = useCallback(() => {
@@ -52,18 +54,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsAuthenticated(false);
   }, []);
 
-  const value: AuthContextType = {
-    isAuthenticated,
-    login,
-    logout,
-  };
+  // Bridge: the axios 401 interceptor calls this to log out + redirect.
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setIsAuthenticated(false);
+      navigate('/admins-otolor/login', { replace: true });
+    });
+    return () => setUnauthorizedHandler(null);
+  }, [navigate]);
+
+  const value: AuthContextType = { isAuthenticated, login, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-/**
- * Hook to access auth context
- */
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
