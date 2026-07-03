@@ -590,6 +590,10 @@
       "create": "Создать",
       "update": "Обновить"
     },
+    "steps": {
+      "profile": "Профиль",
+      "availability": "Расписание"
+    },
     "form": {
       "avatarLabel": "Фото врача",
       "selectImage": "Выбрать изображение",

@@ -591,6 +591,10 @@
       "create": "Yaratish",
       "update": "Yangilash"
     },
+    "steps": {
+      "profile": "Ma'lumotlar",
+      "availability": "Ish jadvali"
+    },
     "form": {
       "avatarLabel": "Shifokor rasmi",
       "selectImage": "Rasmni tanlash",

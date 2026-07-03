@@ -604,6 +604,10 @@
       "create": "Create",
       "update": "Update"
     },
+    "steps": {
+      "profile": "Profile",
+      "availability": "Availability"
+    },
     "form": {
       "avatarLabel": "Doctor Avatar",
       "selectImage": "Select Image",
