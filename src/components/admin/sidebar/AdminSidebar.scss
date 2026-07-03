@@ -13,18 +13,41 @@
   }
 
   &__logo {
-    padding: 20px 24px;
+    padding: 20px 20px 16px;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 8px;
+
+    &--collapsed {
+      padding: 14px 8px;
+    }
   }
 
-  &__logo-text {
-    font-size: 28px;
-    font-weight: 700;
-    color: $primary-green-bright;
+  &__logo-chip {
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  &__logo-img {
     display: block;
-    letter-spacing: -0.5px;
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  &__logo--collapsed &__logo-chip {
+    padding: 6px;
+  }
+
+  &__logo--collapsed &__logo-img {
+    max-width: 44px;
   }
 
   &__logo-subtitle {
@@ -99,14 +122,6 @@
   
   // Collapsed state
   &.ant-layout-sider-collapsed {
-    .admin-sidebar__logo {
-      padding: 20px 12px;
-    }
-    
-    .admin-sidebar__logo-text {
-      font-size: 24px;
-    }
-    
     .admin-sidebar__menu {
       .ant-menu-item {
         margin: 4px 8px;

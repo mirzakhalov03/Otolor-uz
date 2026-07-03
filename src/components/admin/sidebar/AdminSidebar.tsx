@@ -16,6 +16,7 @@ import {
 } from '@ant-design/icons';
 import { useAuth } from '@/context/auth';
 import { useTranslation } from 'react-i18next';
+import logo from '@/assets/icons/logo.png';
 import './AdminSidebar.scss';
 
 const { Sider } = Layout;
@@ -83,10 +84,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollapse }) =>
       breakpoint="lg"
     >
       {/* Logo */}
-      <div className="admin-sidebar__logo">
-        <span className="admin-sidebar__logo-text">
-          {collapsed ? 'O' : 'Otolor'}
-        </span>
+      <div className={`admin-sidebar__logo ${collapsed ? 'admin-sidebar__logo--collapsed' : ''}`}>
+        <div className="admin-sidebar__logo-chip">
+          <img src={logo} alt="Otolor" className="admin-sidebar__logo-img" />
+        </div>
         {!collapsed && (
           <Text className="admin-sidebar__logo-subtitle">{t('admin.panel')}</Text>
         )}

@@ -1,22 +1,18 @@
 import React from 'react';
-import { Button } from 'antd';
 import {
   TeamOutlined,
   CalendarOutlined,
   AppstoreOutlined,
   TagsOutlined,
-  LogoutOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@/context/auth';
 import './AdminBottomBar.scss';
 
 const AdminBottomBar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { logout } = useAuth();
 
   const getSelectedKey = (): string => {
     const path = location.pathname;
@@ -36,11 +32,6 @@ const AdminBottomBar: React.FC = () => {
     { key: 'services', icon: <TagsOutlined />, label: t('admin.services'), path: '/admins-otolor/services' },
   ] as const;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/admins-otolor/login', { replace: true });
-  };
-
   return (
     <div className="admin-bottom-bar" role="navigation" aria-label="Admin mobile navigation">
       <div className="admin-bottom-bar__tabs">
@@ -56,14 +47,6 @@ const AdminBottomBar: React.FC = () => {
           </button>
         ))}
       </div>
-      <Button
-        type="text"
-        icon={<LogoutOutlined />}
-        onClick={handleLogout}
-        className="admin-bottom-bar__logout"
-      >
-        {t('auth.logout')}
-      </Button>
     </div>
   );
 };

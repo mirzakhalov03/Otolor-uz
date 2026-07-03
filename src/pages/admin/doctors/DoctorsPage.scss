@@ -115,8 +115,97 @@
 
 /* Doctor create/edit wizard */
 .doctor-modal {
-  &__steps {
+  // Steps rendered as two filled pill segments instead of the default
+  // number-dot + connector line. The current step is a solid green block.
+  &__steps.ant-steps {
+    display: flex;
+    gap: 8px;
     margin-bottom: 24px;
+
+    .ant-steps-item {
+      flex: 1 1 0;
+      margin: 0;
+      padding: 6px 12px;
+      border-radius: 10px;
+      background: #f4f5f7;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    // AntD forces the last item to `flex: none` — override flex ONLY (no
+    // background, so `:last-child` specificity doesn't beat the state colors).
+    .ant-steps-item:last-child {
+      flex: 1 1 0;
+    }
+
+    // Kill every connector/tail variant AntD may render — pills stand alone.
+    .ant-steps-item::before,
+    .ant-steps-item::after,
+    .ant-steps-item-tail,
+    .ant-steps-item-rail,
+    .ant-steps-item-title::after {
+      display: none !important;
+    }
+
+    .ant-steps-item-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    // The icon circle inherits the pill — no separate colored bubble.
+    .ant-steps-item-icon {
+      width: auto;
+      height: auto;
+      margin: 0;
+      background: transparent;
+      border: none;
+      line-height: 1;
+
+      .ant-steps-icon {
+        color: inherit;
+        font-size: 15px;
+      }
+    }
+
+    .ant-steps-item-content {
+      min-height: 0;
+    }
+
+    .ant-steps-item-title {
+      padding: 0;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: #667085;
+    }
+
+    // Completed step: soft green so progress reads at a glance.
+    .ant-steps-item-finish {
+      background: #e5f7ec;
+
+      .ant-steps-item-title,
+      .ant-steps-icon {
+        color: #1f9d57;
+      }
+    }
+
+    // Current step: whole pill filled solid green, icon + label white.
+    .ant-steps-item-active,
+    .ant-steps-item-process {
+      background: #2dc263;
+
+      .ant-steps-item-title,
+      .ant-steps-item-icon,
+      .ant-steps-icon,
+      .ant-steps-icon .anticon,
+      .ant-steps-icon .anticon svg {
+        color: #fff !important;
+        fill: currentColor;
+      }
+    }
   }
 }
 

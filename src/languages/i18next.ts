@@ -25,6 +25,9 @@ i18n
         },
         backend: {
             loadPath: '/locales/{{lng}}/translation.json',
+            // Cache-bust translation files so updated keys always load instead of a
+            // stale browser/CDN copy. Bump this whenever locale JSON changes.
+            queryStringParams: { v: '20260704' },
         }
     });
 

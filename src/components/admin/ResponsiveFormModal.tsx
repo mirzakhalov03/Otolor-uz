@@ -5,6 +5,9 @@
  * - Mobile (<md): full-screen sheet with a pinned footer and body-only scroll,
  *   so the primary action is always thumb-reachable on long forms.
  * Passes through every AntD ModalProp (footer, onOk, okText, confirmLoading, ...).
+ *
+ * zIndex is forced above the admin bottom bar (1200) so the pinned footer / action
+ * buttons are never covered by the mobile nav — and the mask hides it while open.
  */
 
 import React from 'react';
@@ -22,6 +25,7 @@ export interface ResponsiveFormModalProps extends Omit<ModalProps, 'width'> {
 const ResponsiveFormModal: React.FC<ResponsiveFormModalProps> = ({
   width = 640,
   className,
+  zIndex = 1300,
   children,
   ...rest
 }) => {
@@ -41,6 +45,7 @@ const ResponsiveFormModal: React.FC<ResponsiveFormModalProps> = ({
       {...rest}
       width={isMobile ? '100%' : width}
       centered={!isMobile}
+      zIndex={zIndex}
       style={isMobile ? { top: 0, maxWidth: '100vw', margin: 0, paddingBottom: 0 } : undefined}
       className={mergedClassName}
     >
