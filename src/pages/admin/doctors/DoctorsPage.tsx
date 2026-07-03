@@ -14,7 +14,6 @@ import {
   Tag,
   Avatar,
   Popconfirm,
-  Modal,
   Form,
   message,
   Tooltip,
@@ -24,6 +23,7 @@ import {
   Grid,
   InputNumber,
   Switch,
+  Steps,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UploadFile, UploadProps } from 'antd';
@@ -34,7 +34,13 @@ import {
   SearchOutlined,
   ReloadOutlined,
   ClockCircleOutlined,
-  UploadOutlined,
+  UserOutlined,
+  CalendarOutlined,
+  CameraOutlined,
+  LeftOutlined,
+  RightOutlined,
+  CheckOutlined,
+  StarOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { Doctor } from '@/pages/appointments/types/appointment.types';
@@ -48,6 +54,7 @@ import {
   useUpdateDoctor,
   useDeleteDoctor,
 } from '@/api/query/useAdminQueries';
+import { ResponsiveFormModal } from '@/components/admin';
 import { useTranslation } from 'react-i18next';
 import './DoctorsPage.scss';
 
@@ -65,6 +72,7 @@ const DoctorsPage: React.FC = () => {
   const isMobile = !screens.md;
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [step, setStep] = useState(0);
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [form] = Form.useForm<any>();
@@ -96,6 +104,7 @@ const DoctorsPage: React.FC = () => {
     setAvatarUrl(undefined);
     setSelectedAvatarFile(null);
     schedule.initForCreate();
+    setStep(0);
     setModalOpen(true);
   };
 
@@ -110,7 +119,30 @@ const DoctorsPage: React.FC = () => {
     setAvatarUrl(doctor.avatarUrl);
     setSelectedAvatarFile(null);
     schedule.initForEdit(doctor);
+    setStep(0);
     setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditingDoctor(null);
+    form.resetFields();
+    setAvatarUrl(undefined);
+    setSelectedAvatarFile(null);
+    setStep(0);
+  };
+
+  // Steps are clickable. Moving forward first validates the profile fields;
+  // moving back is always allowed.
+  const handleStepChange = async (target: number) => {
+    if (target > step) {
+      try {
+        await form.validateFields(['name', 'specialization', 'experience']);
+      } catch {
+        return; // inline field errors are shown by AntD
+      }
+    }
+    setStep(target);
   };
 
   const handleDelete = async (id: string) => {
@@ -405,94 +437,141 @@ const DoctorsPage: React.FC = () => {
         />
       </Card>
 
-      {/* Create / Edit Modal */}
-      <Modal
+      {/* Create / Edit Modal — 2-step wizard (Profile → Availability) */}
+      <ResponsiveFormModal
         title={editingDoctor ? t('adminDoctors.modal.editTitle') : t('adminDoctors.modal.addTitle')}
         open={modalOpen}
-        onCancel={() => {
-          setModalOpen(false);
-          setEditingDoctor(null);
-          form.resetFields();
-          setAvatarUrl(undefined);
-          setSelectedAvatarFile(null);
-        }}
-        onOk={handleSubmit}
-        confirmLoading={createMutation.isPending || updateMutation.isPending || avatarUploading}
-        okText={editingDoctor ? t('adminDoctors.modal.update') : t('adminDoctors.modal.create')}
+        onCancel={closeModal}
         width={640}
         destroyOnClose
+        className="doctor-modal"
+        footer={
+          <>
+            {step === 0 ? (
+              <Button onClick={closeModal}>{t('common.cancel')}</Button>
+            ) : (
+              <Button icon={<LeftOutlined />} onClick={() => setStep(0)}>
+                {t('common.back')}
+              </Button>
+            )}
+            {step === 0 ? (
+              <Button type="primary" onClick={() => handleStepChange(1)}>
+                {t('common.next')}
+                <RightOutlined />
+              </Button>
+            ) : (
+              <Button
+                type="primary"
+                icon={<CheckOutlined />}
+                loading={createMutation.isPending || updateMutation.isPending || avatarUploading}
+                onClick={handleSubmit}
+              >
+                {editingDoctor ? t('adminDoctors.modal.update') : t('adminDoctors.modal.create')}
+              </Button>
+            )}
+          </>
+        }
       >
-        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
-          <Form.Item label={t('adminDoctors.form.avatarLabel')}>
-            <Space direction="vertical" size={8} style={{ width: '100%' }}>
-              <Space size="middle">
-                <Avatar size={56} src={avatarUrl}>
-                  {(form.getFieldValue('name') || 'D').charAt(0).toUpperCase()}
-                </Avatar>
-                <Upload {...uploadProps} fileList={selectedAvatarFileList}>
-                  <Button icon={<UploadOutlined />}>{t('adminDoctors.form.selectImage')}</Button>
+        <Steps
+          size="small"
+          current={step}
+          onChange={handleStepChange}
+          responsive={false}
+          className="doctor-modal__steps"
+          items={[
+            { title: t('adminDoctors.steps.profile'), icon: <UserOutlined /> },
+            { title: t('adminDoctors.steps.availability'), icon: <CalendarOutlined /> },
+          ]}
+        />
+
+        <Form form={form} layout="vertical">
+          {/* Step 1: Profile */}
+          <div style={{ display: step === 0 ? 'block' : 'none' }}>
+            <Form.Item label={t('adminDoctors.form.avatarLabel')}>
+              <div className="doctor-avatar-upload-wrap">
+                <Upload {...uploadProps} fileList={selectedAvatarFileList} showUploadList={false}>
+                  <div className="doctor-avatar-upload">
+                    <Avatar size={72} src={avatarUrl}>
+                      {(form.getFieldValue('name') || 'D').charAt(0).toUpperCase()}
+                    </Avatar>
+                    <span className="doctor-avatar-upload__overlay">
+                      <CameraOutlined />
+                    </span>
+                  </div>
                 </Upload>
-              </Space>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {t('adminDoctors.form.avatarHelp')}
-              </Text>
-            </Space>
-          </Form.Item>
+                <div className="doctor-avatar-upload__meta">
+                  <Text strong>
+                    {selectedAvatarFile ? selectedAvatarFile.name : t('adminDoctors.form.selectImage')}
+                  </Text>
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    {t('adminDoctors.form.avatarHelp')}
+                  </Text>
+                </div>
+              </div>
+            </Form.Item>
 
-          <Form.Item
-            name="name"
-            label={t('adminDoctors.form.nameLabel')}
-            rules={[
-              { required: true, message: t('adminDoctors.form.validation.nameRequired') },
-              { min: 2, message: t('adminDoctors.form.validation.nameMin') },
-              { max: 100, message: t('adminDoctors.form.validation.nameMax') },
-            ]}
-          >
-            <Input placeholder={t('adminDoctors.form.namePlaceholder')} />
-          </Form.Item>
+            <Form.Item
+              name="name"
+              label={t('adminDoctors.form.nameLabel')}
+              rules={[
+                { required: true, message: t('adminDoctors.form.validation.nameRequired') },
+                { min: 2, message: t('adminDoctors.form.validation.nameMin') },
+                { max: 100, message: t('adminDoctors.form.validation.nameMax') },
+              ]}
+            >
+              <Input placeholder={t('adminDoctors.form.namePlaceholder')} />
+            </Form.Item>
 
-          <Form.Item
-            name="specialization"
-            label={t('adminDoctors.form.specializationLabel')}
-            rules={[{ max: 100, message: t('adminDoctors.form.validation.specializationMax') }]}
-          >
-            <Input placeholder={t('adminDoctors.form.specializationPlaceholder')} />
-          </Form.Item>
+            <Form.Item
+              name="specialization"
+              label={t('adminDoctors.form.specializationLabel')}
+              rules={[{ max: 100, message: t('adminDoctors.form.validation.specializationMax') }]}
+            >
+              <Input placeholder={t('adminDoctors.form.specializationPlaceholder')} />
+            </Form.Item>
 
-          <Form.Item
-            name="experience"
-            label={t('adminDoctors.form.experienceLabel')}
-            rules={[
-              { type: 'number', min: 0, max: 80, message: t('adminDoctors.form.validation.experienceRange') },
-            ]}
-          >
-            <InputNumber
-              min={0}
-              max={80}
-              style={{ width: '100%' }}
-              placeholder={t('adminDoctors.form.experiencePlaceholder')}
+            <Form.Item
+              name="experience"
+              label={t('adminDoctors.form.experienceLabel')}
+              rules={[
+                { type: 'number', min: 0, max: 80, message: t('adminDoctors.form.validation.experienceRange') },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                max={80}
+                style={{ width: '100%' }}
+                placeholder={t('adminDoctors.form.experiencePlaceholder')}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="isFeatured"
+              label={
+                <Space size={6}>
+                  <StarOutlined />
+                  {t('adminDoctors.form.featuredLabel')}
+                </Space>
+              }
+              valuePropName="checked"
+              tooltip={t('adminDoctors.form.featuredHelp')}
+            >
+              <Switch />
+            </Form.Item>
+          </div>
+
+          {/* Step 2: Availability */}
+          <div style={{ display: step === 1 ? 'block' : 'none' }}>
+            <ScheduleEditor
+              days={schedule.next7Days}
+              enabledDates={schedule.enabledDates}
+              dateTimeRanges={schedule.dateTimeRanges}
+              onToggle={schedule.toggleDate}
+              onRangeChange={schedule.updateTimeRange}
             />
-          </Form.Item>
-
-          <Form.Item
-            name="isFeatured"
-            label={t('adminDoctors.form.featuredLabel')}
-            valuePropName="checked"
-            tooltip={t('adminDoctors.form.featuredHelp')}
-          >
-            <Switch />
-          </Form.Item>
-
-          {/* Schedule: Next 7 days with checkboxes + time range pickers */}
-          <ScheduleEditor
-            days={schedule.next7Days}
-            enabledDates={schedule.enabledDates}
-            dateTimeRanges={schedule.dateTimeRanges}
-            onToggle={schedule.toggleDate}
-            onRangeChange={schedule.updateTimeRange}
-          />
+          </div>
         </Form>
-      </Modal>
+      </ResponsiveFormModal>
     </div>
   );
 };
