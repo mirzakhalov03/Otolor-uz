@@ -11,8 +11,7 @@ i18n
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        fallbackLng: 'uz', // Uzbek as default
-        lng: 'uz', // Force Uzbek as initial language
+        fallbackLng: 'uz', // Uzbek as default/fallback; detection resolves the active language
         debug: false,
         supportedLngs: Languages,
         interpolation: {
