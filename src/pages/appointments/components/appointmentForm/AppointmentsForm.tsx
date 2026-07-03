@@ -90,22 +90,22 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
 
     // Client-side validation
     if (!selectedDoctor || !selectedDate || !selectedTime) {
-      setApiError(t('appointments.errorSelectAll', 'Please select a doctor, date, and time'));
+      setApiError(t('appointments.errorSelectAll'));
       return;
     }
 
     if (!fullName.trim()) {
-      setFieldErrors([{ field: 'fullName', message: t('appointments.errorFullName', 'Please enter your full name') }]);
+      setFieldErrors([{ field: 'fullName', message: t('appointments.errorFullName') }]);
       return;
     }
 
     if (!phoneNumber.trim()) {
-      setFieldErrors([{ field: 'phoneNumber', message: t('appointments.errorPhone', 'Please enter your phone number') }]);
+      setFieldErrors([{ field: 'phoneNumber', message: t('appointments.errorPhone') }]);
       return;
     }
 
     if (!age.trim()) {
-      setFieldErrors([{ field: 'age', message: t('appointments.errorAge', 'Please enter your age') }]);
+      setFieldErrors([{ field: 'age', message: t('appointments.errorAge') }]);
       return;
     }
 
@@ -173,11 +173,11 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
     <div className="appointments-form">
       {/* Step 2: Date & Time Selection (Side by Side) */}
       <div className="form-section">
-        <h2 className="section-title">{t('appointments.step2Title', '2. Select Date & Time')}</h2>
+        <h2 className="section-title">{t('appointments.step2Title')}</h2>
         <div className="date-time-container">
           {/* Left: Calendar */}
           <div className="calendar-section">
-            <h3 className="subsection-title">{t('appointments.dateLabel', 'Date')}</h3>
+            <h3 className="subsection-title">{t('appointments.dateLabel')}</h3>
             <WeeklyCalendar
               availableDates={availableDates}
               selectedDate={selectedDate}
@@ -185,26 +185,26 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
               isLoading={isDatesLoading && !!doctorId}
             />
             {!doctorId && (
-              <p className="hint-text">{t('appointments.selectDoctorFirst', 'Select a doctor to see available dates')}</p>
+              <p className="hint-text">{t('appointments.selectDoctorFirst')}</p>
             )}
           </div>
 
           {/* Right: Time Slots */}
           <div className="time-section">
-            <h3 className="subsection-title">{t('appointments.availableTimes', 'Available Times')}</h3>
+            <h3 className="subsection-title">{t('appointments.availableTimes')}</h3>
             <div className="time-slots">
               {!doctorId ? (
                 <div className="empty-state">
-                  <p>{t('appointments.selectDoctorFirst', 'Select a doctor')}</p>
+                  <p>{t('appointments.selectDoctorFirst')}</p>
                 </div>
               ) : !selectedDate ? (
                 <div className="empty-state">
-                  <p>{t('appointments.selectDateFirst', 'Select a date')}</p>
+                  <p>{t('appointments.selectDateFirst')}</p>
                 </div>
               ) : isTimeSlotsLoading ? (
                 <div className="empty-state">
                   <Loader2 className="time-slots__spinner" size={24} />
-                  <p>{t('appointments.loadingTimes', 'Loading times...')}</p>
+                  <p>{t('appointments.loadingTimes')}</p>
                 </div>
               ) : availableTimeSlots.length > 0 ? (
                 availableTimeSlots.map((time) => (
@@ -219,7 +219,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
                 ))
               ) : (
                 <div className="empty-state">
-                  <p>{t('appointments.noTimesAvailable', 'No times available for this date')}</p>
+                  <p>{t('appointments.noTimesAvailable')}</p>
                 </div>
               )}
             </div>
@@ -229,7 +229,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
 
       {/* Step 3: User Information */}
       <div className="form-section">
-        <h2 className="section-title">{t('appointments.step3Title', '3. Enter Your Information')}</h2>
+        <h2 className="section-title">{t('appointments.step3Title')}</h2>
 
         {/* API-level error message */}
         {apiError && (
@@ -244,11 +244,11 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
             <div className={`form-field ${getFieldError('fullName') ? 'form-field--error' : ''}`}>
               <label htmlFor="fullName">
                 <User size={16} />
-                <span>{t('appointments.fullName', 'Full Name')}</span>
+                <span>{t('appointments.fullName')}</span>
               </label>
               <Input
                 id="fullName"
-                placeholder={t('appointments.fullNamePlaceholder', 'First Last Name')}
+                placeholder={t('appointments.fullNamePlaceholder')}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 size="large"
@@ -262,7 +262,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
             <div className={`form-field ${getFieldError('phoneNumber') ? 'form-field--error' : ''}`}>
               <label htmlFor="phoneNumber">
                 <Phone size={16} />
-                <span>{t('appointments.phoneNumber', 'Phone Number')}</span>
+                <span>{t('appointments.phoneNumber')}</span>
               </label>
               <Input
                 id="phoneNumber"
@@ -280,7 +280,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
             <div className={`form-field ${getFieldError('age') ? 'form-field--error' : ''}`}>
               <label htmlFor="age">
                 <User size={16} />
-                <span>{t('appointments.age', 'Age')}</span>
+                <span>{t('appointments.age')}</span>
               </label>
               <Input
                 id="age"
@@ -306,7 +306,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
               className="submit-button"
               block
             >
-              {t('appointments.submitAppointment', 'Book Appointment')}
+              {t('appointments.submitAppointment')}
             </Button>
           </div>
         </div>
@@ -318,7 +318,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
         onCancel={handleModalClose}
         footer={[
           <Button key="close" type="primary" onClick={handleModalClose} size="large">
-            {t('common.close', 'Close')}
+            {t('common.close')}
           </Button>
         ]}
         centered
@@ -332,33 +332,33 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
             </div>
             
             <h2 className="confirmation-title">
-              {t('appointments.modal.title', 'Booking Confirmed!')}
+              {t('appointments.modal.title')}
             </h2>
             
             <div className="order-number">
-              <span className="order-label">{t('appointments.modal.orderNumber', 'Your Order Number')}</span>
+              <span className="order-label">{t('appointments.modal.orderNumber')}</span>
               <span className="order-value">{bookingConfirmation.orderNumber}</span>
             </div>
             
             <div className="patient-info">
               <p className="patient-name">
-                <strong>{t('appointments.modal.patient', 'Patient')}:</strong> {bookingConfirmation.fullName}
+                <strong>{t('appointments.modal.patient')}:</strong> {bookingConfirmation.fullName}
               </p>
               <p className="doctor-info">
-                <strong>{t('appointments.modal.doctor', 'Doctor')}:</strong> {bookingConfirmation.doctorName}
+                <strong>{t('appointments.modal.doctor')}:</strong> {bookingConfirmation.doctorName}
               </p>
               <p className="appointment-datetime">
-                <strong>{t('appointments.modal.datetime', 'Date & Time')}:</strong> {bookingConfirmation.date} | {bookingConfirmation.time}
+                <strong>{t('appointments.modal.datetime')}:</strong> {bookingConfirmation.date} | {bookingConfirmation.time}
               </p>
             </div>
             
             <div className="rules-section">
-              <h3 className="rules-title">{t('appointments.modal.rulesTitle', 'Important Guidelines')}</h3>
+              <h3 className="rules-title">{t('appointments.modal.rulesTitle')}</h3>
               <ul className="rules-list">
-                <li>{t('appointments.modal.rule1', 'Please arrive 15 minutes before your appointment time')}</li>
-                <li>{t('appointments.modal.rule2', 'Bring your ID and any previous medical records')}</li>
-                <li>{t('appointments.modal.rule3', 'If you need to cancel, please do so at least 24 hours in advance')}</li>
-                <li>{t('appointments.modal.rule4', 'Wear a mask and follow clinic hygiene protocols')}</li>
+                <li>{t('appointments.modal.rule1')}</li>
+                <li>{t('appointments.modal.rule2')}</li>
+                <li>{t('appointments.modal.rule3')}</li>
+                <li>{t('appointments.modal.rule4')}</li>
               </ul>
             </div>
           </div>

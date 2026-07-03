@@ -621,6 +621,7 @@
     "step3Title": "3. Enter Your Information",
     "dateLabel": "Date",
     "availableTimes": "Available Times",
+    "loadingTimes": "Loading times...",
     "selectDoctorFirst": "Select a doctor first",
     "selectDateFirst": "Select a date first",
     "noTimesAvailable": "No times available for this date",
@@ -652,6 +653,7 @@
     "errorSlotTaken": "This time slot was just booked. Please choose another.",
     "modal": {
       "title": "Booking Confirmed!",
+      "orderNumber": "Your Order Number",
       "queueNumber": "Your Queue Number",
       "patient": "Patient",
       "doctor": "Doctor",

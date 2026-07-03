@@ -607,6 +607,7 @@
     "step3Title": "3. Введите ваши данные",
     "dateLabel": "Дата",
     "availableTimes": "Доступное время",
+    "loadingTimes": "Загрузка времени...",
     "selectDoctorFirst": "Сначала выберите врача",
     "selectDateFirst": "Сначала выберите дату",
     "noTimesAvailable": "Нет доступного времени на эту дату",
@@ -638,6 +639,7 @@
     "errorSlotTaken": "Это время уже занято. Пожалуйста, выберите другое.",
     "modal": {
       "title": "Запись подтверждена!",
+      "orderNumber": "Ваш номер очереди",
       "queueNumber": "Ваш номер в очереди",
       "patient": "Пациент",
       "doctor": "Врач",

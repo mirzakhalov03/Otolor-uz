@@ -608,6 +608,7 @@
     "step3Title": "3. Ma'lumotlaringizni kiriting",
     "dateLabel": "Sana",
     "availableTimes": "Mavjud vaqtlar",
+    "loadingTimes": "Vaqtlar yuklanmoqda...",
     "selectDoctorFirst": "Avval shifokorni tanlang",
     "selectDateFirst": "Avval sanani tanlang",
     "noTimesAvailable": "Bu sana uchun vaqt mavjud emas",
@@ -639,6 +640,7 @@
     "errorSlotTaken": "Bu vaqt allaqachon band qilindi. Iltimos, boshqa vaqtni tanlang.",
     "modal": {
       "title": "Navbat tasdiqlandi!",
+      "orderNumber": "Sizning navbat raqamingiz",
       "queueNumber": "Sizning navbat raqamingiz",
       "patient": "Bemor",
       "doctor": "Shifokor",
