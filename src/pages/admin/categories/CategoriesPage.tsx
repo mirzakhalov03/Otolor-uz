@@ -6,7 +6,6 @@ import {
   Space,
   Input,
   Popconfirm,
-  Modal,
   Form,
   message,
   Tooltip,
@@ -31,6 +30,7 @@ import {
   useUpdateCategory,
   useDeleteCategory,
 } from '@/api/query/useAdminQueries';
+import { ResponsiveFormModal } from '@/components/admin';
 import { useTranslation } from 'react-i18next';
 import './CategoriesPage.scss';
 
@@ -272,7 +272,7 @@ const CategoriesPage: React.FC = () => {
         />
       </Card>
 
-      <Modal
+      <ResponsiveFormModal
         title={editingCategory ? t('adminCategories.modal.editTitle') : t('adminCategories.modal.addTitle')}
         open={modalOpen}
         onCancel={closeModal}
@@ -309,7 +309,7 @@ const CategoriesPage: React.FC = () => {
             <Input placeholder={t('adminCategories.form.slugPlaceholder')} />
           </Form.Item>
         </Form>
-      </Modal>
+      </ResponsiveFormModal>
     </div>
   );
 };
