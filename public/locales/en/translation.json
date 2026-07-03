@@ -1,7 +1,28 @@
 {
   "weeklyCalendar": {
-    "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    "days": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "months": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ]
   },
   "common": {
     "appName": "Otolor Clinic",
@@ -600,8 +621,13 @@
         "nameRequired": "Doctor name is required",
         "nameMin": "Name must be at least 2 characters",
         "nameMax": "Name cannot exceed 100 characters",
-        "specializationMax": "Specialization cannot exceed 100 characters"
-      }
+        "specializationMax": "Specialization cannot exceed 100 characters",
+        "experienceRange": "Experience must be between 0 and 80"
+      },
+      "experienceLabel": "Experience (years)",
+      "experiencePlaceholder": "e.g. 12",
+      "featuredLabel": "Show on homepage",
+      "featuredHelp": "When enabled, the doctor appears on the About page and homepage."
     },
     "toasts": {
       "createSuccess": "Doctor created successfully",

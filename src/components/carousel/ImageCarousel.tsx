@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import './ImageCarousel.scss';
-import { doctorsImages } from '../../assets/images/doctors/doctorsImages';
+import { doctorsImages, type DoctorImage } from '../../assets/images/doctors/doctorsImages';
+import { useDoctors } from '@/api/query/useDoctors';
 
 interface ImageCarouselProps {
     autoPlayInterval?: number;
@@ -14,8 +15,32 @@ const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height
     const [isPageVisible, setIsPageVisible] = useState(!document.hidden);
     const [isInViewport, setIsInViewport] = useState(true);
     const rootRef = useRef<HTMLDivElement | null>(null);
-    
-    const totalSlides = useMemo(() => doctorsImages.length, []);
+
+    const { data: doctors } = useDoctors();
+
+    // Keep all the pre-filled/static doctors and append any newly-added
+    // doctors that have an uploaded photo, so admin additions show up here too.
+    const slides: DoctorImage[] = useMemo(() => {
+        const liveWithPhoto = (doctors ?? [])
+            .filter((d) => d.avatarUrl)
+            .map((d) => ({
+                src: d.avatarUrl as string,
+                alt: d.name,
+                name: d.name,
+                title: d.specialization || '',
+            }));
+        // Dedupe by image src so the same photo never appears twice.
+        const seen = new Set(doctorsImages.map((i) => i.src));
+        const extra = liveWithPhoto.filter((i) => !seen.has(i.src));
+        return [...doctorsImages, ...extra];
+    }, [doctors]);
+
+    const totalSlides = slides.length;
+
+    // Clamp the active index during render so a changing slide source
+    // (e.g. live data arriving) can never leave us pointing past the end —
+    // avoids a setState-in-effect round trip.
+    const activeIndex = totalSlides > 0 ? currentIndex % totalSlides : 0;
 
     const goToNext = useCallback(() => {
         if (isTransitioning) return;
@@ -69,9 +94,9 @@ const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height
             <div className="carousel-container">
                 <div 
                     className="carousel-track"
-                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                    style={{ transform: `translateX(-${activeIndex * 100}%)` }}
                 >
-                    {doctorsImages.map((image, index) => (
+                    {slides.map((image, index) => (
                         <div key={index} className="carousel-slide">
                             <img
                                 src={image.src}
@@ -91,10 +116,10 @@ const ImageCarousel = ({ autoPlayInterval = 4000, showDoctorInfo = false, height
             </div>
 
             <div className="carousel-dots">
-                {doctorsImages.map((_, index) => (
+                {slides.map((_, index) => (
                     <button
                         key={index}
-                        className={`carousel-dot ${index === currentIndex ? 'active' : ''}`}
+                        className={`carousel-dot ${index === activeIndex ? 'active' : ''}`}
                         onClick={() => goToSlide(index)}
                         aria-label={`Go to slide ${index + 1}`}
                     />

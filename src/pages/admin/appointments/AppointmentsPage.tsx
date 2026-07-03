@@ -38,6 +38,7 @@ import {
   useAdminDoctors,
 } from '@/api/query/useAdminQueries';
 import type { Appointment } from '@/pages/appointments/types/appointment.types';
+import { ApiError } from '@/api/errors';
 import { useTranslation } from 'react-i18next';
 import './AppointmentsPage.scss';
 
@@ -99,8 +100,8 @@ const AppointmentsPage: React.FC = () => {
           status: t(`adminAppointments.status.${status}`),
         })
       );
-    } catch (error: any) {
-      const msg = error?.response?.data?.message || t('adminAppointments.toasts.updateStatusFailed');
+    } catch (error: unknown) {
+      const msg = error instanceof ApiError ? error.message : t('adminAppointments.toasts.updateStatusFailed');
       message.error(msg);
     }
   };
@@ -109,8 +110,8 @@ const AppointmentsPage: React.FC = () => {
     try {
       await deleteMutation.mutateAsync(id);
       message.success(t('adminAppointments.toasts.deleteSuccess'));
-    } catch (error: any) {
-      const msg = error?.response?.data?.message || t('adminAppointments.toasts.deleteFailed');
+    } catch (error: unknown) {
+      const msg = error instanceof ApiError ? error.message : t('adminAppointments.toasts.deleteFailed');
       message.error(msg);
     }
   };

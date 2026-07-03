@@ -22,6 +22,8 @@ import {
   Empty,
   Upload,
   Grid,
+  InputNumber,
+  Switch,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UploadFile, UploadProps } from 'antd';
@@ -102,6 +104,8 @@ const DoctorsPage: React.FC = () => {
     form.setFieldsValue({
       name: doctor.name,
       specialization: doctor.specialization || '',
+      experience: doctor.experience,
+      isFeatured: doctor.isFeatured ?? false,
     });
     setAvatarUrl(doctor.avatarUrl);
     setSelectedAvatarFile(null);
@@ -140,6 +144,8 @@ const DoctorsPage: React.FC = () => {
         name: values.name,
         specialization: values.specialization || undefined,
         avatarUrl: uploadedAvatarUrl,
+        experience: typeof values.experience === 'number' ? values.experience : undefined,
+        isFeatured: !!values.isFeatured,
         weeklySchedule,
       };
 
@@ -212,6 +218,7 @@ const DoctorsPage: React.FC = () => {
             {name?.charAt(0).toUpperCase()}
           </Avatar>
           <span style={{ fontWeight: 600, color: '#1a1a2e' }}>{name}</span>
+          {record.isFeatured && <Tag color="green">{t('adminDoctors.form.featuredLabel')}</Tag>}
         </Space>
       ),
     },
@@ -450,6 +457,30 @@ const DoctorsPage: React.FC = () => {
             rules={[{ max: 100, message: t('adminDoctors.form.validation.specializationMax') }]}
           >
             <Input placeholder={t('adminDoctors.form.specializationPlaceholder')} />
+          </Form.Item>
+
+          <Form.Item
+            name="experience"
+            label={t('adminDoctors.form.experienceLabel')}
+            rules={[
+              { type: 'number', min: 0, max: 80, message: t('adminDoctors.form.validation.experienceRange') },
+            ]}
+          >
+            <InputNumber
+              min={0}
+              max={80}
+              style={{ width: '100%' }}
+              placeholder={t('adminDoctors.form.experiencePlaceholder')}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="isFeatured"
+            label={t('adminDoctors.form.featuredLabel')}
+            valuePropName="checked"
+            tooltip={t('adminDoctors.form.featuredHelp')}
+          >
+            <Switch />
           </Form.Item>
 
           {/* Schedule: Next 7 days with checkboxes + time range pickers */}

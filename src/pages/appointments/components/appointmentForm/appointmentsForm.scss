@@ -188,7 +188,8 @@
     }
 
     &__submit {
-      width: 300px;
+      width: 100%;
+      max-width: 300px;
       margin: $spacing-lg auto 0;
     }
 
@@ -196,7 +197,8 @@
       display: flex;
       flex-direction: column;
       gap: $spacing-sm;
-      width: 300px;
+      width: 100%;
+      max-width: 300px;
 
       &--error {
         label {

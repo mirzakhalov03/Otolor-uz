@@ -9,9 +9,22 @@ interface DoctorSelectorProps {
   onSelectDoctor: (doctor: Doctor) => void;
 }
 
+/**
+ * A doctor is bookable only if their schedule has at least one date that is
+ * today or later with a time range set. Doctors with no upcoming availability
+ * are hidden from the booking flow entirely (not just disabled).
+ */
+const hasUpcomingAvailability = (doctor: Doctor): boolean => {
+  const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD in local time
+  const schedule = doctor.weeklySchedule ?? {};
+  return Object.entries(schedule).some(([date, range]) => date >= today && !!range);
+};
+
 const DoctorSelector = ({ selectedDoctorId, onSelectDoctor }: DoctorSelectorProps) => {
   const { t } = useTranslation();
   const { data: doctors, isLoading, isError, error } = useDoctors();
+
+  const bookableDoctors = (doctors ?? []).filter(hasUpcomingAvailability);
 
   return (
     <div className='doctor-selector'>
@@ -35,12 +48,12 @@ const DoctorSelector = ({ selectedDoctorId, onSelectDoctor }: DoctorSelectorProp
 
       {!isLoading && !isError && doctors && (
         <div className='doctor-selector__grid'>
-          {doctors.length === 0 ? (
+          {bookableDoctors.length === 0 ? (
             <p className='doctor-selector__empty'>
               {t('appointments.noDoctors', 'No doctors available at the moment.')}
             </p>
           ) : (
-            doctors.map((doctor) => (
+            bookableDoctors.map((doctor) => (
               <SelectorCard
                 key={doctor._id}
                 doctor={doctor}

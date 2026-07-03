@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,8 @@ const Services = () => {
         queryFn: getCategories,
     });
 
+    // Derive the active category (first one as default) instead of syncing
+    // it into state via an effect — clicks still set selectedCategory directly.
     const activeCategory = selectedCategory ?? categories[0]?._id ?? null;
 
     const {
@@ -29,12 +31,6 @@ const Services = () => {
         queryFn: () => getServices(activeCategory || undefined),
         enabled: !!activeCategory,
     });
-
-    useEffect(() => {
-        if (!selectedCategory && categories.length > 0) {
-            setSelectedCategory(categories[0]._id);
-        }
-    }, [categories, selectedCategory]);
 
     const filteredServices = useMemo(() => {
         if (!activeCategory) return [];

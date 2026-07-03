@@ -146,13 +146,15 @@
       border-radius: 10px;
     }
 
+    // Mobile renders the stacked `mobileColumns`, so the table must fit the
+    // viewport — no forced min-width / nowrap (that would overflow the screen).
     .ant-table {
-      min-width: 760px;
+      min-width: 0;
 
       .ant-table-thead > tr > th,
       .ant-table-tbody > tr > td {
         padding: 10px 8px !important;
-        white-space: nowrap;
+        white-space: normal;
       }
     }
 

@@ -1,7 +1,28 @@
 {
   "weeklyCalendar": {
-    "days": ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"],
-    "months": ["Yan", "Fev", "Mar", "Apr", "May", "Iyun", "Iyul", "Avg", "Sen", "Okt", "Noy", "Dek"]
+    "days": [
+      "Yak",
+      "Dush",
+      "Sesh",
+      "Chor",
+      "Pay",
+      "Jum",
+      "Shan"
+    ],
+    "months": [
+      "Yan",
+      "Fev",
+      "Mar",
+      "Apr",
+      "May",
+      "Iyun",
+      "Iyul",
+      "Avg",
+      "Sen",
+      "Okt",
+      "Noy",
+      "Dek"
+    ]
   },
   "common": {
     "appName": "Otolor Klinikasi",
@@ -578,6 +599,10 @@
       "namePlaceholder": "masalan: Dr. Sardor Karimov",
       "specializationLabel": "Mutaxassislik",
       "specializationPlaceholder": "masalan: Stomatolog, Ortodont",
+      "experienceLabel": "Tajriba (yil)",
+      "experiencePlaceholder": "masalan: 12",
+      "featuredLabel": "Bosh sahifada ko'rsatish",
+      "featuredHelp": "Yoqilganda, shifokor \"Biz haqimizda\" sahifasi va bosh sahifada ko'rsatiladi.",
       "availabilityTitle": "Qabul vaqti - keyingi 7 kun",
       "availabilityHint": "Shifokor qabul qiladigan kunlarni belgilang. Yakshanba sukut bo'yicha dam olish kuni.",
       "timeStart": "Boshlanish",
@@ -587,7 +612,8 @@
         "nameRequired": "Shifokor ismi majburiy",
         "nameMin": "Ism kamida 2 ta belgidan iborat bo'lishi kerak",
         "nameMax": "Ism 100 belgidan oshmasligi kerak",
-        "specializationMax": "Mutaxassislik 100 belgidan oshmasligi kerak"
+        "specializationMax": "Mutaxassislik 100 belgidan oshmasligi kerak",
+        "experienceRange": "Tajriba 0 dan 80 gacha bo'lishi kerak"
       }
     },
     "toasts": {

@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '@/context/auth';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/languageSelector/LanguageSwitcher';
 import './AdminLogin.scss';

@@ -47,6 +47,12 @@ const Navbar = () => {
     setIsMobileMenuOpen(false)
   }
 
+  // Lock body scroll while the mobile menu overlay is open.
+  useEffect(() => {
+    document.body.classList.toggle('no-scroll', isMobileMenuOpen);
+    return () => document.body.classList.remove('no-scroll');
+  }, [isMobileMenuOpen]);
+
   useEffect(() => {
     const updateScrollState = () => {
       const nextIsScrolled = window.scrollY > 50

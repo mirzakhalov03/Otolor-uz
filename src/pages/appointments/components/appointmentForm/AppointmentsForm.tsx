@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Input, Button } from 'antd';
 import { Clock, User, Phone, Loader2, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -45,21 +45,21 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
   const bookMutation = useBookAppointment();
   const queryClient = useQueryClient();
 
-  // Reset date & time when doctor changes
-  useEffect(() => {
+  // Reset dependent selections when the doctor changes. Adjusting state during
+  // render (React's recommended alternative to an effect) keeps this in sync
+  // without an extra render pass or a set-state-in-effect.
+  const [prevDoctorId, setPrevDoctorId] = useState(doctorId);
+  if (doctorId !== prevDoctorId) {
+    setPrevDoctorId(doctorId);
     setSelectedDate(null);
     setSelectedTime(null);
     setFieldErrors([]);
     setApiError(null);
-  }, [doctorId]);
-
-  // Reset time when date changes
-  useEffect(() => {
-    setSelectedTime(null);
-  }, [selectedDate]);
+  }
 
   const handleDateSelect = (dateStr: string) => {
     setSelectedDate(dateStr);
+    setSelectedTime(null); // a new date invalidates the previously picked time
     setFieldErrors([]);
     setApiError(null);
   };

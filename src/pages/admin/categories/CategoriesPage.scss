@@ -89,13 +89,14 @@
       border-radius: 10px;
     }
 
+    // Mobile uses stacked `mobileColumns`; keep the table within the viewport.
     .ant-table {
-      min-width: 560px;
+      min-width: 0;
 
       .ant-table-thead > tr > th,
       .ant-table-tbody > tr > td {
         padding: 10px 8px !important;
-        white-space: nowrap;
+        white-space: normal;
       }
     }
 

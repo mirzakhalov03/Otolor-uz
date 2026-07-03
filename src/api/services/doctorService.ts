@@ -25,6 +25,8 @@ export const createDoctor = async (payload: {
   name: string;
   specialization?: string;
   avatarUrl?: string;
+  experience?: number;
+  isFeatured?: boolean;
   weeklySchedule: Record<string, string>;
 }): Promise<Doctor> => {
   const { data } = await api.post<ApiResponse<Doctor>>('/doctors', payload);
@@ -40,6 +42,8 @@ export const updateDoctor = async (
     name?: string;
     specialization?: string;
     avatarUrl?: string;
+    experience?: number;
+    isFeatured?: boolean;
     weeklySchedule?: Record<string, string>;
   }
 ): Promise<Doctor> => {

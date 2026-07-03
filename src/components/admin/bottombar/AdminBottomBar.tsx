@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '@/context/auth';
 import './AdminBottomBar.scss';
 
 const AdminBottomBar: React.FC = () => {

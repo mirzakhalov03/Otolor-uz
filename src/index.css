@@ -10,10 +10,17 @@
 
 html, body {
   background-color: #F5F5F0;
+  overflow-x: hidden; /* guard against stray full-bleed elements causing horizontal scroll on mobile */
+  max-width: 100%;
 }
 
 body {
   min-height: 100vh;
+}
+
+/* Applied to <body> while a fullscreen overlay (mobile menu) is open */
+body.no-scroll {
+  overflow: hidden;
 }
 
 .container{
