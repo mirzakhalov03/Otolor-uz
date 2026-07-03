@@ -32,17 +32,14 @@ const AdminLogin: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // Small delay to feel realistic
-    await new Promise((r) => setTimeout(r, 500));
-
-    const result = login(values.username, values.password);
+    const result = await login(values.username, values.password);
 
     if (result.success) {
       message.success(t('adminLogin.toasts.welcomeBack'));
       const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/admins-otolor';
       navigate(from, { replace: true });
     } else {
-      setError(t(result.messageKey));
+      setError(result.message || t('auth.invalidCredentials'));
     }
 
     setLoading(false);
