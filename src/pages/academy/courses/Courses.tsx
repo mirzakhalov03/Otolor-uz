@@ -66,37 +66,6 @@ const Courses = () => {
     }
   ]
 
-  // const otherCourses = [
-  //   {
-  //     id: 1,
-  //     title: t('academyCourses.otherCourses.courses.course1Title'),
-  //     type: 'free',
-  //     level: t('academyCourses.otherCourses.levels.beginner'),
-  //     link: 'https://www.youtube.com/watch?v=-tngi6x3usI'
-  //   },
-  //   {
-  //     id: 2,
-  //     title: t('academyCourses.otherCourses.courses.course2Title'),
-  //     type: 'paid',
-  //     level: t('academyCourses.otherCourses.levels.intermediate'),
-  //     link: 'https://www.youtube.com/watch?v=m9V2MRUAmR0'
-  //   },
-  //   {
-  //     id: 3,
-  //     title: t('academyCourses.otherCourses.courses.course3Title'),
-  //     type: 'paid',
-  //     level: t('academyCourses.otherCourses.levels.advanced'),
-  //     link: 'https://www.youtube.com/watch?v=4fmGZIWflXI'
-  //   },
-  //   {
-  //     id: 4,
-  //     title: t('academyCourses.otherCourses.courses.course4Title'),
-  //     type: 'free',
-  //     level: t('academyCourses.otherCourses.levels.intermediate'),
-  //     link: 'https://www.youtube.com/watch?v=FyFGoOu8X4Y'
-  //   }
-  // ]
-
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
     setContactForm((prev) => ({ ...prev, [name]: value }))
