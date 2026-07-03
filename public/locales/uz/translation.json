@@ -632,6 +632,7 @@
     "errorAge": "Iltimos, yoshingizni kiriting",
     "success": "Navbatingiz muvaffaqiyatli qabul qilindi!",
     "error": "Navbat olishda xatolik yuz berdi. Qayta urinib ko'ring.",
+    "errorSlotTaken": "Bu vaqt allaqachon band qilindi. Iltimos, boshqa vaqtni tanlang.",
     "modal": {
       "title": "Navbat tasdiqlandi!",
       "queueNumber": "Sizning navbat raqamingiz",

@@ -4,9 +4,10 @@ import { Clock, User, Phone, CheckCircle, Loader2, AlertCircle } from 'lucide-re
 import { useTranslation } from 'react-i18next';
 import { type Doctor, type FieldError } from '../../types/appointment.types';
 import { useAvailableDates, useAvailableTimeSlots, useBookAppointment } from '@/api/query/useAppointments';
+import { useQueryClient } from '@tanstack/react-query';
+import { ApiError } from '@/api/errors';
 import WeeklyCalendar from './WeeklyCalendar';
 import './appointmentsForm.scss';
-import axios from 'axios';
 
 interface AppointmentsFormProps {
   selectedDoctor: Doctor | null;
@@ -48,6 +49,7 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
 
   // Booking mutation
   const bookMutation = useBookAppointment();
+  const queryClient = useQueryClient();
 
   // Reset date & time when doctor changes
   useEffect(() => {
@@ -140,19 +142,22 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
           setApiError(null);
         },
         onError: (error) => {
-          if (axios.isAxiosError(error) && error.response?.data) {
-            const responseData = error.response.data;
-
-            // Field-level validation errors
-            if (responseData.errors && Array.isArray(responseData.errors)) {
-              setFieldErrors(responseData.errors);
-            } else if (responseData.message) {
-              setApiError(responseData.message);
+          if (error instanceof ApiError) {
+            if (error.code === 'validation' && error.fieldErrors) {
+              setFieldErrors(error.fieldErrors);
+            } else if (error.code === 'conflict') {
+              // Slot was taken between load and submit: message + drop stale slot + refetch.
+              setApiError(t('appointments.errorSlotTaken'));
+              setSelectedTime(null);
+              queryClient.invalidateQueries({
+                queryKey: ['availableTimeSlots', doctorId, selectedDate],
+              });
             } else {
-              setApiError(t('appointments.error', 'Something went wrong. Please try again.'));
+              // business (off-grid/past), rate_limit (429), network, unknown
+              setApiError(error.message);
             }
           } else {
-            setApiError(t('appointments.error', 'Something went wrong. Please try again.'));
+            setApiError(t('appointments.error'));
           }
         },
       }

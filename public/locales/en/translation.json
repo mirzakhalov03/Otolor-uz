@@ -645,6 +645,7 @@
     "errorAge": "Please enter your age",
     "success": "Your appointment has been successfully booked!",
     "error": "An error occurred while booking. Please try again.",
+    "errorSlotTaken": "This time slot was just booked. Please choose another.",
     "modal": {
       "title": "Booking Confirmed!",
       "queueNumber": "Your Queue Number",
