@@ -1,5 +1,6 @@
-import dayjs, { Dayjs } from 'dayjs';
-import 'dayjs/locale/uz-latn';
+import { type Dayjs } from 'dayjs';
+import { useTranslation } from 'react-i18next';
+import { clinicNext7, clinicToday } from '@/utils/clinicTime';
 import './weeklyCalendar.scss';
 
 interface WeeklyCalendarProps {
@@ -10,19 +11,10 @@ interface WeeklyCalendarProps {
 }
 
 const WeeklyCalendar = ({ availableDates, selectedDate, onSelectDate, isLoading }: WeeklyCalendarProps) => {
-    // Generate next 7 days starting from today
-    const getNextWeek = (): Dayjs[] => {
-        const days: Dayjs[] = [];
-        const today = dayjs();
+    const { t } = useTranslation();
 
-        for (let i = 0; i < 7; i++) {
-            days.push(today.add(i, 'day'));
-        }
-
-        return days;
-    };
-
-    const weekDays = getNextWeek();
+    // Next 7 days anchored to the clinic timezone (Asia/Tashkent)
+    const weekDays = clinicNext7();
 
     const isDateAvailable = (date: Dayjs): boolean => {
         const dateStr = date.format('YYYY-MM-DD');
@@ -39,15 +31,11 @@ const WeeklyCalendar = ({ availableDates, selectedDate, onSelectDate, isLoading 
         onSelectDate(date.format('YYYY-MM-DD'));
     };
 
-    const getDayName = (date: Dayjs): string => {
-        const days = ['Yak', 'Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan'];
-        return days[date.day()];
-    };
+    const days = t('weeklyCalendar.days', { returnObjects: true }) as string[];
+    const months = t('weeklyCalendar.months', { returnObjects: true }) as string[];
 
-    const getMonthName = (date: Dayjs): string => {
-        const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'Iyun', 'Iyul', 'Avg', 'Sen', 'Okt', 'Noy', 'Dek'];
-        return months[date.month()];
-    };
+    const getDayName = (date: Dayjs): string => days[date.day()];
+    const getMonthName = (date: Dayjs): string => months[date.month()];
 
     if (isLoading) {
         return (
@@ -68,7 +56,7 @@ const WeeklyCalendar = ({ availableDates, selectedDate, onSelectDate, isLoading 
             {weekDays.map((day, index) => {
                 const available = isDateAvailable(day);
                 const selected = isDateSelected(day);
-                const isToday = day.isSame(dayjs(), 'day');
+                const isToday = day.isSame(clinicToday(), 'day');
 
                 return (
                     <button

@@ -1,4 +1,8 @@
 {
+  "weeklyCalendar": {
+    "days": ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"],
+    "months": ["Yan", "Fev", "Mar", "Apr", "May", "Iyun", "Iyul", "Avg", "Sen", "Okt", "Noy", "Dek"]
+  },
   "common": {
     "appName": "Otolor Klinikasi",
     "loading": "Yuklanmoqda...",
