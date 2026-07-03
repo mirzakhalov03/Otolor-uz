@@ -4,7 +4,7 @@
  * Schedule uses specific dates (next 7 days) instead of recurring weekday names
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   Table,
@@ -18,8 +18,6 @@ import {
   Form,
   message,
   Tooltip,
-  Checkbox,
-  TimePicker,
   Typography,
   Empty,
   Upload,
@@ -38,9 +36,10 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { Doctor } from '@/pages/appointments/types/appointment.types';
-import { clinicToday } from '@/utils/clinicTime';
 import { ApiError } from '@/api/errors';
 import { uploadImage } from '@/api/services/uploadService';
+import { useDoctorSchedule } from './useDoctorSchedule';
+import ScheduleEditor from './ScheduleEditor';
 import {
   useAdminDoctors,
   useCreateDoctor,
@@ -58,26 +57,6 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
   return error instanceof ApiError ? error.message : fallback;
 };
 
-/**
- * Generate the next 7 days starting from today.
- * Returns objects with date string (YYYY-MM-DD) and day index.
- */
-function getNext7Days(): { dateStr: string; dayIndex: number; isSunday: boolean }[] {
-  const days: { dateStr: string; dayIndex: number; isSunday: boolean }[] = [];
-
-  const start = clinicToday();
-  for (let i = 0; i < 7; i++) {
-    const d = start.add(i, 'day');
-    days.push({
-      dateStr: d.format('YYYY-MM-DD'),
-      dayIndex: d.day(),
-      isSunday: d.day() === 0,
-    });
-  }
-
-  return days;
-}
-
 const DoctorsPage: React.FC = () => {
   const { t } = useTranslation();
   const screens = useBreakpoint();
@@ -91,12 +70,8 @@ const DoctorsPage: React.FC = () => {
   const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
 
-  // Track which dates are enabled (checked) in the modal
-  const [enabledDates, setEnabledDates] = useState<Set<string>>(new Set());
-  // Track time ranges per date
-  const [dateTimeRanges, setDateTimeRanges] = useState<Record<string, [dayjs.Dayjs, dayjs.Dayjs] | null>>({});
-
-  const next7Days = useMemo(() => getNext7Days(), []);
+  // Schedule editing state (next-7-days availability) lives in a dedicated hook.
+  const schedule = useDoctorSchedule();
 
   // Queries & mutations
   const { data: doctors, isLoading, refetch } = useAdminDoctors(search || undefined);
@@ -118,20 +93,7 @@ const DoctorsPage: React.FC = () => {
     form.resetFields();
     setAvatarUrl(undefined);
     setSelectedAvatarFile(null);
-
-    // Default: all days enabled except Sundays
-    const defaultEnabled = new Set<string>();
-    const defaultTimes: Record<string, [dayjs.Dayjs, dayjs.Dayjs] | null> = {};
-    for (const day of next7Days) {
-      if (!day.isSunday) {
-        defaultEnabled.add(day.dateStr);
-        defaultTimes[day.dateStr] = [dayjs('09:00', 'HH:mm'), dayjs('17:00', 'HH:mm')];
-      } else {
-        defaultTimes[day.dateStr] = null;
-      }
-    }
-    setEnabledDates(defaultEnabled);
-    setDateTimeRanges(defaultTimes);
+    schedule.initForCreate();
     setModalOpen(true);
   };
 
@@ -143,24 +105,7 @@ const DoctorsPage: React.FC = () => {
     });
     setAvatarUrl(doctor.avatarUrl);
     setSelectedAvatarFile(null);
-
-    // Populate enabled dates and time ranges from existing schedule
-    const enabled = new Set<string>();
-    const times: Record<string, [dayjs.Dayjs, dayjs.Dayjs] | null> = {};
-
-    for (const day of next7Days) {
-      const timeRange = doctor.weeklySchedule?.[day.dateStr];
-      if (timeRange) {
-        enabled.add(day.dateStr);
-        const [start, end] = timeRange.split('-');
-        times[day.dateStr] = [dayjs(start, 'HH:mm'), dayjs(end, 'HH:mm')];
-      } else {
-        times[day.dateStr] = day.isSunday ? null : [dayjs('09:00', 'HH:mm'), dayjs('17:00', 'HH:mm')];
-      }
-    }
-
-    setEnabledDates(enabled);
-    setDateTimeRanges(times);
+    schedule.initForEdit(doctor);
     setModalOpen(true);
   };
 
@@ -171,29 +116,6 @@ const DoctorsPage: React.FC = () => {
     } catch (error: unknown) {
       message.error(getErrorMessage(error, t('adminDoctors.toasts.deleteFailed')));
     }
-  };
-
-  const toggleDate = (dateStr: string) => {
-    setEnabledDates((prev) => {
-      const next = new Set(prev);
-      if (next.has(dateStr)) {
-        next.delete(dateStr);
-      } else {
-        next.add(dateStr);
-        // Set default time if none
-        if (!dateTimeRanges[dateStr]) {
-          setDateTimeRanges((prev) => ({
-            ...prev,
-            [dateStr]: [dayjs('09:00', 'HH:mm'), dayjs('17:00', 'HH:mm')],
-          }));
-        }
-      }
-      return next;
-    });
-  };
-
-  const updateTimeRange = (dateStr: string, range: [dayjs.Dayjs, dayjs.Dayjs] | null) => {
-    setDateTimeRanges((prev) => ({ ...prev, [dateStr]: range }));
   };
 
   const handleSubmit = async () => {
@@ -207,13 +129,7 @@ const DoctorsPage: React.FC = () => {
       }
 
       // Build weeklySchedule from enabled dates + time ranges
-      const weeklySchedule: Record<string, string> = {};
-      for (const dateStr of enabledDates) {
-        const range = dateTimeRanges[dateStr];
-        if (range && range[0] && range[1]) {
-          weeklySchedule[dateStr] = `${range[0].format('HH:mm')}-${range[1].format('HH:mm')}`;
-        }
-      }
+      const weeklySchedule = schedule.buildWeeklySchedule();
 
       if (Object.keys(weeklySchedule).length === 0) {
         message.error(t('adminDoctors.toasts.enableOneDay'));
@@ -537,53 +453,13 @@ const DoctorsPage: React.FC = () => {
           </Form.Item>
 
           {/* Schedule: Next 7 days with checkboxes + time range pickers */}
-          <div style={{ marginBottom: 24 }}>
-            <Text strong style={{ display: 'block', marginBottom: 12, fontSize: 14 }}>
-              {t('adminDoctors.form.availabilityTitle')}
-            </Text>
-            <Text type="secondary" style={{ display: 'block', marginBottom: 16, fontSize: 12 }}>
-              {t('adminDoctors.form.availabilityHint')}
-            </Text>
-            <div className="schedule-grid">
-              {next7Days.map((day) => {
-                const isEnabled = enabledDates.has(day.dateStr);
-                const timeRange = dateTimeRanges[day.dateStr];
-                return (
-                  <div
-                    key={day.dateStr}
-                    className={`schedule-row ${isEnabled ? 'schedule-row--active' : ''} ${day.isSunday ? 'schedule-row--sunday' : ''}`}
-                  >
-                    <Checkbox
-                      checked={isEnabled}
-                      onChange={() => toggleDate(day.dateStr)}
-                      className="schedule-row__checkbox"
-                    >
-                      <div className="schedule-row__label">
-                        <span className="schedule-row__day">{t(`adminDoctors.days.${day.dayIndex}`)}</span>
-                        <span className="schedule-row__date">{dayjs(day.dateStr).format('MMM DD, YYYY')}</span>
-                      </div>
-                    </Checkbox>
-                    <div className="schedule-row__time">
-                      {isEnabled && (
-                        <TimePicker.RangePicker
-                          format="HH:mm"
-                          minuteStep={30}
-                          placeholder={[t('adminDoctors.form.timeStart'), t('adminDoctors.form.timeEnd')]}
-                          value={timeRange}
-                          onChange={(val) => updateTimeRange(day.dateStr, val as [dayjs.Dayjs, dayjs.Dayjs] | null)}
-                          size="small"
-                          style={{ width: 200 }}
-                        />
-                      )}
-                      {!isEnabled && (
-                        <Tag color="default" style={{ fontSize: 12 }}>{t('adminDoctors.form.dayOff')}</Tag>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <ScheduleEditor
+            days={schedule.next7Days}
+            enabledDates={schedule.enabledDates}
+            dateTimeRanges={schedule.dateTimeRanges}
+            onToggle={schedule.toggleDate}
+            onRangeChange={schedule.updateTimeRange}
+          />
         </Form>
       </Modal>
     </div>
