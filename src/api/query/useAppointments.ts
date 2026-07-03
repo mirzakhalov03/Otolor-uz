@@ -15,6 +15,7 @@ export const useAvailableDates = (doctorId: string | null) => {
     queryKey: ['availableDates', doctorId],
     queryFn: () => getAvailableDates(doctorId!),
     enabled: !!doctorId,
+    staleTime: 0, // availability changes as people book — always refetch
   });
 };
 
@@ -27,6 +28,7 @@ export const useAvailableTimeSlots = (doctorId: string | null, date: string | nu
     queryKey: ['availableTimeSlots', doctorId, date],
     queryFn: () => getAvailableTimeSlots(doctorId!, date!),
     enabled: !!doctorId && !!date,
+    staleTime: 0, // slots change as people book — always refetch
   });
 };
 
