@@ -115,7 +115,12 @@ const Services = () => {
                                             key={service._id}
                                             className='grid grid-cols-[1fr_120px] border-b border-gray-200 transition-colors duration-200 last:border-b-0 hover:bg-[#1D6652]/3 md:grid-cols-[1fr_200px]'
                                         >
-                                            <div className='flex items-center p-3 text-sm font-medium text-gray-800 md:p-4 md:text-base'>{service.title}</div>
+                                            <div className='flex flex-col justify-center p-3 md:p-4'>
+                                                <span className='text-sm font-medium text-gray-800 md:text-base'>{service.title}</span>
+                                                {service.description && (
+                                                    <span className='mt-0.5 text-xs text-gray-500 md:text-sm'>{service.description}</span>
+                                                )}
+                                            </div>
                                             <div className='flex items-center justify-end p-3 text-base font-bold text-[#1D6652] md:p-4 md:text-lg'>
                                                 {typeof service.price === 'number' ? service.price.toLocaleString() : '—'} {t('servicesPage.currency')}
                                             </div>
