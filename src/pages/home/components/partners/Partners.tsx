@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import partnersBg from '../../../../assets/images/otolor-hero-bg.png';
+import partnersBg from '../../../../assets/images/otolor-hero-bg.webp';
 import moscadaver from '../../../../assets/images/partners/moscadaver.png';
 import sokinUyqu from '../../../../assets/images/partners/sokinuyqu.jpg';
 import mclinic from '../../../../assets/images/partners/mclinic.png';

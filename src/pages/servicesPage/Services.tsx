@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Spinner from '../../components/spinner/Spinner';
 import { getCategories } from '@/api/services/categoryService';
 import { getServices } from '@/api/services/serviceService';
-import heroBg from '../../assets/images/otolor-hero-bg.png';
+import heroBg from '../../assets/images/otolor-hero-bg.webp';
 
 const Services = () => {
     const { t } = useTranslation();
