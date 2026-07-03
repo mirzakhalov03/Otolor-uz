@@ -1,26 +1,7 @@
-import { useLocation } from 'react-router-dom';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Outlet } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 import Navbar from '../navbar/Navbar';
 import { Footer } from '../footer';
-
-const PageTransition = ({ children }: { children: React.ReactNode }) => {
-    const reduceMotion = useReducedMotion();
-
-    if (reduceMotion) {
-        return <>{children}</>;
-    }
-
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-        >
-            {children}
-        </motion.div>
-    );
-};
+import './layout.scss';
 
 const Layout = () => {
     const location = useLocation();
@@ -28,11 +9,10 @@ const Layout = () => {
     return (
         <>
             <Navbar />
-            <AnimatePresence mode="wait">
-                <PageTransition key={location.pathname}>
-                    <Outlet />
-                </PageTransition>
-            </AnimatePresence>
+            {/* key re-mounts on route change to retrigger the CSS fade */}
+            <div key={location.pathname} className="page-transition">
+                <Outlet />
+            </div>
             <Footer />
         </>
     );
