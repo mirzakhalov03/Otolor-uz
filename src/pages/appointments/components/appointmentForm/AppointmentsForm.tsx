@@ -1,24 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Input, Button, Modal } from 'antd';
-import { Clock, User, Phone, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { Input, Button } from 'antd';
+import { Clock, User, Phone, Loader2, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { type Doctor, type FieldError } from '../../types/appointment.types';
 import { useAvailableDates, useAvailableTimeSlots, useBookAppointment } from '@/api/query/useAppointments';
 import { useQueryClient } from '@tanstack/react-query';
 import { ApiError } from '@/api/errors';
 import WeeklyCalendar from './WeeklyCalendar';
+import BookingConfirmationModal, { type BookingConfirmation } from './BookingConfirmationModal';
+import { validateBookingForm } from './validateBookingForm';
 import './appointmentsForm.scss';
 
 interface AppointmentsFormProps {
   selectedDoctor: Doctor | null;
-}
-
-interface BookingConfirmation {
-  orderNumber: string;
-  fullName: string;
-  doctorName: string;
-  date: string;
-  time: string;
 }
 
 const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
@@ -89,25 +83,18 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
     setApiError(null);
 
     // Client-side validation
-    if (!selectedDoctor || !selectedDate || !selectedTime) {
-      setApiError(t('appointments.errorSelectAll'));
+    const validation = validateBookingForm(
+      { hasDoctor: !!selectedDoctor, selectedDate, selectedTime, fullName, phoneNumber, age },
+      t,
+    );
+    if (validation) {
+      if (validation.apiError) setApiError(validation.apiError);
+      if (validation.fieldErrors) setFieldErrors(validation.fieldErrors);
       return;
     }
 
-    if (!fullName.trim()) {
-      setFieldErrors([{ field: 'fullName', message: t('appointments.errorFullName') }]);
-      return;
-    }
-
-    if (!phoneNumber.trim()) {
-      setFieldErrors([{ field: 'phoneNumber', message: t('appointments.errorPhone') }]);
-      return;
-    }
-
-    if (!age.trim()) {
-      setFieldErrors([{ field: 'age', message: t('appointments.errorAge') }]);
-      return;
-    }
+    // Narrow for TypeScript — validation guarantees these are set.
+    if (!selectedDoctor || !selectedDate || !selectedTime) return;
 
     bookMutation.mutate(
       {
@@ -312,58 +299,11 @@ const AppointmentsForm = ({ selectedDoctor }: AppointmentsFormProps) => {
         </div>
       </div>
 
-      {/* Booking Confirmation Modal */}
-      <Modal
+      <BookingConfirmationModal
         open={showModal}
-        onCancel={handleModalClose}
-        footer={[
-          <Button key="close" type="primary" onClick={handleModalClose} size="large">
-            {t('common.close')}
-          </Button>
-        ]}
-        centered
-        className="booking-confirmation-modal"
-        width={480}
-      >
-        {bookingConfirmation && (
-          <div className="confirmation-content">
-            <div className="confirmation-icon">
-              <CheckCircle size={64} />
-            </div>
-            
-            <h2 className="confirmation-title">
-              {t('appointments.modal.title')}
-            </h2>
-            
-            <div className="order-number">
-              <span className="order-label">{t('appointments.modal.orderNumber')}</span>
-              <span className="order-value">{bookingConfirmation.orderNumber}</span>
-            </div>
-            
-            <div className="patient-info">
-              <p className="patient-name">
-                <strong>{t('appointments.modal.patient')}:</strong> {bookingConfirmation.fullName}
-              </p>
-              <p className="doctor-info">
-                <strong>{t('appointments.modal.doctor')}:</strong> {bookingConfirmation.doctorName}
-              </p>
-              <p className="appointment-datetime">
-                <strong>{t('appointments.modal.datetime')}:</strong> {bookingConfirmation.date} | {bookingConfirmation.time}
-              </p>
-            </div>
-            
-            <div className="rules-section">
-              <h3 className="rules-title">{t('appointments.modal.rulesTitle')}</h3>
-              <ul className="rules-list">
-                <li>{t('appointments.modal.rule1')}</li>
-                <li>{t('appointments.modal.rule2')}</li>
-                <li>{t('appointments.modal.rule3')}</li>
-                <li>{t('appointments.modal.rule4')}</li>
-              </ul>
-            </div>
-          </div>
-        )}
-      </Modal>
+        confirmation={bookingConfirmation}
+        onClose={handleModalClose}
+      />
     </div>
   );
 };
