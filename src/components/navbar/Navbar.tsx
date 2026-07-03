@@ -4,7 +4,7 @@ import { Menu, X, ChevronDown, Lock } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Logo from "../../assets/Logo"
 import CallButton from "../CTA-buttons/CallButton"
-import LangSelector from "../langSelector/LangSelector"
+import LanguageSwitcher from "@/components/languageSelector/LanguageSwitcher"
 import './Navbar.scss'
 
 const Navbar = () => {
@@ -149,7 +149,7 @@ const Navbar = () => {
               )}
             </div>
             
-            <LangSelector />
+            <LanguageSwitcher variant="plain" />
             <CallButton />
           </div>
 
@@ -246,7 +246,7 @@ const Navbar = () => {
           </nav>
 
           <div className="navbar-mobile__footer">
-            <LangSelector />
+            <LanguageSwitcher variant="plain" />
             <CallButton />
           </div>
         </div>

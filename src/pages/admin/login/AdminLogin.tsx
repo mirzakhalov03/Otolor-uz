@@ -9,7 +9,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import LanguageSelector from '@/components/languageSelector/LanguageSelector';
+import LanguageSwitcher from '@/components/languageSelector/LanguageSwitcher';
 import './AdminLogin.scss';
 
 const { Title, Text } = Typography;
@@ -48,7 +48,7 @@ const AdminLogin: React.FC = () => {
   return (
     <div className="admin-login">
       <div className="admin-login__language-selector">
-        <LanguageSelector type="text" showLabel />
+        <LanguageSwitcher variant="dropdown" type="text" showLabel />
       </div>
       <div className="admin-login__container">
         <Card className="admin-login__card">
