@@ -6,7 +6,6 @@ import {
   Space,
   Input,
   Popconfirm,
-  Modal,
   Form,
   message,
   Tooltip,
@@ -34,6 +33,7 @@ import {
   useUpdateService,
   useDeleteService,
 } from '@/api/query/useAdminQueries';
+import { ResponsiveFormModal } from '@/components/admin';
 import { useTranslation } from 'react-i18next';
 import './ServicesPage.scss';
 
@@ -320,7 +320,7 @@ const ServicesPage: React.FC = () => {
         />
       </Card>
 
-      <Modal
+      <ResponsiveFormModal
         title={editingService ? t('adminServices.modal.editTitle') : t('adminServices.modal.addTitle')}
         open={modalOpen}
         onCancel={() => {
@@ -375,7 +375,7 @@ const ServicesPage: React.FC = () => {
             <InputNumber min={0} precision={0} style={{ width: '100%' }} placeholder={t('adminServices.form.pricePlaceholder')} />
           </Form.Item>
         </Form>
-      </Modal>
+      </ResponsiveFormModal>
     </div>
   );
 };
