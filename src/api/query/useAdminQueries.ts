@@ -6,7 +6,12 @@ import {
   deleteAppointment,
 } from '@/api/services/adminService';
 import type { AdminAppointmentParams } from '@/api/services/adminService';
-import { getCategories, createCategory } from '@/api/services/categoryService';
+import {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from '@/api/services/categoryService';
 import {
   getServices,
   getServiceById,
@@ -16,6 +21,7 @@ import {
 } from '@/api/services/serviceService';
 import type {
   CreateCategoryPayload,
+  UpdateCategoryPayload,
   CreateServicePayload,
   UpdateServicePayload,
 } from '@/api/types/catalog.types';
@@ -144,6 +150,29 @@ export const useCreateCategory = () => {
     mutationFn: (payload: CreateCategoryPayload) => createCategory(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'categories'] });
+    },
+  });
+};
+
+export const useUpdateCategory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateCategoryPayload }) =>
+      updateCategory(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'categories'] });
+    },
+  });
+};
+
+export const useDeleteCategory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteCategory(id),
+    onSuccess: () => {
+      // Services embed category data, so a deletion can affect the services list too.
+      queryClient.invalidateQueries({ queryKey: ['admin', 'categories'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'services'] });
     },
   });
 };

@@ -25,6 +25,11 @@ export interface CreateCategoryPayload {
   slug?: string;
 }
 
+export interface UpdateCategoryPayload {
+  name?: string;
+  slug?: string;
+}
+
 export interface CreateServicePayload {
   title: string;
   description?: string;

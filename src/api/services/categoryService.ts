@@ -1,6 +1,10 @@
 import api from './api';
 import type { ApiResponse } from '@/pages/appointments/types/appointment.types';
-import type { Category, CreateCategoryPayload } from '@/api/types/catalog.types';
+import type {
+  Category,
+  CreateCategoryPayload,
+  UpdateCategoryPayload,
+} from '@/api/types/catalog.types';
 
 export const getCategories = async (): Promise<Category[]> => {
   const { data } = await api.get<ApiResponse<Category[]>>('/categories');
@@ -10,4 +14,16 @@ export const getCategories = async (): Promise<Category[]> => {
 export const createCategory = async (payload: CreateCategoryPayload): Promise<Category> => {
   const { data } = await api.post<ApiResponse<Category>>('/categories', payload);
   return data.data;
+};
+
+export const updateCategory = async (
+  id: string,
+  payload: UpdateCategoryPayload
+): Promise<Category> => {
+  const { data } = await api.patch<ApiResponse<Category>>(`/categories/${id}`, payload);
+  return data.data;
+};
+
+export const deleteCategory = async (id: string): Promise<void> => {
+  await api.delete(`/categories/${id}`);
 };

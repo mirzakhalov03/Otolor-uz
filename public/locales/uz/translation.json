@@ -451,8 +451,14 @@
       "showTotal": "{{from}}-{{to}} / {{total}} ta kategoriya"
     },
     "modal": {
-      "title": "Yangi kategoriya qo'shish",
-      "create": "Yaratish"
+      "addTitle": "Yangi kategoriya qo'shish",
+      "editTitle": "Kategoriyani tahrirlash",
+      "create": "Yaratish",
+      "update": "Yangilash"
+    },
+    "actions": {
+      "deleteTitle": "Kategoriyani o'chirish",
+      "deleteDescription": "Ishonchingiz komilmi? Bu amalni ortga qaytarib bo'lmaydi."
     },
     "form": {
       "nameLabel": "Kategoriya nomi",
@@ -470,7 +476,11 @@
     },
     "toasts": {
       "createSuccess": "Kategoriya muvaffaqiyatli yaratildi",
-      "createFailed": "Kategoriyani yaratishda xatolik yuz berdi"
+      "createFailed": "Kategoriyani yaratishda xatolik yuz berdi",
+      "updateSuccess": "Kategoriya muvaffaqiyatli yangilandi",
+      "deleteSuccess": "Kategoriya muvaffaqiyatli o'chirildi",
+      "deleteFailed": "Kategoriyani o'chirishda xatolik yuz berdi",
+      "saveFailed": "Kategoriyani saqlashda xatolik yuz berdi"
     }
   },
   "adminServices": {

@@ -464,8 +464,14 @@
       "showTotal": "{{from}}-{{to}} of {{total}} categories"
     },
     "modal": {
-      "title": "Add New Category",
-      "create": "Create"
+      "addTitle": "Add New Category",
+      "editTitle": "Edit Category",
+      "create": "Create",
+      "update": "Update"
+    },
+    "actions": {
+      "deleteTitle": "Delete category",
+      "deleteDescription": "Are you sure? This cannot be undone."
     },
     "form": {
       "nameLabel": "Category Name",
@@ -483,7 +489,11 @@
     },
     "toasts": {
       "createSuccess": "Category created successfully",
-      "createFailed": "Failed to create category"
+      "createFailed": "Failed to create category",
+      "updateSuccess": "Category updated successfully",
+      "deleteSuccess": "Category deleted successfully",
+      "deleteFailed": "Failed to delete category",
+      "saveFailed": "Failed to save category"
     }
   },
   "adminServices": {
