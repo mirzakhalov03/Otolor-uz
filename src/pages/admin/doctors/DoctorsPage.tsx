@@ -38,6 +38,8 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { Doctor } from '@/pages/appointments/types/appointment.types';
+import { clinicToday } from '@/utils/clinicTime';
+import { ApiError } from '@/api/errors';
 import { uploadImage } from '@/api/services/uploadService';
 import {
   useAdminDoctors,
@@ -53,11 +55,7 @@ const { Title, Text } = Typography;
 const { useBreakpoint } = Grid;
 
 const getErrorMessage = (error: unknown, fallback: string): string => {
-  if (typeof error === 'object' && error !== null && 'response' in error) {
-    const response = (error as { response?: { data?: { message?: string } } }).response;
-    if (response?.data?.message) return response.data.message;
-  }
-  return fallback;
+  return error instanceof ApiError ? error.message : fallback;
 };
 
 /**
@@ -67,8 +65,9 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
 function getNext7Days(): { dateStr: string; dayIndex: number; isSunday: boolean }[] {
   const days: { dateStr: string; dayIndex: number; isSunday: boolean }[] = [];
 
+  const start = clinicToday();
   for (let i = 0; i < 7; i++) {
-    const d = dayjs().add(i, 'day');
+    const d = start.add(i, 'day');
     days.push({
       dateStr: d.format('YYYY-MM-DD'),
       dayIndex: d.day(),

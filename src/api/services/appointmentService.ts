@@ -6,7 +6,7 @@ import type {
 } from '@/pages/appointments/types/appointment.types';
 
 /**
- * Fetch available dates for a doctor (next 30 days where they work).
+ * Fetch available dates for a doctor (next 7 days where they work).
  */
 export const getAvailableDates = async (doctorId: string): Promise<string[]> => {
   const { data } = await api.get<ApiResponse<string[]>>('/appointments/availability', {
